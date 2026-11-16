@@ -265,11 +265,17 @@ The implementation is divided into small commits. See [Intent Classifier](INTENT
 
 ##### Step 3.3.b: TF-IDF and Logistic Regression pipeline
 
-**Work:**
-- Add Scikit-learn as a project dependency.
-- Implement a single fitted TF-IDF and Logistic Regression pipeline.
-- Keep feature and classifier configuration explicit and reproducible.
-- Save the fitted pipeline and a provenance manifest under ignored local model artifacts.
+**Status:** Completed.
+
+**Delivered:**
+- Scikit-learn 1.7.2 dependency pinned to the supported 1.7 series for the Python 3.10 project environment.
+- One Scikit-learn Pipeline containing TfidfVectorizer and LogisticRegression.
+- Explicit and reproducible TF-IDF, regularization, solver, iteration, and random-seed settings.
+- Training data and provenance validation at the fit boundary.
+- Atomic local model serialization and a JSON manifest with source checksums, class counts, library versions, settings, and model checksum.
+- Model manifest marks the artifact as not evaluated until held-out evaluation is implemented.
+
+**Verification:** A temporary balanced fixture outside the repository was used to fit and reload the model, inspect ten-class scores, verify artifact checksums, and exercise invalid configuration, insufficient labels, duplicate groups, invalid provenance, and interrupted manifest writes. This is an implementation smoke test, not a project accuracy result.
 
 **Acceptance criteria:**
 - The pipeline fits only the validated confirmed training subset.

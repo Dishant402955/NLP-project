@@ -26,6 +26,8 @@ Heuristic suggestions, pending rows, ambiguous rows, rejected rows, and referenc
 
 ## 3. Baseline configuration
 
+Scikit-learn is constrained to the 1.7 series because the configured project environment uses Python 3.10. The dependency and transitive versions are recorded in uv.lock.
+
 Initial, explicit settings:
 
 | Component | Initial setting |
@@ -48,7 +50,7 @@ Training fits one Scikit-learn pipeline so that inference always uses the exact 
 
 The generated model and its JSON manifest live under the ignored models/ directory. The manifest records the source dataset revision, training-partition checksum, confirmed-annotation checksum, label counts, feature settings, classifier settings, and Scikit-learn version.
 
-Model files are generated locally and are not committed to Git.
+Model files are generated locally and are not committed to Git. The serialized joblib file must be treated as a trusted local artifact; do not load model files from untrusted sources because joblib uses Python object serialization.
 
 The trainer must fail before writing model artifacts when the confirmed training data is empty, invalid, or below the per-label minimum. The data loader enforces this contract before any Scikit-learn component is called.
 
