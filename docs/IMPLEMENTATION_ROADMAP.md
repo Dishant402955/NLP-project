@@ -196,6 +196,18 @@ This stage is divided into three small implementation commits.
 
 ##### Step 3.2.b: reviewed annotation validator and importer
 
+**Status:** Completed.
+
+**Delivered:**
+- Strict validation of the pilot manifest and reviewer-edited CSV.
+- Source and suggestion integrity checks against the original training partition and pilot metadata.
+- Explicit review-status validation for pending, confirmed, ambiguous, and rejected rows.
+- Confirmed-only JSONL export with reviewer notes and a checksum manifest.
+- Spreadsheet-formula escaping is reversed before source comparison and export.
+- Failure-safe manifest handling so incomplete imports are not marked complete.
+
+**Verification:** Valid and invalid annotation cases, all-pending export, malformed metadata, source edits, suggestion edits, missing/duplicate rows, formula-leading values, and interrupted export were tested outside the repository.
+
 **Work:**
 - Validate reviewer-edited CSV headers, IDs, group IDs, source text, statuses, and labels.
 - Allow only pending, confirmed, ambiguous, or rejected statuses.

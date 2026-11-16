@@ -79,5 +79,6 @@ The annotation validator checks that:
 - Pending, ambiguous, and rejected rows do not contain confirmed labels.
 - Ambiguous and rejected rows include reviewer notes.
 - A confirmed other_or_ambiguous label includes a reviewer note.
+- The CSV path and source training checksum match the pilot manifest.
 
-Only rows explicitly marked confirmed are exported to the confirmed annotation JSONL file. Pending, ambiguous, and rejected rows are excluded. No heuristic suggestion is ever promoted automatically.
+Only rows explicitly marked confirmed are exported to the confirmed annotation JSONL file. Pending, ambiguous, and rejected rows are excluded. The confirmed-output manifest includes a checksum of the reviewed CSV and of the exported JSONL file. No heuristic suggestion is ever promoted automatically.
