@@ -435,6 +435,27 @@ def load_frozen_development_threshold(
         raise EvaluationError("frozen threshold has no development provenance")
     if development_source.get("partition_name") != "dev":
         raise EvaluationError("frozen threshold was not selected on the development partition")
+    minimum_coverage = frozen.get("minimum_coverage")
+    development_metrics = frozen.get("development_metrics")
+    if (
+        isinstance(minimum_coverage, bool)
+        or not isinstance(minimum_coverage, (int, float))
+        or not math.isfinite(minimum_coverage)
+        or not 0.0 < minimum_coverage <= 1.0
+    ):
+        raise EvaluationError("frozen threshold has an invalid minimum coverage")
+    if not isinstance(development_metrics, dict):
+        raise EvaluationError("frozen threshold has no development metrics")
+    recorded_coverage = development_metrics.get("coverage")
+    if (
+        isinstance(recorded_coverage, bool)
+        or not isinstance(recorded_coverage, (int, float))
+        or not math.isfinite(recorded_coverage)
+        or recorded_coverage + 1e-12 < minimum_coverage
+    ):
+        raise EvaluationError("frozen development metrics do not meet the minimum coverage")
+    if development_metrics.get("record_count", 0) < 1:
+        raise EvaluationError("frozen development metrics contain no evaluated records")
     for name in (
         "partition_sha256",
         "confirmed_annotations_sha256",
