@@ -151,7 +151,7 @@ The first pilot is generated from the training partition only. It contains 50 ca
 
 The pilot generator uses request-text rules only to suggest labels. It does not use the paired Bash command to assign a suggestion. Every row starts with a blank confirmed label and a pending review status. The suggestions are deliberately not treated as ground truth.
 
-The local worklist and its manifest are stored under data/annotations/ and are excluded from Git. See the [Annotation Guide](ANNOTATION_GUIDE.md) for the review procedure and CSV field definitions. Only explicitly confirmed rows will be imported for classifier training.
+The local worklist and its manifest are stored under data/annotations/ and are excluded from Git. Generate it with .venv/bin/nl2bash-annotations create and validate reviewer decisions with .venv/bin/nl2bash-annotations validate. See the [Annotation Guide](ANNOTATION_GUIDE.md) for the full review procedure and CSV field definitions. The current generated pilot contains 500 pending rows and zero confirmed labels. Only explicitly confirmed rows will be imported for classifier training.
 
 ## 10. Evaluation metrics
 

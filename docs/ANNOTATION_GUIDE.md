@@ -17,7 +17,34 @@ These files are excluded from Git. Keep reviewed copies in the same local annota
 
 The CSV generator prefixes spreadsheet-formula-leading source text with an apostrophe so spreadsheet software treats it as text. The validator removes this protective prefix and verifies the original source text before importing annotations. Do not manually remove or alter the prefix.
 
-## 3. CSV columns
+## 3. Creating and validating the worklist
+
+From the repository root, install the package and generate the worklist:
+
+    uv pip install --python .venv/bin/python -e .
+    .venv/bin/nl2bash-annotations create
+
+The default command reads only the verified training partition and writes:
+
+- data/annotations/intent_pilot.csv
+- data/annotations/intent_pilot_manifest.json
+
+Review the CSV using the decision rules below. Keep the source fields, suggestions, and suggestion reasons unchanged. Edit only confirmed_intent, review_status, and reviewer_note.
+
+After review, validate and export confirmed labels:
+
+    .venv/bin/nl2bash-annotations validate
+
+The default export files are:
+
+- data/annotations/confirmed_intents.jsonl
+- data/annotations/confirmed_intents_manifest.json
+
+The validator reports the number of confirmed, pending, ambiguous, and rejected rows. An all-pending worklist produces an empty confirmed JSONL file. That is expected; it is safer than quietly training on guesses.
+
+Use the --help option on either subcommand to see options for alternate paths, pilot size, and seed.
+
+## 4. CSV columns
 
 | Column | Reviewer action |
 |---|---|
@@ -31,7 +58,7 @@ The CSV generator prefixes spreadsheet-formula-leading source text with an apost
 | review_status | Change pending to confirmed, ambiguous, or rejected. |
 | reviewer_note | Record why an item is ambiguous/rejected. A note is required for other_or_ambiguous. |
 
-## 4. Review decisions
+## 5. Review decisions
 
 Use exactly these review statuses:
 
@@ -42,7 +69,7 @@ Use exactly these review statuses:
 
 Use other_or_ambiguous as a confirmed label when the request is clearly outside the supported operation categories or the requested outcome combines independent operations. Use the ambiguous status when a reliable single label cannot be selected even after considering the reference command.
 
-## 5. Annotation rules
+## 6. Annotation rules
 
 1. The natural-language request is the classifier input and the primary basis for its label.
 2. Read the entire request before deciding. Do not label a request solely from its first word or from the first utility in the reference command.
@@ -52,7 +79,7 @@ Use other_or_ambiguous as a confirmed label when the request is clearly outside 
 6. Correct a wrong suggested label by entering the appropriate label in confirmed_intent; do not edit the suggestion column.
 7. Do not confirm a label when the pair is unclear or mismatched. Use ambiguous or rejected with a note.
 
-## 6. Valid labels
+## 7. Valid labels
 
 The confirmed_intent field accepts only:
 
@@ -69,7 +96,7 @@ The confirmed_intent field accepts only:
 
 The spelling must match exactly.
 
-## 7. Import and training policy
+## 8. Import and training policy
 
 The annotation validator checks that:
 - All pilot example IDs and group IDs are present exactly once.

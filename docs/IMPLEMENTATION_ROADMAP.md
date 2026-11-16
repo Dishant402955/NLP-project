@@ -223,23 +223,17 @@ This stage is divided into three small implementation commits.
 
 ##### Step 3.2.c: annotation CLI and pilot generation
 
-**Status:** In progress.
+**Status:** Completed.
 
-**Substep 3.2.c.a: annotation CLI entry point**
+**Delivered:**
+- Installed nl2bash-annotations console command with create and validate subcommands.
+- Machine-readable summaries and non-zero error status for invalid inputs.
+- Default CSV, manifests, and confirmed export under the Git-ignored data/annotations/ directory.
+- Reviewer instructions and reproducible command examples in the Annotation Guide.
 
-Implemented in src/nl2bash/annotation_cli.py and exposed as nl2bash-annotations with create and validate subcommands. Both operations display a machine-readable summary and return a non-zero status on invalid inputs.
+**Verified current state:** The local pilot contains 500 rows, 50 suggested examples per taxonomy label, 500 unique duplicate groups, 500 pending statuses, and zero confirmed labels. The confirmed export is therefore empty until a reviewer completes and validates the worklist.
 
-**Work:**
-- Expose pilot creation and annotation validation through a small CLI.
-- Generate the balanced pilot from the verified training partition.
-- Store CSV, pilot manifest, and confirmed export under ignored local annotation directories.
-- Document how a human reviews and edits the CSV.
-
-**Acceptance criteria:**
-- The pilot can be recreated using a fixed seed and source manifest.
-- CLI errors are clear and non-zero on invalid data.
-- Generated annotation artifacts remain outside Git.
-- The final pilot counts and limitations are documented.
+**Completion note:** The annotation tooling is implemented. Human review of the pilot is still outstanding, and classifier training must wait until confirmed labels exist.
 
 #### Step 3.3: TF-IDF and Logistic Regression baseline
 
