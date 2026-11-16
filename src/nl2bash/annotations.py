@@ -190,93 +190,107 @@ def _read_json(path: Path) -> dict[str, Any]:
     return value
 
 
-def _read_training_partition(
-    training_file: str | Path,
+def _read_partition(
+    partition_file: str | Path,
     dataset_manifest_file: str | Path,
+    partition_name: str = "train",
 ) -> tuple[list[dict[str, str]], dict[str, Any], str]:
-    train_path = Path(training_file)
+    if not isinstance(partition_name, str) or partition_name not in {"train", "dev", "test"}:
+        raise ValueError("partition_name must be train, dev, or test")
+    source_path = Path(partition_file)
     manifest_path = Path(dataset_manifest_file)
     manifest = _read_json(manifest_path)
     partitions = manifest.get("partitions", {})
     if not isinstance(partitions, dict):
         raise AnnotationError("dataset manifest has no valid partitions object")
-    partition = partitions.get("train", {})
+    partition = partitions.get(partition_name, {})
     if not isinstance(partition, dict):
-        raise AnnotationError("dataset manifest has no valid train partition entry")
+        raise AnnotationError(f"dataset manifest has no valid {partition_name} partition entry")
     relative_name = partition.get("file")
     if not isinstance(relative_name, str) or not relative_name:
-        raise AnnotationError("dataset manifest has no train partition filename")
+        raise AnnotationError(f"dataset manifest has no {partition_name} partition filename")
     relative_path = Path(relative_name)
     if relative_path.is_absolute() or ".." in relative_path.parts:
-        raise AnnotationError("dataset manifest train path must stay inside its directory")
+        raise AnnotationError(f"dataset manifest {partition_name} path must stay inside its directory")
     manifest_root = manifest_path.parent.resolve()
     declared_path = (manifest_root / relative_path).resolve()
     if manifest_root not in declared_path.parents:
-        raise AnnotationError("dataset manifest train path escapes its directory")
+        raise AnnotationError(f"dataset manifest {partition_name} path escapes its directory")
 
-    if not declared_path.is_file() or train_path.resolve() != declared_path:
+    if not declared_path.is_file() or source_path.resolve() != declared_path:
         raise AnnotationError(
-            "training file must be the train partition declared by the dataset manifest"
+            f"partition file must be the {partition_name} partition declared by the dataset manifest"
         )
 
     try:
-        raw = train_path.read_bytes()
+        raw = source_path.read_bytes()
     except OSError as exc:
-        raise AnnotationError(f"cannot read training partition {train_path}: {exc}") from exc
+        raise AnnotationError(f"cannot read {partition_name} partition {source_path}: {exc}") from exc
 
     checksum = hashlib.sha256(raw).hexdigest()
     expected_checksum = partition.get("sha256")
     if not isinstance(expected_checksum, str) or len(expected_checksum) != 64:
-        raise AnnotationError("dataset manifest has an invalid train checksum")
+        raise AnnotationError(f"dataset manifest has an invalid {partition_name} checksum")
     if checksum != expected_checksum:
-        raise AnnotationError("training partition checksum does not match dataset manifest")
+        raise AnnotationError(f"{partition_name} partition checksum does not match dataset manifest")
 
     try:
         lines = raw.decode("utf-8").splitlines()
     except UnicodeDecodeError as exc:
-        raise AnnotationError(f"training partition is not valid UTF-8 at byte {exc.start}") from exc
+        raise AnnotationError(f"{partition_name} partition is not valid UTF-8 at byte {exc.start}") from exc
 
-    if isinstance(partition.get("record_count"), bool) or not isinstance(partition.get("record_count"), int):
-        raise AnnotationError("dataset manifest has an invalid train record count")
-    if len(lines) != partition.get("record_count"):
-        raise AnnotationError("training partition record count does not match dataset manifest")
+    record_count = partition.get("record_count")
+    if isinstance(record_count, bool) or not isinstance(record_count, int) or record_count < 0:
+        raise AnnotationError(f"dataset manifest has an invalid {partition_name} record count")
+    if len(lines) != record_count:
+        raise AnnotationError(f"{partition_name} partition record count does not match dataset manifest")
 
     records: list[dict[str, str]] = []
     seen_ids: set[str] = set()
-    seen_groups: dict[str, str] = {}
-    seen_requests: dict[str, str] = {}
-    seen_commands: dict[str, str] = {}
+    request_groups: dict[str, str] = {}
+    command_groups: dict[str, str] = {}
 
     for line_number, line in enumerate(lines, start=1):
         try:
             row = json.loads(line)
         except json.JSONDecodeError as exc:
-            raise AnnotationError(f"invalid JSONL record at line {line_number}: {exc}") from exc
+            raise AnnotationError(
+                f"invalid JSONL record in {partition_name} partition at line {line_number}: {exc}"
+            ) from exc
         required = {"example_id", "group_id", "request", "reference_command"}
         if not isinstance(row, dict) or not required.issubset(row):
-            raise AnnotationError(f"training record at line {line_number} is missing required fields")
+            raise AnnotationError(
+                f"{partition_name} partition line {line_number} is missing required fields"
+            )
         if any(not isinstance(row[field], str) or not row[field] for field in required):
-            raise AnnotationError(f"training record at line {line_number} has empty or invalid fields")
+            raise AnnotationError(
+                f"{partition_name} partition line {line_number} has empty or invalid fields"
+            )
         example_id = row["example_id"]
         group_id = row["group_id"]
         if example_id in seen_ids:
-            raise AnnotationError(f"duplicate example ID in training partition: {example_id}")
+            raise AnnotationError(f"duplicate example ID in {partition_name} partition: {example_id}")
         seen_ids.add(example_id)
-        previous = seen_groups.setdefault(example_id, group_id)
-        if previous != group_id:
-            raise AnnotationError(f"conflicting group ID for training example: {example_id}")
         for value, registry, label in (
-            (row["request"].strip(), seen_requests, "request"),
-            (row["reference_command"].strip(), seen_commands, "reference command"),
+            (row["request"].strip(), request_groups, "request"),
+            (row["reference_command"].strip(), command_groups, "reference command"),
         ):
             previous_group = registry.setdefault(value, group_id)
             if previous_group != group_id:
                 raise AnnotationError(
-                    f"duplicate {label} appears in multiple training groups: {example_id}"
+                    f"duplicate {label} appears in multiple {partition_name} groups: {example_id}"
                 )
         records.append({field: row[field] for field in required})
 
     return records, manifest, checksum
+
+
+def _read_training_partition(
+    training_file: str | Path,
+    dataset_manifest_file: str | Path,
+) -> tuple[list[dict[str, str]], dict[str, Any], str]:
+    """Backward-compatible reader for the training partition."""
+    return _read_partition(training_file, dataset_manifest_file, "train")
 
 
 def suggest_intent(request: str) -> tuple[str | None, str]:
@@ -320,65 +334,108 @@ def create_annotation_worklist(
     *,
     per_label: int = 50,
     seed: int = 42,
+    partition_name: str = "train",
+    selection_mode: str | None = None,
 ) -> dict[str, Any]:
-    """Create a balanced, training-only pilot with pending human review.
+    """Create a suggested training pilot or a blind held-out review worklist.
 
-    Each selected duplicate group appears at most once across the entire
-    pilot. Suggestions are based on natural-language text patterns only.
+    suggested_balanced is intended for the training pilot only.
+    manual_all_groups selects one original record per duplicate group
+    without generating any suggested label.
     """
+    if not isinstance(partition_name, str) or partition_name not in {"train", "dev", "test"}:
+        raise ValueError("partition_name must be train, dev, or test")
     if isinstance(per_label, bool) or not isinstance(per_label, int) or per_label < 1:
         raise ValueError("per_label must be a positive integer")
     if isinstance(seed, bool) or not isinstance(seed, int):
         raise TypeError("seed must be an integer")
 
-    records, dataset_manifest, training_sha256 = _read_training_partition(
-        training_file, dataset_manifest_file
+    if selection_mode is None:
+        selection_mode = "suggested_balanced" if partition_name == "train" else "manual_all_groups"
+    if selection_mode not in {"suggested_balanced", "manual_all_groups"}:
+        raise ValueError("selection_mode must be suggested_balanced or manual_all_groups")
+    if partition_name != "train" and selection_mode != "manual_all_groups":
+        raise ValueError("development and test worklists must use blind manual review")
+
+    records, dataset_manifest, partition_sha256 = _read_partition(
+        training_file, dataset_manifest_file, partition_name
     )
-    candidates: dict[str, list[dict[str, str]]] = {
-        label: [] for label in (rule[0] for rule in _SUGGESTION_RULES)
-    }
+    source_revision = dataset_manifest.get("source", {}).get("revision")
+    if not isinstance(source_revision, str) or not source_revision:
+        raise AnnotationError("dataset manifest has no source revision")
 
-    for record in records:
-        label, reason = suggest_intent(record["request"])
-        if label is None:
-            continue
-        candidates[label].append({**record, "suggested_intent": label, "suggestion_reason": reason})
-
-    # Rare categories are sampled first to reduce competition for duplicate
-    # groups. A single seeded generator makes the complete selection stable.
-    rng = random.Random(seed)
-    selected_groups: set[str] = set()
-    selected_by_label: dict[str, list[dict[str, str]]] = {}
+    selected_rows: list[dict[str, str]] = []
     candidate_group_counts: dict[str, int] = {}
-    for label, _pattern in _SUGGESTION_RULES:
-        label_candidates = candidates[label]
-        candidate_groups = {row["group_id"] for row in label_candidates}
-        candidate_group_counts[label] = len(candidate_groups)
-        rng.shuffle(label_candidates)
+    selected_per_label: dict[str, int] = {}
+    shortages: dict[str, int] = {}
 
-        chosen: list[dict[str, str]] = []
-        for row in label_candidates:
-            if row["group_id"] in selected_groups:
-                continue
-            selected_groups.add(row["group_id"])
-            chosen.append(row)
-            if len(chosen) == per_label:
-                break
-        selected_by_label[label] = chosen
+    if selection_mode == "suggested_balanced":
+        candidates: dict[str, list[dict[str, str]]] = {
+            label: [] for label in (rule[0] for rule in _SUGGESTION_RULES)
+        }
+        for record in records:
+            label, reason = suggest_intent(record["request"])
+            if label is not None:
+                candidates[label].append(
+                    {**record, "suggested_intent": label, "suggestion_reason": reason}
+                )
 
-    rows: list[dict[str, str]] = []
-    for label in INTENT_LABELS:
-        for record in selected_by_label.get(label, []):
-            rows.append(
+        rng = random.Random(seed)
+        selected_groups: set[str] = set()
+        for label, _pattern in _SUGGESTION_RULES:
+            label_candidates = candidates[label]
+            candidate_group_counts[label] = len({row["group_id"] for row in label_candidates})
+            rng.shuffle(label_candidates)
+            chosen: list[dict[str, str]] = []
+            for row in label_candidates:
+                if row["group_id"] in selected_groups:
+                    continue
+                selected_groups.add(row["group_id"])
+                chosen.append(row)
+                if len(chosen) == per_label:
+                    break
+            selected_per_label[label] = len(chosen)
+            if len(chosen) < per_label:
+                shortages[label] = per_label - len(chosen)
+            selected_rows.extend(
                 {
-                    **{key: record[key] for key in ("example_id", "group_id", "request", "reference_command")},
+                    **{key: row[key] for key in ("example_id", "group_id", "request", "reference_command")},
                     "suggested_intent": label,
-                    "suggestion_reason": record["suggestion_reason"],
-                    "confirmed_intent": "",
-                    "review_status": "pending",
-                    "reviewer_note": "",
+                    "suggestion_reason": row["suggestion_reason"],
                 }
+                for row in chosen
             )
+        selection_method = "request_text_heuristics_then_seeded_unique_group_sampling"
+        ruleset: str | None = SUGGESTION_RULESET
+        requested_per_label: int | None = per_label
+    else:
+        representative_by_group: dict[str, dict[str, str]] = {}
+        for record in records:
+            representative_by_group.setdefault(record["group_id"], record)
+        selected_groups = set(representative_by_group)
+        selected_rows = [
+            {
+                **record,
+                "suggested_intent": "",
+                "suggestion_reason": "blind manual review; no heuristic suggestion supplied",
+            }
+            for record in representative_by_group.values()
+        ]
+        selection_method = "one_source_record_per_duplicate_group_blind_manual_review"
+        ruleset = None
+        requested_per_label = None
+
+    rows = [
+        {
+            **{key: record[key] for key in ("example_id", "group_id", "request", "reference_command")},
+            "suggested_intent": record["suggested_intent"],
+            "suggestion_reason": record["suggestion_reason"],
+            "confirmed_intent": "",
+            "review_status": "pending",
+            "reviewer_note": "",
+        }
+        for record in selected_rows
+    ]
 
     output_path = Path(output_csv)
     manifest_path = Path(pilot_manifest_file)
@@ -389,13 +446,20 @@ def create_annotation_worklist(
     if output_path.resolve() == manifest_path.resolve():
         raise AnnotationError("worklist CSV and pilot manifest must use different paths")
     if output_path.resolve() in protected_paths or manifest_path.resolve() in protected_paths:
-        raise AnnotationError("annotation outputs must not overwrite the training data or dataset manifest")
+        raise AnnotationError("annotation outputs must not overwrite the source partition or dataset manifest")
+
+    manifest_path.unlink(missing_ok=True)
     csv_tmp_path: Path | None = None
     try:
         output_path.parent.mkdir(parents=True, exist_ok=True)
         with tempfile.NamedTemporaryFile(
-            mode="w", encoding="utf-8", newline="", prefix=f".{output_path.name}.",
-            suffix=".tmp", dir=output_path.parent, delete=False
+            mode="w",
+            encoding="utf-8",
+            newline="",
+            prefix=f".{output_path.name}.",
+            suffix=".tmp",
+            dir=output_path.parent,
+            delete=False,
         ) as stream:
             csv_tmp_path = Path(stream.name)
             writer = csv.DictWriter(stream, fieldnames=WORKLIST_FIELDS, lineterminator="\n")
@@ -413,34 +477,42 @@ def create_annotation_worklist(
             csv_tmp_path.unlink(missing_ok=True)
         raise AnnotationError(f"cannot write annotation worklist {output_path}: {exc}") from exc
 
-    counts = {label: len(selected_by_label.get(label, [])) for label in INTENT_LABELS}
-    shortages = {
-        label: per_label - count for label, count in counts.items() if count < per_label
+    source_metadata: dict[str, Any] = {
+        "dataset_manifest": str(Path(dataset_manifest_file)),
+        "partition_name": partition_name,
+        "partition_file": str(Path(training_file)),
+        "partition_sha256": partition_sha256,
+        "dataset_revision": source_revision,
     }
+    if partition_name == "train":
+        source_metadata["training_file"] = str(Path(training_file))
+        source_metadata["training_sha256"] = partition_sha256
+
+    summary: dict[str, Any] = {
+        "partition_records_available": len(records),
+        "partition_groups_available": len({row["group_id"] for row in records}),
+        "pilot_records": len(rows),
+        "unique_duplicate_groups": len(selected_groups),
+        "all_review_statuses_pending": True,
+        "blind_manual_review": selection_mode == "manual_all_groups",
+    }
+    if partition_name == "train":
+        summary["training_records_available"] = len(records)
+
     pilot_manifest: dict[str, Any] = {
         "schema_version": 1,
         "dataset": "NL2Bash",
-        "source": {
-            "dataset_manifest": str(Path(dataset_manifest_file)),
-            "training_file": str(Path(training_file)),
-            "training_sha256": training_sha256,
-            "dataset_revision": dataset_manifest["source"]["revision"],
-        },
+        "source": source_metadata,
         "selection": {
-            "method": "request_text_heuristics_then_seeded_unique_group_sampling",
-            "ruleset": SUGGESTION_RULESET,
+            "method": selection_method,
+            "ruleset": ruleset,
             "seed": seed,
-            "requested_per_label": per_label,
+            "requested_per_label": requested_per_label,
             "candidate_unique_groups": candidate_group_counts,
-            "selected_per_label": counts,
+            "selected_per_label": selected_per_label,
             "shortages": shortages,
         },
-        "summary": {
-            "training_records_available": len(records),
-            "pilot_records": len(rows),
-            "unique_duplicate_groups": len(selected_groups),
-            "all_review_statuses_pending": True,
-        },
+        "summary": summary,
         "review_file": str(output_path),
         "pilot_example_ids": [row["example_id"] for row in rows],
         "pilot_group_ids": [row["group_id"] for row in rows],

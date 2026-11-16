@@ -156,7 +156,17 @@ def load_confirmed_training_data(
     confirmed_output = annotation_manifest.get("confirmed_output")
     if not isinstance(annotation_source, dict) or not isinstance(confirmed_output, dict):
         raise AnnotationError("annotation manifest is missing source or confirmed-output metadata")
-    if annotation_source.get("training_sha256") != training_sha256:
+    annotation_partition = annotation_source.get("partition_name", "train")
+    if annotation_partition != "train":
+        raise AnnotationError(
+            f"classifier fitting accepts only training annotations, not {annotation_partition} annotations"
+        )
+    annotation_partition_sha256 = annotation_source.get(
+        "partition_sha256", annotation_source.get("training_sha256")
+    )
+    if annotation_partition_sha256 != training_sha256:
+        raise AnnotationError("confirmed annotations refer to a different training partition")
+    if annotation_source.get("training_sha256", training_sha256) != training_sha256:
         raise AnnotationError("confirmed annotations refer to a different training partition")
     dataset_revision = dataset_source.get("revision")
     if not isinstance(dataset_revision, str) or not dataset_revision:

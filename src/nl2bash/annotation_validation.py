@@ -14,7 +14,7 @@ from nl2bash.annotations import (
     WORKLIST_FIELDS,
     AnnotationError,
     _read_json,
-    _read_training_partition,
+    _read_partition,
     _write_atomic,
     restore_spreadsheet_text,
 )
@@ -26,25 +26,59 @@ def validate_reviewed_annotations(
     pilot_manifest_file: str | Path,
     output_jsonl: str | Path,
     output_manifest_file: str | Path,
+    *,
+    partition_name: str = "train",
 ) -> dict[str, Any]:
-    """Validate a reviewed pilot and export only explicitly confirmed labels."""
-    records, dataset_manifest, training_sha256 = _read_training_partition(
-        training_file, dataset_manifest_file
+    """Validate a review worklist against one manifested partition.
+
+    The default remains the training partition for backward compatibility.
+    Development and test worklists must be generated in blind manual-review
+    mode and their exports retain an explicit partition name.
+    """
+    records, dataset_manifest, partition_sha256 = _read_partition(
+        training_file, dataset_manifest_file, partition_name
     )
+    dataset_source = dataset_manifest.get("source", {})
+    if not isinstance(dataset_source, dict):
+        raise AnnotationError("dataset manifest has invalid source metadata")
+    dataset_revision = dataset_source.get("revision")
+    if not isinstance(dataset_revision, str) or not dataset_revision:
+        raise AnnotationError("dataset manifest has no source revision")
+
     pilot_manifest = _read_json(Path(pilot_manifest_file))
     pilot_source = pilot_manifest.get("source", {})
-    dataset_source = dataset_manifest.get("source", {})
-    if not isinstance(pilot_source, dict) or not isinstance(dataset_source, dict):
-        raise AnnotationError("dataset or pilot manifest has invalid source metadata")
-    if pilot_source.get("training_sha256") != training_sha256:
-        raise AnnotationError("pilot manifest does not match the current training partition")
-    if pilot_source.get("dataset_revision") != dataset_manifest.get("source", {}).get("revision"):
+    if not isinstance(pilot_source, dict):
+        raise AnnotationError("pilot manifest has invalid source metadata")
+    if pilot_source.get("dataset_revision") != dataset_revision:
         raise AnnotationError("pilot and dataset manifests refer to different source revisions")
+    declared_partition = pilot_source.get("partition_name", "train")
+    if declared_partition != partition_name:
+        raise AnnotationError(
+            f"pilot manifest belongs to the {declared_partition} partition, not {partition_name}"
+        )
+    declared_partition_sha256 = pilot_source.get(
+        "partition_sha256",
+        pilot_source.get("training_sha256") if partition_name == "train" else None,
+    )
+    if declared_partition_sha256 != partition_sha256:
+        raise AnnotationError(
+            f"pilot manifest does not match the current {partition_name} partition"
+        )
+    pilot_summary = pilot_manifest.get("summary")
+    if not isinstance(pilot_summary, dict):
+        raise AnnotationError("pilot manifest has no valid summary")
+    blind_manual_review = pilot_summary.get("blind_manual_review", False)
+    if partition_name in {"dev", "test"} and blind_manual_review is not True:
+        raise AnnotationError("development and test annotations require blind manual review")
 
     expected_metadata = pilot_manifest.get("pilot_example_metadata")
     expected_ids = pilot_manifest.get("pilot_example_ids")
     expected_groups = pilot_manifest.get("pilot_group_ids")
-    if not isinstance(expected_metadata, dict) or not isinstance(expected_ids, list) or not isinstance(expected_groups, list):
+    if (
+        not isinstance(expected_metadata, dict)
+        or not isinstance(expected_ids, list)
+        or not isinstance(expected_groups, list)
+    ):
         raise AnnotationError("pilot manifest is missing its example metadata")
     if any(not isinstance(value, str) or not value for value in expected_ids + expected_groups):
         raise AnnotationError("pilot manifest contains invalid example or group IDs")
@@ -52,10 +86,31 @@ def validate_reviewed_annotations(
         raise AnnotationError("pilot manifest contains duplicate example or group IDs")
     if len(expected_groups) != len(expected_ids):
         raise AnnotationError("pilot manifest group list does not match its example list")
-    if {value.get("group_id") for value in expected_metadata.values() if isinstance(value, dict)} != set(expected_groups):
+    if set(expected_metadata) != set(expected_ids):
+        raise AnnotationError("pilot manifest metadata does not match its example IDs")
+
+    metadata_groups: set[str] = set()
+    for example_id, metadata in expected_metadata.items():
+        if not isinstance(metadata, dict):
+            raise AnnotationError(f"invalid pilot metadata for {example_id}")
+        group_id = metadata.get("group_id")
+        suggested = metadata.get("suggested_intent")
+        reason = metadata.get("suggestion_reason")
+        if not all(isinstance(value, str) for value in (group_id, suggested, reason)):
+            raise AnnotationError(f"incomplete pilot metadata for {example_id}")
+        if not group_id or not reason:
+            raise AnnotationError(f"incomplete pilot metadata for {example_id}")
+        if suggested and suggested not in INTENT_LABELS:
+            raise AnnotationError(f"invalid suggested intent in pilot metadata for {example_id}")
+        if not suggested and not blind_manual_review:
+            raise AnnotationError(
+                f"empty suggested intent is permitted only for blind manual review: {example_id}"
+            )
+        metadata_groups.add(group_id)
+    if metadata_groups != set(expected_groups):
         raise AnnotationError("pilot manifest group metadata does not match its group IDs")
 
-    training_by_id = {record["example_id"]: record for record in records}
+    records_by_id = {record["example_id"]: record for record in records}
     csv_path = Path(reviewed_csv)
     expected_review_file = pilot_manifest.get("review_file")
     if not isinstance(expected_review_file, str) or Path(expected_review_file).resolve() != csv_path.resolve():
@@ -104,9 +159,11 @@ def validate_reviewed_annotations(
             raise AnnotationError(f"duplicate pilot group ID at CSV line {line_number}: {group_id}")
         seen_groups.add(group_id)
 
-        source = training_by_id.get(example_id)
+        source = records_by_id.get(example_id)
         if source is None:
-            raise AnnotationError(f"pilot example is not present in the training partition: {example_id}")
+            raise AnnotationError(
+                f"pilot example {example_id} is not present in the {partition_name} partition"
+            )
         for field in ("request", "reference_command"):
             restored = restore_spreadsheet_text(row.get(field, ""))
             if restored != source[field]:
@@ -180,8 +237,7 @@ def validate_reviewed_annotations(
         raise AnnotationError("confirmed JSONL and output manifest must use different paths")
     if output_path.resolve() in protected_paths or output_manifest_path.resolve() in protected_paths:
         raise AnnotationError("confirmed outputs must not overwrite source or review files")
-    # The manifest is the completion marker. Remove an older one first so a
-    # failed rebuild cannot leave stale metadata beside a partial new export.
+
     output_manifest_path.unlink(missing_ok=True)
     output_lines = [
         json.dumps(row, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
@@ -195,27 +251,40 @@ def validate_reviewed_annotations(
     except OSError as exc:
         raise AnnotationError(f"cannot checksum reviewed annotation CSV {csv_path}: {exc}") from exc
 
+    output_source: dict[str, Any] = {
+        "dataset_revision": dataset_revision,
+        "partition_name": partition_name,
+        "partition_sha256": partition_sha256,
+        "dataset_manifest": str(Path(dataset_manifest_file)),
+        "partition_file": str(Path(training_file)),
+        "pilot_manifest": str(Path(pilot_manifest_file)),
+        "reviewed_csv": str(csv_path),
+        "reviewed_csv_sha256": reviewed_csv_sha256,
+    }
+    if partition_name == "train":
+        output_source["training_sha256"] = partition_sha256
+
     output_manifest = {
         "schema_version": 1,
         "dataset": "NL2Bash",
-        "source": {
-            "dataset_revision": dataset_manifest["source"]["revision"],
-            "training_sha256": training_sha256,
-            "pilot_manifest": str(Path(pilot_manifest_file)),
-            "reviewed_csv": str(csv_path),
-            "reviewed_csv_sha256": reviewed_csv_sha256,
-        },
+        "source": output_source,
         "summary": {
+            "partition_records": len(records),
             "pilot_records": len(rows),
             "confirmed_records": len(confirmed),
             "status_counts": status_counts,
+            "blind_manual_review": blind_manual_review,
         },
         "confirmed_output": {
             "file": str(output_path),
             "record_count": len(confirmed),
             "sha256": hashlib.sha256(output_payload).hexdigest(),
         },
-        "training_policy": "only rows explicitly marked confirmed are exported",
+        "training_policy": (
+            "only rows explicitly marked confirmed are exported; held-out exports must not be used for fitting"
+            if partition_name in {"dev", "test"}
+            else "only rows explicitly marked confirmed are exported"
+        ),
     }
     manifest_payload = (
         json.dumps(output_manifest, ensure_ascii=False, sort_keys=True, indent=2) + "\n"

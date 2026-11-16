@@ -317,17 +317,35 @@ The implementation is divided into small commits. See [Intent Classifier](INTENT
 
 ##### Step 3.3.d: held-out annotations and evaluation
 
+##### Step 3.3.d.a: blind development and test annotation worklists
+
+**Status:** Completed.
+
+**Delivered:**
+- Partition-aware worklist generation for train, development, and test.
+- Development and test default to blind manual review with no heuristic label suggestions.
+- One original request is selected from each duplicate group in the held-out partition.
+- Confirmed exports record their partition names and source checksums.
+- Classifier training rejects development and test annotation exports.
+
+**Verified current worklists:** 375 pending development examples and 375 pending test examples, with 375 unique duplicate groups in each partition. No suggested labels were generated.
+
+##### Step 3.3.d.b: development threshold selection and test evaluation
+
 **Work:**
-- Extend the annotation workflow to support development and test partitions without changing the existing training pilot.
-- Generate separate review worklists and confirmed exports for held-out partitions.
-- Validate every held-out annotation against its own source partition and checksum.
-- Implement evaluation using development data for configuration selection and test data once after the configuration is frozen.
+- Load confirmed development and test labels using partition-specific checksums and source-row validation.
+- Select the low-confidence threshold using development labels only.
+- Freeze threshold and model provenance before test evaluation.
+- Evaluate the test partition once after configuration freeze.
+- Report accuracy, macro/weighted and per-class precision, recall, F1, support, confusion matrix, and low-confidence counts.
 
 **Acceptance criteria:**
 - No development or test annotation enters model fitting.
-- No duplicate-linked group appears across partitions.
-- Metrics include accuracy, macro/weighted and per-class precision, recall, F1, support, and confusion matrix.
+- Held-out annotations are manually confirmed without model or heuristic suggestions.
+- No duplicate-linked group appears across train, development, and test.
 - Test evaluation fails closed when labels are missing, unconfirmed, or inconsistent.
+- The test report records model hash, test partition checksum, annotation checksum, and frozen development threshold.
+- A completed test report cannot be silently overwritten or re-run for the same project evaluation.
 
 **Current limitation:** The training pilot contains 500 pending rows and zero confirmed labels. The classifier can be implemented and tested with temporary fixtures outside the repository, but no real model training or performance result is possible until human annotations are confirmed.
 
