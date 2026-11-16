@@ -8,7 +8,9 @@ version = "0.1.0"
 description = "A hybrid NLP system for translating natural-language requests into Bash commands."
 readme = "README.md"
 requires-python = ">=3.10"
-dependencies = []
+dependencies = [
+    "scikit-learn>=1.7,<1.8",
+]
 
 [project.scripts]
 nl2bash-prepare-dataset = "nl2bash.dataset_cli:main"
