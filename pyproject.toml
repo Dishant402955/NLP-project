@@ -12,6 +12,7 @@ dependencies = []
 
 [project.scripts]
 nl2bash-prepare-dataset = "nl2bash.dataset_cli:main"
+nl2bash-annotations = "nl2bash.annotation_cli:main"
 
 [tool.setuptools]
 package-dir = {"" = "src"}
