@@ -113,6 +113,12 @@ This stage is divided into small implementation commits. Do not train a classifi
 
 #### Step 3.1: Reproducible dataset preparation
 
+**Status:** In progress.
+
+**Substep 3.1.a: aligned corpus loader**
+
+Implemented in src/nl2bash/corpus.py: paired UTF-8 files are read line by line, aligned counts and blank records are validated, source text is preserved, stable row IDs are assigned, and source SHA-256 checksums are calculated.
+
 **Work:**
 - Implement a standard-library dataset loader for aligned NL2Bash request and command files.
 - Validate row counts, empty records, encoding, and source checksums.
