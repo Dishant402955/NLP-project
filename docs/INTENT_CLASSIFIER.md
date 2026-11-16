@@ -83,7 +83,28 @@ Report accuracy, macro and weighted precision/recall/F1, per-class precision/rec
 
 No test result is valid until the test annotations are confirmed and the final configuration is frozen.
 
-## 7. Current limitation
+## 7. CLI usage
+
+Install the locked project dependencies and package:
+
+    uv sync --locked
+    uv pip install --python .venv/bin/python -e .
+
+Train the model after the confirmed training export meets the per-label minimum:
+
+    .venv/bin/nl2bash-classifier train
+
+The command reads the confirmed annotation export and its manifest, validates every row against the training partition, and writes the model and manifest under models/.
+
+Predict one request using the verified local model:
+
+    .venv/bin/nl2bash-classifier predict --request "Find all Python files under the current directory"
+
+The prediction command prints JSON with the public intent label, diagnostic top label, score, threshold, and low-confidence flag. It does not generate or execute a Bash command.
+
+At the current project state, the train command intentionally exits with an error because the confirmed annotation export is empty. Complete and validate the human-reviewed pilot first.
+
+## 8. Current limitation
 
 The annotation workflow currently has a 500-example training pilot. All 500 rows are pending and the confirmed export contains zero rows. Therefore no real classifier can be fitted or evaluated yet.
 

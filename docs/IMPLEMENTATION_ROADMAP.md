@@ -299,10 +299,15 @@ The implementation is divided into small commits. See [Intent Classifier](INTENT
 
 **Substep 3.3.c.b: classifier CLI**
 
-**Work:**
-- Add a train command that loads the validated confirmed-training dataset and persists the local model.
-- Add a predict command that loads a verified local model and prints a JSON prediction.
-- Keep all generated model files under the Git-ignored models/ directory.
+**Status:** Completed.
+
+**Delivered:**
+- train command loads the checksum-verified confirmed training export and persists the local model.
+- predict command loads a checksum-verified local model and prints a JSON intent result.
+- Input/output path collision checks and concise non-zero error handling.
+- Model files default to the Git-ignored models/ directory.
+
+**Verification:** Temporary fixture files outside the repository were used to train through the CLI, predict a known-feature request, exercise the zero-known-feature fallback, and verify output collision and missing-model errors. The actual project train command was also checked and correctly refuses the current empty confirmed-label export.
 
 **Acceptance criteria:**
 - Training refuses empty or insufficient confirmed data.
