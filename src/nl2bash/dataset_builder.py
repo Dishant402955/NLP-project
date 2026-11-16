@@ -160,6 +160,12 @@ def write_dataset_artifacts(
     output_path = Path(output_dir)
     output_path.mkdir(parents=True, exist_ok=True)
 
+    # The manifest is the completion marker. Remove an older one before
+    # replacing partition files so an interrupted rebuild cannot leave a
+    # stale manifest describing a mixture of old and new outputs.
+    manifest_path = output_path / "manifest.json"
+    manifest_path.unlink(missing_ok=True)
+
     partition_details: dict[str, dict[str, Any]] = {}
     for split_name in ratios:
         payload = _jsonl_bytes(partition_rows[split_name])
@@ -205,5 +211,5 @@ def write_dataset_artifacts(
     manifest_payload = (
         json.dumps(manifest, ensure_ascii=False, sort_keys=True, indent=2) + "\n"
     ).encode("utf-8")
-    _write_atomic(output_path / "manifest.json", manifest_payload)
+    _write_atomic(manifest_path, manifest_payload)
     return manifest

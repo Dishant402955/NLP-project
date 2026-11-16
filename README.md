@@ -6,7 +6,7 @@ The system displays the generated command, explains what it does, and checks its
 
 ## Project status
 
-The Python package foundation and conservative request-preprocessing API are available. Intent classification, parameter extraction, model generation, validation, and the end-to-end CLI are planned implementation stages.
+The Python package foundation, conservative request preprocessing, and reproducible NL2Bash dataset-preparation CLI are implemented. Intent annotation and classification are the next stages; parameter extraction, model generation, validation, and the end-to-end command-generation CLI remain planned.
 
 ## Project objectives
 
@@ -46,7 +46,7 @@ find . -type f -name "*.py" -size +10M
 | Entity and parameter extraction | Rule-based extraction |
 | Command generation | Qwen2.5 1.5B Instruct through Ollama |
 | Bash syntax parsing | bashlex |
-| Testing | pytest |
+| Verification | Temporary scripts outside the repository; no test source is committed |
 | Initial interface | Command-line interface |
 
 The stack is a project plan and may be adjusted after environment checks and initial experiments.

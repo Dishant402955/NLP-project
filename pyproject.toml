@@ -10,6 +10,9 @@ readme = "README.md"
 requires-python = ">=3.10"
 dependencies = []
 
+[project.scripts]
+nl2bash-prepare-dataset = "nl2bash.dataset_cli:main"
+
 [tool.setuptools]
 package-dir = {"" = "src"}
 

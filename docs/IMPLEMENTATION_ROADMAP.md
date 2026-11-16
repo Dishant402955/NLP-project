@@ -113,7 +113,17 @@ This stage is divided into small implementation commits. Do not train a classifi
 
 #### Step 3.1: Reproducible dataset preparation
 
-**Status:** In progress.
+**Status:** Completed.
+
+**Delivered:**
+- Aligned UTF-8 corpus loading, row validation, stable IDs, and source checksums.
+- Transitive duplicate grouping by exact request or reference command after trimming surrounding whitespace.
+- Seeded, duplicate-safe train/dev/test partition allocation.
+- JSONL partition writing and a checksum/provenance manifest.
+- A command-line entry point named nl2bash-prepare-dataset.
+- A verified local run against the audited NL2Bash revision.
+
+**Verified run:** 12,607 records, 9,451 duplicate groups, largest group 45; train 10,085, dev 1,261, test 1,261. Request and command overlap across partitions were independently verified as zero.
 
 **Substep 3.1.a: aligned corpus loader**
 
@@ -130,6 +140,10 @@ Implemented in src/nl2bash/splitting.py: a seeded greedy allocator assigns whole
 **Substep 3.1.d: partition files and manifest**
 
 Implemented in src/nl2bash/dataset_builder.py: deterministic JSONL partitions are written atomically per file, and a manifest records source revision/checksums, split configuration, record/group counts, output checksums, and zero-overlap checks.
+
+**Substep 3.1.e: dataset preparation CLI**
+
+Implemented in src/nl2bash/dataset_cli.py and exposed as nl2bash-prepare-dataset. It validates that output paths are separate from raw inputs, orchestrates loading/grouping/splitting/writing, and returns a non-zero status with a concise error on invalid inputs.
 
 **Work:**
 - Implement a standard-library dataset loader for aligned NL2Bash request and command files.

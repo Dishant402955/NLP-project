@@ -107,7 +107,35 @@ The project record format will retain the source pair and keep new annotations e
 
 The null fields are populated only after annotation and split assignment. The source pair is not rewritten during annotation.
 
-## 7. Intent labels and annotation
+## 7. Reproducible preparation run
+
+The project provides the command-line entry point nl2bash-prepare-dataset. Install the package in the project's Python environment, then run the following from the repository root:
+
+```bash
+uv pip install --python .venv/bin/python -e .
+
+.venv/bin/nl2bash-prepare-dataset \
+  --requests data/raw/nl2bash/all.nl \
+  --commands data/raw/nl2bash/all.cm \
+  --output-dir data/processed/nl2bash \
+  --source-revision d6b9f5bdff45621d190134e31ab63b7bf7002190 \
+  --seed 42
+```
+
+The current audited run produced:
+
+| Partition | Records | Duplicate groups |
+|---|---:|---:|
+| Train | 10,085 | 8,701 |
+| Development | 1,261 | 375 |
+| Test | 1,261 | 375 |
+| **Total** | **12,607** | **9,451** |
+
+The manifest records the upstream revision, SHA-256 checksums of the raw files, split algorithm, seed, target ratios, record and group counts, output-file checksums, and zero cross-partition request/command overlap checks.
+
+Generated JSONL files and the manifest are stored under data/processed/nl2bash/. Both raw and processed data directories are ignored by Git. The generated files are local artifacts and are not part of the repository history. Re-running the command with the same source files, revision, and settings produces byte-identical partition files and manifest.
+
+## 8. Intent labels and annotation
 
 NL2Bash does not provide the intent labels needed to train our classifier. The project will use the [Intent Taxonomy](INTENT_TAXONOMY.md), which defines nine primary operation categories and an `other_or_ambiguous` fallback.
 
@@ -117,7 +145,7 @@ The labelled data must use the same duplicate-aware partitions described above. 
 
 Raw data, annotations, and generated split files are local project artifacts and will not be committed to Git.
 
-## 8. Evaluation metrics
+## 9. Evaluation metrics
 
 ### Intent classification
 
@@ -143,7 +171,7 @@ Exact string matching alone is not a complete measure of correctness.
 
 Measure generation latency under a recorded hardware, model, and configuration setup. Report the number of examples and the measurement method.
 
-## 9. Planned experiments
+## 10. Planned experiments
 
 1. Train an intent-classification baseline using TF-IDF and Logistic Regression.
 2. Evaluate entity extraction on annotated examples.
@@ -154,7 +182,7 @@ Measure generation latency under a recorded hardware, model, and configuration s
 
 Any functional or semantic command checks must run only in a controlled, isolated environment with reviewed examples. The normal application must never execute generated commands.
 
-## 10. Reporting
+## 11. Reporting
 
 The final experiment report should include:
 - Dataset source, upstream revision, license, checksums, filtering decisions, and final split sizes.
@@ -164,7 +192,7 @@ The final experiment report should include:
 - Representative successful and unsuccessful examples.
 - Limitations, including ambiguous requests, unsupported syntax, and semantically incorrect commands.
 
-## 11. Citation
+## 12. Citation
 
 Lin, Xi Victoria, Chenglong Wang, Luke Zettlemoyer, and Michael D. Ernst. 2018. “NL2Bash: A Corpus and Semantic Parser for Natural Language Interface to the Linux Operating System.” Proceedings of LREC 2018.
 

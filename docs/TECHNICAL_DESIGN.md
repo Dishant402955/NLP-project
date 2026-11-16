@@ -21,6 +21,7 @@ The implementation is expected to be organized around the following responsibili
 
 - Input and CLI: collect requests and display results.
 - Preprocessing: validate string input and remove surrounding whitespace while preserving all internal content.
+- Dataset preparation: validate the parallel corpus, group duplicate-linked records, assign deterministic partitions, and write JSONL files with a manifest.
 - Intent classifier: train, load, and run the intent model using the categories in [Intent Taxonomy](INTENT_TAXONOMY.md).
 - Entity extractor: identify relevant values and conditions.
 - Command generator: construct the model prompt and obtain generated output.
@@ -62,4 +63,4 @@ Executable checks are required for each implementation step. By project requirem
 
 ## 8. Dataset boundary
 
-The NL2Bash source contains paired natural-language requests and Bash commands, but no project-specific intent labels or entity annotations. The project will maintain its own annotation guide and duplicate-aware data partitions. Raw data, annotations, and processed splits remain local and are not committed to Git. See [Dataset and Evaluation](DATASET_AND_EVALUATION.md).
+The NL2Bash source contains paired natural-language requests and Bash commands, but no project-specific intent labels or entity annotations. The dataset preparation CLI creates duplicate-aware partitions and a checksum manifest. Raw data, annotations, and processed splits remain local and are not committed to Git. See [Dataset and Evaluation](DATASET_AND_EVALUATION.md).
