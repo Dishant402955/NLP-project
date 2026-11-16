@@ -4,6 +4,10 @@ A hybrid NLP system that translates natural-language instructions into Bash comm
 
 The system displays the generated command, explains what it does, and checks its syntax and basic safety properties. It does not execute commands automatically.
 
+## Project status
+
+The repository currently contains the project plan and implementation roadmap. Application components are being developed incrementally; the README will be updated as working functionality becomes available.
+
 ## Project objectives
 
 - Accept Linux command requests written in plain English.
@@ -37,7 +41,7 @@ find . -type f -name "*.py" -size +10M
 | Area | Planned technology |
 |---|---|
 | Programming language | Python |
-| Text preprocessing | NLTK and custom Python utilities |
+| Text preprocessing | Python standard library and custom utilities |
 | Intent classification | Scikit-learn, TF-IDF, Logistic Regression |
 | Entity and parameter extraction | Rule-based extraction |
 | Command generation | Qwen2.5 1.5B Instruct through Ollama |
@@ -55,6 +59,7 @@ Detailed project documentation is maintained in the [docs](docs/) directory.
 - [System Architecture](docs/ARCHITECTURE.md): component responsibilities and the end-to-end data flow.
 - [Technical Design](docs/TECHNICAL_DESIGN.md): planned modules, technology choices, and implementation boundaries.
 - [Dataset and Evaluation](docs/DATASET_AND_EVALUATION.md): dataset plan, evaluation metrics, and experimental approach.
+- [Implementation Roadmap](docs/IMPLEMENTATION_ROADMAP.md): ordered development steps, acceptance criteria, verification protocol, and commit strategy.
 
 ## Project evaluation
 
@@ -71,6 +76,10 @@ Exact command matching is useful for comparison but does not capture every seman
 ## Safety boundary
 
 Generated commands are shown to the user and are not executed automatically. Syntax validity does not establish that a command is safe or that it will have the intended effect. Safety checks are intended to flag known risks, not to provide a formal guarantee.
+
+## Development verification
+
+The application is verified at every implementation step. Test scripts and temporary fixtures are kept outside this repository; no test source or test directory is committed. The review and verification process is defined in [Implementation Roadmap](docs/IMPLEMENTATION_ROADMAP.md).
 
 ## Initial scope
 

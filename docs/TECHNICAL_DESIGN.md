@@ -5,14 +5,13 @@
 | Component | Technology | Purpose |
 |---|---|---|
 | Core application | Python | Application logic and component integration |
-| Preprocessing | NLTK and custom utilities | Tokenization and lightweight text normalization |
+| Preprocessing | Python standard library and custom utilities | Unicode normalization and lightweight whitespace normalization while preserving command-relevant text |
 | Feature extraction | Scikit-learn TF-IDF | Convert text into features for classification |
 | Intent classifier | Scikit-learn Logistic Regression | Predict the requested operation category |
 | Parameter extraction | Python rules and regular expressions | Extract paths, extensions, sizes, ports, dates, and related values |
 | Language model | Qwen2.5 1.5B Instruct | Generate Bash commands and explanations |
 | Model serving | Ollama | Run the selected model locally |
 | Bash parsing | bashlex | Parse generated Bash syntax |
-| Tests | pytest | Unit and integration tests |
 
 These are planned choices, not claims that the environment has already been configured or that the model has been benchmarked.
 
@@ -56,3 +55,7 @@ The initial target is a local Linux environment with Python. Ollama and the sele
 - Keep datasets and model weights out of Git unless their size and licensing make inclusion appropriate.
 - Record model version and experiment configuration for reproducibility.
 - Do not store secrets or machine-specific configuration in source control.
+
+## 7. Verification policy
+
+Executable checks are required for each implementation step. By project requirement, test source and fixtures will be created only in temporary locations outside the repository and will not be committed. See the [Implementation Roadmap](IMPLEMENTATION_ROADMAP.md) for the mandatory ten-pass review and adversarial-review procedure.

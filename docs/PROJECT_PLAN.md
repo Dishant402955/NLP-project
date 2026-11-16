@@ -70,10 +70,12 @@ How effectively can a hybrid NLP and language-model-based system translate natur
 - An entity and parameter extraction component and its evaluation.
 - An LLM-based Bash command-generation component.
 - A command-validation component.
-- A test suite.
+- A repeatable external verification procedure; verification scripts will not be stored in the repository.
 - A documented evaluation dataset and experiment results.
 - Project and technical documentation.
 
 ## 10. Development approach
 
-Implementation will proceed incrementally. Each component will be developed and tested separately before integration. The dataset, model, and runtime environment will be checked before committing to implementation details that depend on them.
+Implementation will proceed incrementally according to the [Implementation Roadmap](IMPLEMENTATION_ROADMAP.md). Each step has explicit acceptance criteria and is reviewed before a small commit is created.
+
+The project is tested, but test source and fixtures are kept outside the Git repository by project requirement. No test directory or test files will be committed. The dataset, model, and runtime environment will be checked before committing to implementation details that depend on them.
