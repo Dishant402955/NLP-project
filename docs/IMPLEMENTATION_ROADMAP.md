@@ -119,6 +119,10 @@ This stage is divided into small implementation commits. Do not train a classifi
 
 Implemented in src/nl2bash/corpus.py: paired UTF-8 files are read line by line, aligned counts and blank records are validated, source text is preserved, stable row IDs are assigned, and source SHA-256 checksums are calculated.
 
+**Substep 3.1.b: duplicate grouping**
+
+Implemented in src/nl2bash/grouping.py: records are connected when they share an exact request or reference command after trimming surrounding whitespace. Transitive links form one group, and group ordering is deterministic.
+
 **Work:**
 - Implement a standard-library dataset loader for aligned NL2Bash request and command files.
 - Validate row counts, empty records, encoding, and source checksums.
