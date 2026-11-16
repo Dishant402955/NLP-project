@@ -18,7 +18,7 @@ Develop and evaluate a hybrid NLP system that translates natural-language instru
 
 1. Accept command requests in plain English.
 2. Preprocess input text for downstream language-processing tasks.
-3. Classify requests into the project-defined intent categories using a manually reviewed labelled subset.
+3. Classify requests into the project-defined intent categories using a labelled subset that will receive independent human review before final evaluation.
 4. Extract useful entities and parameters from requests.
 5. Generate Bash commands using a language model.
 6. Explain the generated command.

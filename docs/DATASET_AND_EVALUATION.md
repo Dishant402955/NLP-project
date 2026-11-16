@@ -151,9 +151,9 @@ The first pilot is generated from the training partition only. It contains 50 ca
 
 The pilot generator uses request-text rules only to suggest labels. It does not use the paired Bash command to assign a suggestion. Every row starts with a blank confirmed label and a pending review status. The suggestions are deliberately not treated as ground truth.
 
-The local worklist and its manifest are stored under data/annotations/ and are excluded from Git. Generate it with .venv/bin/nl2bash-annotations create and validate reviewer decisions with .venv/bin/nl2bash-annotations validate. See the [Annotation Guide](ANNOTATION_GUIDE.md) for the full review procedure and CSV field definitions. The current generated pilot contains 500 pending rows and zero confirmed labels. Only explicitly confirmed rows will be imported for classifier training.
+The local worklist and its manifest are stored under data/annotations/ and are excluded from Git. Generate it with .venv/bin/nl2bash-annotations create and validate reviewer decisions with .venv/bin/nl2bash-annotations validate. See the [Annotation Guide](ANNOTATION_GUIDE.md) for the full review procedure and CSV field definitions. The initial AI-assisted annotation pass has labelled all 500 training rows and all 375 development rows. These are provisional labels, not independent human annotations; see [Annotation Review Status](ANNOTATION_REVIEW_STATUS.md). Only independently reviewed labels should support final academic performance claims.
 
-Separate blind worklists are generated for development and test using one source record per duplicate group. These worklists contain no heuristic label suggestions. Their confirmed exports are tagged with the matching partition name and checksum. The classifier training loader rejects either held-out export.
+Separate blind worklists are generated for development and test using one source record per duplicate group. These worklists contain no heuristic label suggestions. Their confirmed exports are tagged with the matching partition name and checksum. The classifier training loader rejects either held-out export. The development worklist has a provisional AI-assisted request-only annotation; the test worklist remains untouched and empty.
 
 ## 10. Evaluation metrics
 

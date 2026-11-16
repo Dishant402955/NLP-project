@@ -6,6 +6,8 @@ This guide explains how to review the local intent-annotation pilot for the Natu
 
 The pilot is a manually reviewed dataset artifact. The suggested labels are weak hints generated from request-text patterns. They are not ground truth and must not be used for model training until a reviewer confirms them.
 
+**Current annotation provenance:** the local training and development worklists have an initial AI-assisted request-only annotation pass. Those labels are provisional and must not be described as independently human-reviewed. Before final academic evaluation, a human reviewer should audit or replace them using this guide. The test worklist remains pending and must stay sealed until the model and threshold are frozen. See [Annotation Review Status](ANNOTATION_REVIEW_STATUS.md).
+
 ## 2. Files
 
 The annotation workflow creates these local files:

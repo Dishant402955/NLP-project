@@ -119,8 +119,10 @@ The report is written to artifacts/evaluation/test_report.json. A separate test_
 
 The classifier CLI also provides --help for each command and options for alternate input and artifact paths. It never generates or executes a Bash command.
 
-## 8. Current limitation
+## 8. Current limitation and provisional run
 
-The annotation workflow currently has a 500-example training pilot and blind development and test worklists of 375 rows each. All 1,250 rows are pending and all three confirmed exports contain zero rows. Therefore no real classifier can be fitted, no threshold can be selected, and no real test metrics can be reported yet.
+The current local annotation state is: 500 AI-assisted training labels, 375 AI-assisted blind development labels, and zero test labels. The training and development labels were assigned from the natural-language requests without using paired commands or classifier predictions. However, both partitions were reviewed by the same AI annotator. They are not independent human ground truth and may share systematic annotation bias.
+
+A project-specific baseline has been fitted and a development threshold has been selected from these provisional labels. Its metrics are engineering diagnostics only, not final academic results. A human reviewer should independently adjudicate the training and development annotations, with particular attention to category boundaries and the `other_or_ambiguous` class, before finalizing claims. The test partition must remain untouched until the taxonomy, model, and threshold are frozen.
 
 Implementation and offline verification may use temporary synthetic fixtures outside the repository. Such fixtures must never be committed, must never be added to the project's annotation data, and must never be presented as model results.
