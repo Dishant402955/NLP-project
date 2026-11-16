@@ -109,23 +109,60 @@ The original request must remain available through the pipeline. NLP output must
 
 ### Step 3: Intent classification
 
+This stage is divided into small implementation commits. Do not train a classifier on unreviewed heuristic labels.
+
+#### Step 3.1: Reproducible dataset preparation
+
 **Work:**
-- Use the [Intent Taxonomy](INTENT_TAXONOMY.md) as the initial label set.
-- Annotate a balanced pilot of approximately 50 examples per label, for approximately 500 examples.
-- Review ambiguous examples and revise the annotation guidance before expanding the labelled set.
-- Keep duplicate-linked groups in one data partition.
-- Implement text-to-feature conversion using TF-IDF.
-- Train a Logistic Regression baseline with Scikit-learn.
-- Persist the trained model and vectorizer as generated artifacts, not committed binaries.
-- Add inference with confidence information and a clear low-confidence outcome.
-- Record training configuration and evaluation results.
+- Implement a standard-library dataset loader for aligned NL2Bash request and command files.
+- Validate row counts, empty records, encoding, and source checksums.
+- Link rows that share an exact request or exact command after trimming surrounding whitespace.
+- Assign entire duplicate-linked groups to train, development, or test using a fixed seed and 80:10:10 target ratios.
+- Write JSONL partitions and a manifest under ignored local data directories.
+- Record source revision, checksums, seed, ratios, group counts, record counts, and verified cross-partition overlap.
 
 **Acceptance criteria:**
-- Training and inference use the same feature pipeline.
-- The labelled pilot has documented sources, labels, and annotation decisions.
+- Misaligned or malformed source files fail with actionable errors.
+- The same inputs and seed produce byte-for-byte identical partitions and manifest data.
+- No request or command duplicate crosses partitions.
+- Group sizes, split counts, checksums, and source revision appear in the manifest.
+- Raw and processed files remain outside Git.
+
+#### Step 3.2: Annotation workflow and pilot
+
+**Work:**
+- Generate an annotation worklist from the training partition only.
+- Select an initial pilot of approximately 50 examples per taxonomy label, including the fallback label where genuine examples exist.
+- Keep suggested labels separate from confirmed labels.
+- Provide a simple CSV/JSONL review format with source IDs and enough context for a reviewer.
+- Validate imported annotations against the taxonomy and reject unknown labels or duplicate IDs.
+- Record annotation status and review notes; do not silently promote heuristic suggestions to confirmed labels.
+- Review ambiguous examples and refine the taxonomy before model training.
+
+**Acceptance criteria:**
+- Every confirmed label has an auditable source record and reviewer status.
+- The pilot is balanced where the source distribution allows it; shortages are reported rather than filled with fabricated examples.
+- Suggested labels are never treated as ground truth.
+- Duplicate-linked examples remain in one partition.
+- Unreviewed, ambiguous, or invalid annotations are excluded from classifier training.
+
+#### Step 3.3: TF-IDF and Logistic Regression baseline
+
+**Work:**
+- Use the [Intent Taxonomy](INTENT_TAXONOMY.md) as the label set.
+- Implement a Scikit-learn TF-IDF and Logistic Regression pipeline.
+- Train only on confirmed training annotations.
+- Tune only with development data and evaluate once on held-out test data.
+- Persist the model and vectorizer as generated artifacts, not committed binaries.
+- Add inference with confidence information and a low-confidence fallback.
+- Record configuration, class distribution, and evaluation results.
+
+**Acceptance criteria:**
+- Training and inference use the same fitted preprocessing and feature pipeline.
+- Unreviewed and ambiguous labels are excluded from training.
 - No exact duplicate request or reference command crosses train, development, and test partitions.
 - Unknown or low-confidence requests are not silently assigned an unrelated intent.
-- Metrics include accuracy, precision, recall, and F1, including per-class results where meaningful.
+- Metrics include accuracy, precision, recall, and F1, including per-class results and a confusion matrix.
 - Model artifacts can be recreated from documented data and configuration.
 
 ### Step 4: Entity and parameter extraction
