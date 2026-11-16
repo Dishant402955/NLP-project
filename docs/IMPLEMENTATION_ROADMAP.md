@@ -162,21 +162,53 @@ Implemented in src/nl2bash/dataset_cli.py and exposed as nl2bash-prepare-dataset
 
 #### Step 3.2: Annotation workflow and pilot
 
+This stage is divided into three small implementation commits.
+
+##### Step 3.2.a: training-only pilot worklist generator
+
 **Work:**
-- Generate an annotation worklist from the training partition only.
-- Select an initial pilot of approximately 50 examples per taxonomy label, including the fallback label where genuine examples exist.
-- Keep suggested labels separate from confirmed labels.
-- Provide a simple CSV/JSONL review format with source IDs and enough context for a reviewer.
-- Validate imported annotations against the taxonomy and reject unknown labels or duplicate IDs.
-- Record annotation status and review notes; do not silently promote heuristic suggestions to confirmed labels.
-- Review ambiguous examples and refine the taxonomy before model training.
+- Verify the training JSONL checksum against the dataset manifest before selecting candidates.
+- Apply request-text heuristics only to propose a label and record a reason; do not infer a confirmed label from the reference command.
+- Select approximately 50 distinct duplicate groups per taxonomy label using a fixed seed.
+- Keep one row per duplicate group in the pilot.
+- Write a CSV with source IDs, request, reference command, suggested label, blank confirmed label, pending status, and reviewer note.
+- Write a pilot manifest with source checksum, seed, quotas, and actual category counts.
 
 **Acceptance criteria:**
-- Every confirmed label has an auditable source record and reviewer status.
-- The pilot is balanced where the source distribution allows it; shortages are reported rather than filled with fabricated examples.
-- Suggested labels are never treated as ground truth.
-- Duplicate-linked examples remain in one partition.
-- Unreviewed, ambiguous, or invalid annotations are excluded from classifier training.
+- Only the manifest-declared training partition is accepted.
+- Every pilot record belongs to the training partition and is source-identical.
+- Pilot group IDs are unique across all selected labels.
+- Suggestions and confirmed labels are separate fields; all new records start pending.
+- Category shortages are reported instead of filled with fabricated records.
+
+##### Step 3.2.b: reviewed annotation validator and importer
+
+**Work:**
+- Validate reviewer-edited CSV headers, IDs, group IDs, source text, statuses, and labels.
+- Allow only pending, confirmed, ambiguous, or rejected statuses.
+- Require a valid taxonomy label for confirmed rows and a reviewer note for ambiguous/rejected rows.
+- Reject duplicate IDs, duplicate groups, changed source text, unknown labels, and inconsistent status/label combinations.
+- Export only confirmed rows to a separate local JSONL artifact.
+
+**Acceptance criteria:**
+- Pending, ambiguous, and rejected rows never enter the confirmed training artifact.
+- Every exported label was explicitly confirmed by a reviewer.
+- The export is deterministic and retains source IDs and reviewer notes.
+- Invalid annotations fail with actionable errors.
+
+##### Step 3.2.c: annotation CLI and pilot generation
+
+**Work:**
+- Expose pilot creation and annotation validation through a small CLI.
+- Generate the balanced pilot from the verified training partition.
+- Store CSV, pilot manifest, and confirmed export under ignored local annotation directories.
+- Document how a human reviews and edits the CSV.
+
+**Acceptance criteria:**
+- The pilot can be recreated using a fixed seed and source manifest.
+- CLI errors are clear and non-zero on invalid data.
+- Generated annotation artifacts remain outside Git.
+- The final pilot counts and limitations are documented.
 
 #### Step 3.3: TF-IDF and Logistic Regression baseline
 
