@@ -123,6 +123,10 @@ Implemented in src/nl2bash/corpus.py: paired UTF-8 files are read line by line, 
 
 Implemented in src/nl2bash/grouping.py: records are connected when they share an exact request or reference command after trimming surrounding whitespace. Transitive links form one group, and group ordering is deterministic.
 
+**Substep 3.1.c: deterministic group splitting**
+
+Implemented in src/nl2bash/splitting.py: a seeded greedy allocator assigns whole groups to train/dev/test, validates that duplicate requests and commands do not cross groups, and returns records in stable group order.
+
 **Work:**
 - Implement a standard-library dataset loader for aligned NL2Bash request and command files.
 - Validate row counts, empty records, encoding, and source checksums.
