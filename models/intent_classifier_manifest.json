@@ -1,7 +1,7 @@
 {
   "artifact": {
     "file": "models/intent_classifier.joblib",
-    "sha256": "fe098fd7198e3469ddf94055811c00cd2880b0f486cc638e1bc8a3d6ac8768d7"
+    "sha256": "b2c4c64fc4723b5279bb198dff04dd58921f969406b91739ff6524fa97e12d2e"
   },
   "dataset": "NL2Bash",
   "evaluation_status": "not_evaluated",
@@ -17,20 +17,20 @@
   },
   "schema_version": 1,
   "source": {
-    "annotation_manifest_sha256": "bf87fa9c950ec2fc53c8464efafeacd78a3a535bdab452a4c0906fa016949843",
-    "confirmed_annotations_sha256": "8cfcabf63184412f1ace998f30b20072d3cc4adad2941689613d09ea58d31b8a",
+    "annotation_manifest_sha256": "abafeef767755c9759147f4ee58a3164a00eb79eaf2338d62bf8ab6bfb86cd6a",
+    "confirmed_annotations_sha256": "9ad4ff8dbbf32819f515f4d537103bed0db3bbe95a7528408cfa7b65a1a2c13b",
     "dataset_revision": "d6b9f5bdff45621d190134e31ab63b7bf7002190",
-    "reviewed_csv_sha256": "c8f7e0840a7535206b7e77693d1db033ecaa772d7581e9ab86c90ae5350b75e3",
+    "reviewed_csv_sha256": "9812757d316e540d8fae82123d681205df04c8cd3fbf300c0fc95e4d2de44f8b",
     "training_partition_sha256": "15fbee9ac5b8341a14a31285288c5119702b8dbb5ac367903c3a6cb2ea879451"
   },
   "training": {
     "class_counts": {
-      "archive_compression": 39,
-      "file_directory_management": 52,
-      "file_discovery": 57,
+      "archive_compression": 37,
+      "file_directory_management": 54,
+      "file_discovery": 51,
       "network_remote_operations": 50,
       "other_or_ambiguous": 54,
-      "permissions_ownership": 48,
+      "permissions_ownership": 54,
       "process_job_management": 42,
       "shell_environment_session": 76,
       "system_information": 22,

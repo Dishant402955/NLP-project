@@ -10,7 +10,7 @@ The Python package foundation, reproducible NL2Bash dataset preparation, intent 
 
 ## Versioned research artifacts
 
-The repository includes the licensed NL2Bash raw source files, reproducibly generated train/development/test partitions, intent annotation worklists and confirmed exports, the current provisional classifier, and its frozen development-threshold artifact. Their source revision, checksums, and annotation provenance are recorded in manifests and the [Annotation Review Status](docs/ANNOTATION_REVIEW_STATUS.md). The test partition is included, but its labels remain sealed and pending until the model and threshold are frozen. Test scripts, temporary fixtures, caches, virtual environments, and secrets are not committed.
+The repository includes the licensed NL2Bash raw source files, reproducibly generated train/development/test partitions, intent annotation worklists and confirmed exports, the current provisional classifier, and its frozen development-threshold artifact. Their source revision, checksums, and annotation provenance are recorded in manifests, the [Annotation Review Status](docs/ANNOTATION_REVIEW_STATUS.md), and the [Intent Audit Log](docs/INTENT_AUDIT_LOG.md). The test partition is included, but its labels remain sealed and pending until the model and threshold are frozen. Test scripts, temporary fixtures, caches, virtual environments, and secrets are not committed.
 
 ## Project objectives
 

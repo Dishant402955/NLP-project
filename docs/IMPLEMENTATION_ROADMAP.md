@@ -354,7 +354,7 @@ The implementation is divided into small commits. See [Intent Classifier](INTENT
 - A completed test report cannot be silently overwritten or re-run for the same project evaluation.
 
 
-**Current state (2026-11-16):** The local training worklist has 500 AI-assisted request-only labels and the blind development worklist has 375 AI-assisted request-only labels. Both exports pass the partition and checksum validators. The test worklist remains 375 pending rows with an empty confirmed export. A project-specific classifier and development threshold have been produced from the AI-assisted labels for engineering diagnostics only. Because the same AI annotator labelled both partitions, these metrics are provisional and are not independent human-annotated results. Human adjudication remains required before final academic claims or test evaluation. See [Annotation Review Status](ANNOTATION_REVIEW_STATUS.md).
+**Current state (2026-11-17):** The training worklist has 500 AI-assisted request-only labels and the blind development worklist has 375 AI-assisted request-only labels. A second-pass AI audit changed 30 labels across those partitions; both exports pass the partition and checksum validators. The test worklist remains 375 pending rows with an empty confirmed export. The classifier was retrained and its development threshold reselected for engineering diagnostics only. Because the same AI annotator labelled both partitions, these metrics are provisional and are not independent human-annotated results. Human adjudication remains required before final academic claims or test evaluation. See [Annotation Review Status](ANNOTATION_REVIEW_STATUS.md) and [Intent Audit Log](INTENT_AUDIT_LOG.md).
 
 ### Step 4: Entity and parameter extraction
 

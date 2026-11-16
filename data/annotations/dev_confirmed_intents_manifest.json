@@ -2,7 +2,7 @@
   "confirmed_output": {
     "file": "data/annotations/dev_confirmed_intents.jsonl",
     "record_count": 375,
-    "sha256": "3fa0cea374c3f80949c5098eb6954f2cbfcb4307c758edaaba4a571bf7a416c9"
+    "sha256": "72bca2300f8c983ffb01d469523d18db2518dfff383c165be111d2f9a69d2cf5"
   },
   "dataset": "NL2Bash",
   "schema_version": 1,
@@ -14,7 +14,7 @@
     "partition_sha256": "22f30b63140a34c9d12dfd98a0dc0110111f19d46cc8771088c9ddd65e6002f5",
     "pilot_manifest": "data/annotations/dev_review_manifest.json",
     "reviewed_csv": "data/annotations/dev_review.csv",
-    "reviewed_csv_sha256": "4cc60b17ca8fda1b62b57f37ef47dedf382100da6004c8194455973c7b7fe5f0"
+    "reviewed_csv_sha256": "5b4ac3fb0ae4e78d47252543bfa0dcce7769c339295274f4c99bd5a3e857cc31"
   },
   "summary": {
     "blind_manual_review": true,
