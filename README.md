@@ -59,7 +59,8 @@ Detailed project documentation is maintained in the [docs](docs/) directory.
 - [System Architecture](docs/ARCHITECTURE.md): component responsibilities and the end-to-end data flow.
 - [Technical Design](docs/TECHNICAL_DESIGN.md): planned modules, technology choices, and implementation boundaries.
 - [Dataset and Evaluation](docs/DATASET_AND_EVALUATION.md): dataset audit, licensing, split strategy, metrics, and experiments.
-- [Intent Taxonomy](docs/INTENT_TAXONOMY.md): intent labels, definitions, boundary examples, and annotation rules.
+- [Intent Taxonomy](docs/INTENT_TAXONOMY.md): intent labels, definitions, boundary examples, and taxonomy rules.
+- [Annotation Guide](docs/ANNOTATION_GUIDE.md): instructions for reviewing and confirming the local intent pilot.
 - [Implementation Roadmap](docs/IMPLEMENTATION_ROADMAP.md): ordered development steps, acceptance criteria, verification protocol, and commit strategy.
 
 ## Project evaluation

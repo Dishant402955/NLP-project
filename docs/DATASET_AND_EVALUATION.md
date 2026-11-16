@@ -145,7 +145,15 @@ The labelled data must use the same duplicate-aware partitions described above. 
 
 Raw data, annotations, and generated split files are local project artifacts and will not be committed to Git.
 
-## 9. Evaluation metrics
+## 9. Intent annotation pilot
+
+The first pilot is generated from the training partition only. It contains 50 candidate examples per taxonomy label, for 500 rows total. Each row comes from a distinct duplicate group, so the pilot does not contain multiple near-duplicate records from the same group.
+
+The pilot generator uses request-text rules only to suggest labels. It does not use the paired Bash command to assign a suggestion. Every row starts with a blank confirmed label and a pending review status. The suggestions are deliberately not treated as ground truth.
+
+The local worklist and its manifest are stored under data/annotations/ and are excluded from Git. See the [Annotation Guide](ANNOTATION_GUIDE.md) for the review procedure and CSV field definitions. Only explicitly confirmed rows will be imported for classifier training.
+
+## 10. Evaluation metrics
 
 ### Intent classification
 
@@ -171,7 +179,7 @@ Exact string matching alone is not a complete measure of correctness.
 
 Measure generation latency under a recorded hardware, model, and configuration setup. Report the number of examples and the measurement method.
 
-## 10. Planned experiments
+## 11. Planned experiments
 
 1. Train an intent-classification baseline using TF-IDF and Logistic Regression.
 2. Evaluate entity extraction on annotated examples.
@@ -182,7 +190,7 @@ Measure generation latency under a recorded hardware, model, and configuration s
 
 Any functional or semantic command checks must run only in a controlled, isolated environment with reviewed examples. The normal application must never execute generated commands.
 
-## 11. Reporting
+## 12. Reporting
 
 The final experiment report should include:
 - Dataset source, upstream revision, license, checksums, filtering decisions, and final split sizes.
@@ -192,7 +200,7 @@ The final experiment report should include:
 - Representative successful and unsuccessful examples.
 - Limitations, including ambiguous requests, unsupported syntax, and semantically incorrect commands.
 
-## 12. Citation
+## 13. Citation
 
 Lin, Xi Victoria, Chenglong Wang, Luke Zettlemoyer, and Michael D. Ernst. 2018. “NL2Bash: A Corpus and Semantic Parser for Natural Language Interface to the Linux Operating System.” Proceedings of LREC 2018.
 

@@ -166,6 +166,18 @@ This stage is divided into three small implementation commits.
 
 ##### Step 3.2.a: training-only pilot worklist generator
 
+**Status:** Completed.
+
+**Delivered:**
+- Request-text-only weak intent suggestions with explicit suggestion reasons.
+- A deterministic 50-per-label pilot selected from the training partition.
+- A one-example-per-duplicate-group constraint across the entire pilot.
+- A CSV review worklist with blank confirmed labels and pending statuses.
+- A pilot manifest containing source checksums, seed, category quotas, and selected IDs.
+- A reviewer guide in [Annotation Guide](ANNOTATION_GUIDE.md).
+
+**Verified pilot:** 500 rows, 50 per each of the ten labels, 500 distinct duplicate groups, zero confirmed labels, all statuses pending, and no shortages.
+
 **Work:**
 - Verify the training JSONL checksum against the dataset manifest before selecting candidates.
 - Apply request-text heuristics only to propose a label and record a reason; do not infer a confirmed label from the reference command.
