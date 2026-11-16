@@ -36,13 +36,13 @@ Receives a natural-language instruction from the command-line interface. The ori
 
 ### 3.2 Text preprocessing
 
-Performs lightweight normalization and tokenization where useful. Preprocessing must preserve meaningful shell-related details, including paths, file extensions, numbers, flags, and technical terms. It must not remove information required for command generation.
+Validates the input and removes only surrounding whitespace. Later NLP components may create derived token or feature representations, but the original request remains unchanged and available to the generator. Paths, file extensions, numbers, flags, punctuation, quotes, and internal whitespace must be preserved.
 
 ### 3.3 Intent classification
 
-Predicts the operation category represented by the request. Initial categories may include file search, file inspection, text processing, process inspection, directory operations, and system information.
+Predicts the operation category represented by the request. The initial intent labels cover file discovery, text search and processing, file and directory management, permissions and ownership, process and job management, system information, network and remote operations, archive and compression, shell and session operations, and an other/ambiguous fallback.
 
-The initial classifier will use TF-IDF features and a Scikit-learn Logistic Regression model. The category set and training examples will be defined as part of the dataset preparation work.
+The initial classifier will use TF-IDF features and a Scikit-learn Logistic Regression model. The project-defined categories and annotation rules are documented in the [Intent Taxonomy](INTENT_TAXONOMY.md).
 
 ### 3.4 Entity and parameter extraction
 
@@ -84,7 +84,7 @@ Illustrative NLP output:
 
 ```json
 {
-  "intent": "file_search",
+  "intent": "file_discovery",
   "entities": {
     "file_extension": ".py",
     "size_value": 10,

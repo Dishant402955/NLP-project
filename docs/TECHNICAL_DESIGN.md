@@ -21,7 +21,7 @@ The implementation is expected to be organized around the following responsibili
 
 - Input and CLI: collect requests and display results.
 - Preprocessing: validate string input and remove surrounding whitespace while preserving all internal content.
-- Intent classifier: train, load, and run the intent model.
+- Intent classifier: train, load, and run the intent model using the categories in [Intent Taxonomy](INTENT_TAXONOMY.md).
 - Entity extractor: identify relevant values and conditions.
 - Command generator: construct the model prompt and obtain generated output.
 - Validator: parse commands and apply safety rules.
@@ -59,3 +59,7 @@ The initial target is a local Linux environment with Python. Ollama and the sele
 ## 7. Verification policy
 
 Executable checks are required for each implementation step. By project requirement, test source and fixtures will be created only in temporary locations outside the repository and will not be committed. See the [Implementation Roadmap](IMPLEMENTATION_ROADMAP.md) for the mandatory ten-pass review and adversarial-review procedure.
+
+## 8. Dataset boundary
+
+The NL2Bash source contains paired natural-language requests and Bash commands, but no project-specific intent labels or entity annotations. The project will maintain its own annotation guide and duplicate-aware data partitions. Raw data, annotations, and processed splits remain local and are not committed to Git. See [Dataset and Evaluation](DATASET_AND_EVALUATION.md).

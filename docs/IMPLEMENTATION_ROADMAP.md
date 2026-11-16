@@ -77,24 +77,43 @@ The original request must remain available through the pipeline. NLP output must
 
 ### Step 2: Dataset audit and NLP data specification
 
-**Work:**
-- Inspect the NL2Bash source, format, license, and data splits.
-- Determine which records are suitable for this project's Bash-focused scope.
-- Define a small intent taxonomy based on the actual command distribution.
-- Define a documented representation for utterances, commands, intent labels, and extracted entities.
-- Identify data leakage risks and establish reproducible train/validation/test separation.
-- Keep downloaded raw data outside Git unless its license and size explicitly justify distribution.
+**Status:** Completed.
+
+**Delivered:**
+- Audited the current NL2Bash source files, data shape, duplicates, utility distribution, and dataset-specific MIT license.
+- Recorded the difference between the published filtered split counts and the output of the current upstream filtering script.
+- Documented why the legacy split script could not be reproduced unmodified in the available environment.
+- Defined the project intent labels and annotation rules in [Intent Taxonomy](INTENT_TAXONOMY.md).
+- Specified a deterministic, duplicate-aware 80:10:10 split strategy.
+
+**Implementation findings:**
+- The audited source snapshot contains 12,607 aligned request/command records.
+- The current upstream filtering script produced 11,546 filtered records, while the upstream paper/README reports 9,305 filtered records and split sizes of 8,090/609/606.
+- The legacy split routine failed in its spell-correction code in the available environment. These upstream counts are not treated as reproduced project results.
+- A preliminary exact-text duplicate-link analysis found 9,451 connected groups, with a largest group of 45 records.
+
+**Work completed:**
+- Inspect the NL2Bash source, format, license, and data files.
+- Define a project intent taxonomy from the command and request patterns.
+- Define a representation for utterances, reference commands, intent labels, and extracted entities.
+- Define duplicate-aware, deterministic data partitioning.
+- Keep raw and processed dataset files outside Git.
 
 **Acceptance criteria:**
-- Dataset license and source are recorded.
-- Dataset fields and filtering decisions are documented.
-- Intent labels have written definitions and examples.
-- Split strategy prevents examples from leaking between training and evaluation.
-- Dataset processing is deterministic.
+- Dataset source, revision, license, and citation are recorded.
+- Source fields and alignment are documented.
+- Intent labels have written definitions, examples, and annotation rules.
+- Split strategy keeps duplicate requests and duplicate commands in a single partition.
+- Filtering and split discrepancies are documented rather than hidden.
+- Raw data, annotations, and split outputs are excluded from Git.
 
 ### Step 3: Intent classification
 
 **Work:**
+- Use the [Intent Taxonomy](INTENT_TAXONOMY.md) as the initial label set.
+- Annotate a balanced pilot of approximately 50 examples per label, for approximately 500 examples.
+- Review ambiguous examples and revise the annotation guidance before expanding the labelled set.
+- Keep duplicate-linked groups in one data partition.
 - Implement text-to-feature conversion using TF-IDF.
 - Train a Logistic Regression baseline with Scikit-learn.
 - Persist the trained model and vectorizer as generated artifacts, not committed binaries.
@@ -103,6 +122,8 @@ The original request must remain available through the pipeline. NLP output must
 
 **Acceptance criteria:**
 - Training and inference use the same feature pipeline.
+- The labelled pilot has documented sources, labels, and annotation decisions.
+- No exact duplicate request or reference command crosses train, development, and test partitions.
 - Unknown or low-confidence requests are not silently assigned an unrelated intent.
 - Metrics include accuracy, precision, recall, and F1, including per-class results where meaningful.
 - Model artifacts can be recreated from documented data and configuration.

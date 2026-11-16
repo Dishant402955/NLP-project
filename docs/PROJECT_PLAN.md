@@ -18,7 +18,7 @@ Develop and evaluate a hybrid NLP system that translates natural-language instru
 
 1. Accept command requests in plain English.
 2. Preprocess input text for downstream language-processing tasks.
-3. Classify requests into a defined set of command-operation categories.
+3. Classify requests into the project-defined intent categories using a manually reviewed labelled subset.
 4. Extract useful entities and parameters from requests.
 5. Generate Bash commands using a language model.
 6. Explain the generated command.
@@ -30,7 +30,7 @@ Develop and evaluate a hybrid NLP system that translates natural-language instru
 The initial system will:
 - Target Bash commands on Linux.
 - Support a selected set of common command-operation categories.
-- Use a traditional machine-learning classifier for intent classification.
+- Use a traditional machine-learning classifier for intent classification, with labels defined in the [Intent Taxonomy](INTENT_TAXONOMY.md).
 - Use rule-based methods for extracting selected entities and parameters.
 - Use an instruction-tuned language model for command generation.
 - Display generated commands and explanations.
@@ -57,7 +57,7 @@ The initial project will not:
 | Count lines in Python files | Find files and count their lines |
 | Find files modified in the last 24 hours | Search by modification time |
 
-These examples illustrate the intended scope. The final supported categories and dataset will be defined during implementation.
+These examples illustrate the intended scope. The categories are documented in the [Intent Taxonomy](INTENT_TAXONOMY.md) and will be checked against the dataset during annotation.
 
 ## 8. Research question
 

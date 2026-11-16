@@ -58,7 +58,8 @@ Detailed project documentation is maintained in the [docs](docs/) directory.
 - [Project Plan](docs/PROJECT_PLAN.md): scope, objectives, requirements, deliverables, and exclusions.
 - [System Architecture](docs/ARCHITECTURE.md): component responsibilities and the end-to-end data flow.
 - [Technical Design](docs/TECHNICAL_DESIGN.md): planned modules, technology choices, and implementation boundaries.
-- [Dataset and Evaluation](docs/DATASET_AND_EVALUATION.md): dataset plan, evaluation metrics, and experimental approach.
+- [Dataset and Evaluation](docs/DATASET_AND_EVALUATION.md): dataset audit, licensing, split strategy, metrics, and experiments.
+- [Intent Taxonomy](docs/INTENT_TAXONOMY.md): intent labels, definitions, boundary examples, and annotation rules.
 - [Implementation Roadmap](docs/IMPLEMENTATION_ROADMAP.md): ordered development steps, acceptance criteria, verification protocol, and commit strategy.
 
 ## Project evaluation
@@ -92,4 +93,4 @@ The project will investigate the NL2Bash dataset and the associated research:
 - [NL2Bash: A Corpus and Semantic Parser for Natural Language Interface to the Linux Operating System](https://arxiv.org/abs/1802.08979)
 - [NL2Bash repository](https://github.com/TellinaTool/nl2bash)
 
-Dataset terms, format, and suitability will be reviewed before incorporating it into experiments.
+The NL2Bash dataset license and structure have been audited. Raw data and annotations remain outside Git; see the dataset documentation for the audit findings and limitations.
