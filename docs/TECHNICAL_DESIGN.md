@@ -8,7 +8,7 @@
 | Preprocessing | Python standard library and custom utilities | Input validation and removal of surrounding whitespace while preserving internal text and Unicode code points |
 | Feature extraction | Scikit-learn TF-IDF | Convert text into features for classification |
 | Intent classifier | Scikit-learn Logistic Regression | Predict the requested operation category |
-| Parameter extraction | Python rules and regular expressions | Extract paths, extensions, sizes, ports, dates, and related values |
+| Parameter extraction | Python rules and regular expressions | Extract paths, extensions, file names, sizes, ports, process names, dates, and comparison conditions |
 | Language model | Qwen2.5 1.5B Instruct | Generate Bash commands and explanations |
 | Model serving | Ollama | Run the selected model locally |
 | Bash parsing | bashlex | Parse generated Bash syntax |
@@ -24,7 +24,8 @@ The implementation is expected to be organized around the following responsibili
 - Dataset preparation: validate the parallel corpus, group duplicate-linked records, assign deterministic partitions, and write JSONL files with a manifest.
 - Annotation workflow: produce a training-only review worklist, validate explicit human decisions, and export only confirmed labels through the nl2bash-annotations CLI.
 - Intent classifier: fit and run a TF-IDF and Logistic Regression pipeline using only confirmed training annotations and the categories in [Intent Taxonomy](INTENT_TAXONOMY.md).
-- Entity extractor: identify relevant values and conditions.
+- Entity extractor: identify supported values and conditions while preserving exact source spans and reporting incomplete or contradictory cues.
+- Entity evaluation: compute exact-span micro and per-type precision, recall, and F1 against an adjudicated entity sample.
 - Command generator: construct the model prompt and obtain generated output.
 - Validator: parse commands and apply safety rules.
 - Evaluation: select a confidence threshold using confirmed development labels, then evaluate once on the blind-reviewed test partition with provenance and a one-time run guard.
@@ -34,6 +35,8 @@ The implementation is expected to be organized around the following responsibili
 The generation component will send the original request and structured NLP results to the locally served model. The prompt will specify that the model must return a Bash command and a concise explanation, and must not execute anything.
 
 The application should handle unavailable model services, malformed model responses, empty output, and generation timeouts.
+
+The rule-based entity extractor preserves exact values and source spans and reports incomplete or contradictory parameters; see [Entity Extraction](ENTITY_EXTRACTION.md).
 
 The model is a generation component, not the sole source of intent understanding. The separately implemented classifier and extractor provide measurable NLP components and additional context for generation.
 

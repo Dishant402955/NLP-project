@@ -46,14 +46,9 @@ The initial classifier will use TF-IDF features and a Scikit-learn Logistic Regr
 
 ### 3.4 Entity and parameter extraction
 
-Extracts values that constrain the requested operation. Examples include:
-- File extensions, names, and paths.
-- Numeric values and size units.
-- Ports and process names.
-- Dates and time ranges.
-- Comparison conditions such as greater than or smaller than.
+Extracts values that constrain the requested operation. The first deterministic implementation supports file extensions, paths, file names, sizes, ports, process names, date/time phrases, and comparison conditions. It preserves each exact source value and character span, with optional normalized values for sizes, ports, extensions, and comparison operators.
 
-The first implementation will use explicit patterns and rules. The extracted values will be represented in a structured form so that they can be inspected and passed to the generation component.
+Incomplete or contradictory cues are represented as structured extraction issues rather than guessed values. The implementation and current limitations are documented in [Entity Extraction](ENTITY_EXTRACTION.md). Rule-based extraction is intentionally separate from intent classification and language-model generation.
 
 ### 3.5 LLM command generation
 

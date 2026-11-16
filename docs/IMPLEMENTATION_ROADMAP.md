@@ -358,6 +358,20 @@ The implementation is divided into small commits. See [Intent Classifier](INTENT
 
 ### Step 4: Entity and parameter extraction
 
+#### Step 4.1: deterministic extraction API and exact-span metrics
+
+**Status:** Initial implementation completed; reviewed entity benchmark remains outstanding.
+
+**Delivered:**
+- Rule-based extraction for eight entity types: file extensions, paths, file names, sizes, ports, process names, date/time phrases, and comparison conditions.
+- Exact request values and source spans, optional normalized values, and structured issues for missing, invalid, or conflicting parameters.
+- Exact-span micro and per-entity-type precision/recall/F1 evaluation API.
+- API documentation and known extraction limitations in [Entity Extraction](ENTITY_EXTRACTION.md).
+
+**Verification:** External checks under `/tmp/nl2bash-verification/` cover common requests, quoted and variable paths, URL rejection, compound extensions, SI/IEC size conversion, contradictory size limits, missing values/units, port range validation, process-name edge cases, date/time expressions, exact source spans, and invalid evaluation inputs. The extractor also processed all 10,085 training requests without runtime failures (about 12,350 requests/second in this workspace). No development or test requests were used for this smoke scan. No test source or fixture is stored in the repository.
+
+**Remaining:** Create a manually adjudicated entity benchmark with partition provenance, run precision/recall/F1 against it, and refine rules only from training/development examples. Do not tune against the held-out entity test sample.
+
 **Work:**
 - Implement rule-based extraction for the selected supported entities.
 - Initial entity types may include file extensions, paths, file names, sizes, ports, process names, dates, and comparison conditions.
