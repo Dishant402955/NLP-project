@@ -5,7 +5,7 @@
 | Component | Technology | Purpose |
 |---|---|---|
 | Core application | Python | Application logic and component integration |
-| Preprocessing | Python standard library and custom utilities | Unicode normalization and lightweight whitespace normalization while preserving command-relevant text |
+| Preprocessing | Python standard library and custom utilities | Input validation and removal of surrounding whitespace while preserving internal text and Unicode code points |
 | Feature extraction | Scikit-learn TF-IDF | Convert text into features for classification |
 | Intent classifier | Scikit-learn Logistic Regression | Predict the requested operation category |
 | Parameter extraction | Python rules and regular expressions | Extract paths, extensions, sizes, ports, dates, and related values |
@@ -20,7 +20,7 @@ These are planned choices, not claims that the environment has already been conf
 The implementation is expected to be organized around the following responsibilities. The exact file layout may evolve as the code is developed.
 
 - Input and CLI: collect requests and display results.
-- Preprocessing: normalize and tokenize text where appropriate.
+- Preprocessing: validate string input and remove surrounding whitespace while preserving all internal content.
 - Intent classifier: train, load, and run the intent model.
 - Entity extractor: identify relevant values and conditions.
 - Command generator: construct the model prompt and obtain generated output.

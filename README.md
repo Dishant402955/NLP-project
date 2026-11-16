@@ -6,7 +6,7 @@ The system displays the generated command, explains what it does, and checks its
 
 ## Project status
 
-The repository currently contains the project plan and implementation roadmap. Application components are being developed incrementally; the README will be updated as working functionality becomes available.
+The Python package foundation and conservative request-preprocessing API are available. Intent classification, parameter extraction, model generation, validation, and the end-to-end CLI are planned implementation stages.
 
 ## Project objectives
 

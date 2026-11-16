@@ -48,23 +48,28 @@ The original request must remain available through the pipeline. NLP output must
 
 ### Step 1: Application foundation and request preprocessing
 
-**Status:** First implementation step.
+**Status:** Completed.
+
+**Delivered:**
+- Python package metadata and src-layout package.
+- Repository ignore rules for local environments, caches, secrets, datasets, and model artifacts.
+- Request validation and conservative whitespace trimming in the preprocessing module.
 
 **Work:**
 - Create a minimal Python package using a src layout.
 - Declare the minimum supported Python version and build configuration.
 - Add repository ignore rules for generated environments, caches, secrets, raw datasets, and model artifacts.
 - Define a small, stable request-preprocessing API.
-- Normalize Unicode consistently and collapse redundant whitespace.
+- Remove only leading and trailing whitespace from the request.
 - Reject inputs that are not strings or contain no meaningful text.
-- Preserve case, punctuation, shell-like tokens, paths, quotes, and numeric values. Preprocessing must not rewrite the request into a different meaning.
+- Preserve all internal whitespace and Unicode code points, including case, punctuation, shell-like tokens, paths, quotes, and numeric values. Preprocessing must not rewrite the request into a different meaning.
 
 **Acceptance criteria:**
 - The package can be installed in editable mode on the target Python version.
 - The preprocessing module imports without optional ML or LLM dependencies.
 - Valid input is normalized predictably.
 - Empty and invalid input produces a clear, documented error.
-- Inputs containing quotes, paths, punctuation, mixed case, and Unicode are preserved apart from the documented normalization.
+- Inputs containing quotes, paths, punctuation, mixed case, internal whitespace, and Unicode are preserved apart from trimming surrounding whitespace.
 - No generated command is executed.
 - No test source, test directory, test fixture, model weight, or raw dataset is committed.
 

@@ -1,0 +1,27 @@
+# Python bytecode and package artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+build/
+dist/
+
+# Local Python environments and tool caches
+.venv/
+venv/
+env/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Local configuration and secrets
+.env
+.env.*
+!.env.example
+
+# Downloaded datasets and generated model artifacts
+data/raw/
+models/
+artifacts/
