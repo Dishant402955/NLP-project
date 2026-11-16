@@ -61,6 +61,7 @@ Detailed project documentation is maintained in the [docs](docs/) directory.
 - [Dataset and Evaluation](docs/DATASET_AND_EVALUATION.md): dataset audit, licensing, split strategy, metrics, and experiments.
 - [Intent Taxonomy](docs/INTENT_TAXONOMY.md): intent labels, definitions, boundary examples, and taxonomy rules.
 - [Annotation Guide](docs/ANNOTATION_GUIDE.md): commands and instructions for reviewing, confirming, and validating the local intent pilot.
+- [Intent Classifier](docs/INTENT_CLASSIFIER.md): TF-IDF and Logistic Regression training contract, prediction behavior, and evaluation rules.
 - [Implementation Roadmap](docs/IMPLEMENTATION_ROADMAP.md): ordered development steps, acceptance criteria, verification protocol, and commit strategy.
 
 ## Project evaluation

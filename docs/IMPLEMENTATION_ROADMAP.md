@@ -237,22 +237,63 @@ This stage is divided into three small implementation commits.
 
 #### Step 3.3: TF-IDF and Logistic Regression baseline
 
+The implementation is divided into small commits. See [Intent Classifier](INTENT_CLASSIFIER.md) for the model contract and evaluation protocol.
+
+##### Step 3.3.a: confirmed training-data contract
+
 **Work:**
-- Use the [Intent Taxonomy](INTENT_TAXONOMY.md) as the label set.
-- Implement a Scikit-learn TF-IDF and Logistic Regression pipeline.
-- Train only on confirmed training annotations.
-- Tune only with development data and evaluate once on held-out test data.
-- Persist the model and vectorizer as generated artifacts, not committed binaries.
-- Add inference with confidence information and a low-confidence fallback.
-- Record configuration, class distribution, and evaluation results.
+- Validate the confirmed annotation export and both source manifests.
+- Verify annotation IDs, requests, groups, labels, checksums, and explicit review status against the training partition.
+- Require a minimum number of confirmed examples for every taxonomy label.
+- Refuse to train when the confirmed dataset is empty or incomplete.
 
 **Acceptance criteria:**
-- Training and inference use the same fitted preprocessing and feature pipeline.
-- Unreviewed and ambiguous labels are excluded from training.
-- No exact duplicate request or reference command crosses train, development, and test partitions.
-- Unknown or low-confidence requests are not silently assigned an unrelated intent.
-- Metrics include accuracy, precision, recall, and F1, including per-class results and a confusion matrix.
-- Model artifacts can be recreated from documented data and configuration.
+- Only confirmed annotations from the training partition are accepted.
+- Heuristic suggestions and reference commands never become classifier labels or input features.
+- Invalid or insufficient data fails before any model artifact is written.
+
+##### Step 3.3.b: TF-IDF and Logistic Regression pipeline
+
+**Work:**
+- Add Scikit-learn as a project dependency.
+- Implement a single fitted TF-IDF and Logistic Regression pipeline.
+- Keep feature and classifier configuration explicit and reproducible.
+- Save the fitted pipeline and a provenance manifest under ignored local model artifacts.
+
+**Acceptance criteria:**
+- The pipeline fits only the validated confirmed training subset.
+- The fitted vectorizer is reused unchanged during prediction.
+- Model artifacts record the training source, label counts, settings, and library version.
+
+##### Step 3.3.c: prediction and low-confidence handling
+
+**Work:**
+- Load the locally generated pipeline and validate its manifest.
+- Normalize one natural-language request and return the predicted label and top-class score.
+- Expose a configurable low-confidence threshold.
+- Return other_or_ambiguous when the top-class score is below the threshold while retaining the raw top label for diagnostics.
+
+**Acceptance criteria:**
+- Empty or invalid input is rejected.
+- Prediction never executes shell commands.
+- The score is described as an uncalibrated model estimate, not a guarantee of correctness.
+- The threshold is recorded and can later be selected on development data.
+
+##### Step 3.3.d: held-out annotations and evaluation
+
+**Work:**
+- Extend the annotation workflow to support development and test partitions without changing the existing training pilot.
+- Generate separate review worklists and confirmed exports for held-out partitions.
+- Validate every held-out annotation against its own source partition and checksum.
+- Implement evaluation using development data for configuration selection and test data once after the configuration is frozen.
+
+**Acceptance criteria:**
+- No development or test annotation enters model fitting.
+- No duplicate-linked group appears across partitions.
+- Metrics include accuracy, macro/weighted and per-class precision, recall, F1, support, and confusion matrix.
+- Test evaluation fails closed when labels are missing, unconfirmed, or inconsistent.
+
+**Current limitation:** The training pilot contains 500 pending rows and zero confirmed labels. The classifier can be implemented and tested with temporary fixtures outside the repository, but no real model training or performance result is possible until human annotations are confirmed.
 
 ### Step 4: Entity and parameter extraction
 

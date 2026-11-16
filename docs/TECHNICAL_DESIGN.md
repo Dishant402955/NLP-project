@@ -23,7 +23,7 @@ The implementation is expected to be organized around the following responsibili
 - Preprocessing: validate string input and remove surrounding whitespace while preserving all internal content.
 - Dataset preparation: validate the parallel corpus, group duplicate-linked records, assign deterministic partitions, and write JSONL files with a manifest.
 - Annotation workflow: produce a training-only review worklist, validate explicit human decisions, and export only confirmed labels through the nl2bash-annotations CLI.
-- Intent classifier: train, load, and run the intent model using the categories in [Intent Taxonomy](INTENT_TAXONOMY.md).
+- Intent classifier: fit and run a TF-IDF and Logistic Regression pipeline using only confirmed training annotations and the categories in [Intent Taxonomy](INTENT_TAXONOMY.md).
 - Entity extractor: identify relevant values and conditions.
 - Command generator: construct the model prompt and obtain generated output.
 - Validator: parse commands and apply safety rules.
