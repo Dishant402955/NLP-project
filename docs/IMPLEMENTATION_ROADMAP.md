@@ -241,6 +241,17 @@ The implementation is divided into small commits. See [Intent Classifier](INTENT
 
 ##### Step 3.3.a: confirmed training-data contract
 
+**Status:** Completed.
+
+**Delivered:**
+- Training-only annotation loader with checksum and manifest provenance validation.
+- Source-record checks for example IDs, request text, reference command, and duplicate-group IDs.
+- Explicit confirmed-status and taxonomy-label validation.
+- Configurable per-label minimum, defaulting to two examples per taxonomy label.
+- Clear refusal when the confirmed export is empty or insufficient.
+
+**Verification:** Valid fixture data and adversarial cases for changed checksums, changed source rows, duplicate IDs/groups, pending status, unknown labels, missing taxonomy coverage, path traversal, and invalid configuration were checked outside the repository. The actual local zero-label export was refused with the expected actionable error.
+
 **Work:**
 - Validate the confirmed annotation export and both source manifests.
 - Verify annotation IDs, requests, groups, labels, checksums, and explicit review status against the training partition.

@@ -10,6 +10,8 @@ The baseline uses a Scikit-learn TF-IDF vectorizer followed by Logistic Regressi
 
 Training uses only explicitly confirmed annotations from the training partition.
 
+The loader is implemented in src/nl2bash/classifier_data.py. It returns request text, labels, example IDs, duplicate-group IDs, class counts, and source checksums only after all checks pass.
+
 Before fitting, the trainer must verify:
 
 - The dataset manifest identifies the training partition and its SHA-256 checksum.
@@ -48,7 +50,7 @@ The generated model and its JSON manifest live under the ignored models/ directo
 
 Model files are generated locally and are not committed to Git.
 
-The trainer must fail before writing model artifacts when the confirmed training data is empty, invalid, or below the per-label minimum.
+The trainer must fail before writing model artifacts when the confirmed training data is empty, invalid, or below the per-label minimum. The data loader enforces this contract before any Scikit-learn component is called.
 
 ## 5. Prediction behavior
 
