@@ -127,6 +127,10 @@ Implemented in src/nl2bash/grouping.py: records are connected when they share an
 
 Implemented in src/nl2bash/splitting.py: a seeded greedy allocator assigns whole groups to train/dev/test, validates that duplicate requests and commands do not cross groups, and returns records in stable group order.
 
+**Substep 3.1.d: partition files and manifest**
+
+Implemented in src/nl2bash/dataset_builder.py: deterministic JSONL partitions are written atomically per file, and a manifest records source revision/checksums, split configuration, record/group counts, output checksums, and zero-overlap checks.
+
 **Work:**
 - Implement a standard-library dataset loader for aligned NL2Bash request and command files.
 - Validate row counts, empty records, encoding, and source checksums.
