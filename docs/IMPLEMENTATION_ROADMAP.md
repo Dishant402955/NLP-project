@@ -284,17 +284,31 @@ The implementation is divided into small commits. See [Intent Classifier](INTENT
 
 ##### Step 3.3.c: prediction and low-confidence handling
 
+**Substep 3.3.c.a: verified model loading and prediction API**
+
+**Status:** Completed.
+
+**Delivered:**
+- Model loader validates artifact checksum, manifest schema, fitted pipeline structure, feature/classifier settings, taxonomy, and exact library versions.
+- Prediction accepts one natural-language request and uses the fitted TF-IDF pipeline unchanged.
+- Configurable confidence threshold with a provisional default of 0.45.
+- Low-confidence predictions return other_or_ambiguous while retaining the diagnostic top label.
+- Requests with zero known TF-IDF features return other_or_ambiguous with a 0.0 score.
+
+**Verification:** Temporary model fixtures were used to test model loading, version/checksum/configuration mismatch rejection, normal predictions, low-confidence fallback, zero-feature fallback, and invalid requests/thresholds. No fixture model was stored in Git.
+
+**Substep 3.3.c.b: classifier CLI**
+
 **Work:**
-- Load the locally generated pipeline and validate its manifest.
-- Normalize one natural-language request and return the predicted label and top-class score.
-- Expose a configurable low-confidence threshold.
-- Return other_or_ambiguous when the top-class score is below the threshold while retaining the raw top label for diagnostics.
+- Add a train command that loads the validated confirmed-training dataset and persists the local model.
+- Add a predict command that loads a verified local model and prints a JSON prediction.
+- Keep all generated model files under the Git-ignored models/ directory.
 
 **Acceptance criteria:**
-- Empty or invalid input is rejected.
-- Prediction never executes shell commands.
-- The score is described as an uncalibrated model estimate, not a guarantee of correctness.
-- The threshold is recorded and can later be selected on development data.
+- Training refuses empty or insufficient confirmed data.
+- Prediction refuses missing, tampered, or incompatible model artifacts.
+- CLI errors return a non-zero status and concise message.
+- No generated model or synthetic training data is committed.
 
 ##### Step 3.3.d: held-out annotations and evaluation
 

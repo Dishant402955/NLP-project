@@ -47,6 +47,9 @@ class TrainingArtifact:
     manifest: dict[str, Any]
 
 
+DEFAULT_CONFIDENCE_THRESHOLD = 0.45
+
+
 class ClassifierTrainingError(RuntimeError):
     """Raised when the intent classifier cannot be trained safely."""
 
@@ -284,6 +287,10 @@ def train_intent_classifier(
             "sha256": model_sha256,
         },
         "training_policy": "only explicitly confirmed annotations from the training partition are used",
+        "prediction": {
+            "default_confidence_threshold": DEFAULT_CONFIDENCE_THRESHOLD,
+            "threshold_status": "provisional_not_selected_on_development_data",
+        },
         "evaluation_status": "not_evaluated",
     }
     manifest_payload = (

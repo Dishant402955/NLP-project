@@ -63,11 +63,11 @@ Prediction accepts one non-empty natural-language request. It returns:
 - A low-confidence indicator.
 - The configured confidence threshold.
 
-The probability is a model score, not a calibrated probability that the answer is correct. The initial threshold is a conservative placeholder and must be selected using development data before final evaluation.
+The probability is a model score, not a calibrated probability that the answer is correct. The current default threshold is 0.45, a provisional placeholder only; it must be selected using confirmed development data before final evaluation.
 
-When the score is below the threshold, the prediction is marked low confidence and the public intent result is other_or_ambiguous. The underlying top-scoring label remains available for diagnostics.
+When the score is below the threshold, the prediction is marked low confidence and the public intent result is other_or_ambiguous. The underlying top-scoring label remains available for diagnostics. If the request contains no terms in the fitted TF-IDF vocabulary, the predictor returns other_or_ambiguous with a score of 0.0 and no raw top label.
 
-The classifier never executes a command.
+The classifier never executes a command. Model loading checks the model checksum, pipeline structure, taxonomy, and exact Scikit-learn, NumPy, and joblib versions recorded at training time.
 
 ## 6. Evaluation protocol
 
