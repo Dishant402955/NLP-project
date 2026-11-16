@@ -273,7 +273,7 @@ The implementation is divided into small commits. See [Intent Classifier](INTENT
 - Explicit and reproducible TF-IDF, regularization, solver, iteration, and random-seed settings.
 - Training data and provenance validation at the fit boundary.
 - Atomic local model serialization and a JSON manifest with source checksums, class counts, library versions, settings, and model checksum.
-- Model manifest marks the artifact as not evaluated until held-out evaluation is implemented.
+- The model manifest starts with evaluation_status set to not_evaluated; final metrics and the frozen threshold are stored in separate provenance-bearing evaluation artifacts.
 
 **Verification:** A temporary balanced fixture outside the repository was used to fit and reload the model, inspect ten-class scores, verify artifact checksums, and exercise invalid configuration, insufficient labels, duplicate groups, invalid provenance, and interrupted manifest writes. This is an implementation smoke test, not a project accuracy result.
 
@@ -332,12 +332,18 @@ The implementation is divided into small commits. See [Intent Classifier](INTENT
 
 ##### Step 3.3.d.b: development threshold selection and test evaluation
 
-**Work:**
-- Load confirmed development and test labels using partition-specific checksums and source-row validation.
-- Select the low-confidence threshold using development labels only.
-- Freeze threshold and model provenance before test evaluation.
-- Evaluate the test partition once after configuration freeze.
-- Report accuracy, macro/weighted and per-class precision, recall, F1, support, confusion matrix, and low-confidence counts.
+**Status:** Completed.
+
+**Delivered:**
+- Confirmed development/test data loaders with partition-specific source checksums, annotation checksums, source-row identity, and blind-review provenance.
+- Threshold selection on development data using macro-F1 with a minimum 80% prediction coverage requirement.
+- Deterministic tie-breaking: higher macro-F1, then higher coverage, then lower threshold.
+- Frozen threshold artifact records model, development partition, and annotation provenance.
+- The prediction CLI can use the frozen development threshold.
+- One-time test evaluation reports accuracy, macro/weighted and per-class precision/recall/F1, support, ten-class confusion matrix, coverage, and low-confidence count.
+- Project-level test evaluation guard prevents a second run using another report filename.
+
+**Verification:** Temporary, checksum-valid training/dev/test fixtures outside the repository were used to exercise the complete CLI sequence: train, select threshold, predict with the frozen threshold, and evaluate test. Additional checks covered zero-support labels, impossible coverage targets, wrong partitions, wrong model hashes, invalid frozen thresholds, dataset revision mismatches, duplicate report paths, and alternate report filenames. All temporary fixtures and reports remained outside the repository.
 
 **Acceptance criteria:**
 - No development or test annotation enters model fitting.
@@ -347,7 +353,8 @@ The implementation is divided into small commits. See [Intent Classifier](INTENT
 - The test report records model hash, test partition checksum, annotation checksum, and frozen development threshold.
 - A completed test report cannot be silently overwritten or re-run for the same project evaluation.
 
-**Current limitation:** The training pilot contains 500 pending rows and zero confirmed labels. The classifier can be implemented and tested with temporary fixtures outside the repository, but no real model training or performance result is possible until human annotations are confirmed.
+
+**Current limitation:** The training pilot contains 500 pending rows, and the blind development and test worklists contain 375 pending rows each. All three sets currently have zero confirmed labels. The classifier and evaluation implementation are complete and verified with temporary fixtures outside the repository. No project-specific model training, threshold selection, or real test performance result is possible until human annotations are confirmed.
 
 ### Step 4: Entity and parameter extraction
 

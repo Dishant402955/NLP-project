@@ -71,15 +71,19 @@ The classifier never executes a command. Model loading checks the model checksum
 
 ## 6. Evaluation protocol
 
-The classifier must not use development or test examples during fitting.
+The classifier must not use development or test examples during fitting. The implementation validates each held-out export against its own partition checksum and requires the export manifest to identify blind manual review.
 
 - Training partition: fit TF-IDF and Logistic Regression using confirmed training annotations.
-- Development partition: compare documented configurations and select the confidence threshold.
-- Test partition: perform one final evaluation after the configuration is frozen.
+- Development partition: select the confidence threshold using confirmed development labels only.
+- Test partition: perform one final evaluation after the threshold is frozen. A project-level guard prevents a second run, even when a different report filename is supplied.
 
 Held-out evaluation labels must be explicitly confirmed by a reviewer and must be validated against the corresponding source partition. They must never be inferred from request-text heuristics or reference commands.
 
-Report accuracy, macro and weighted precision/recall/F1, per-class precision/recall/F1, class support, and a confusion matrix. Include the selected threshold and the number of low-confidence predictions.
+The threshold-selection rule maximizes development macro-F1 subject to at least 80% prediction coverage. Ties are resolved by higher coverage, then by the lower threshold. Coverage is the fraction of examples not marked low-confidence. The selected threshold, development metrics, source checksums, and model checksum are written to a frozen JSON artifact.
+
+Report accuracy, macro and weighted precision/recall/F1, per-class precision/recall/F1, class support, and a confusion matrix. Macro averages include only classes with at least one confirmed example in that evaluation partition; macro_label_count records how many classes contributed. Classes with zero support remain in the per-class report and confusion matrix with zero support. Include the selected threshold, prediction coverage, and low-confidence count.
+
+Low-confidence and zero-known-feature requests are mapped to other_or_ambiguous for the public classifier result. The separate coverage and low-confidence fields make abstention visible in the report.
 
 No test result is valid until the test annotations are confirmed and the final configuration is frozen.
 
@@ -88,24 +92,35 @@ No test result is valid until the test annotations are confirmed and the final c
 Install the locked project dependencies and package:
 
     uv sync --locked
-    uv pip install --python .venv/bin/python -e .
 
 Train the model after the confirmed training export meets the per-label minimum:
 
     .venv/bin/nl2bash-classifier train
 
-The command reads the confirmed annotation export and its manifest, validates every row against the training partition, and writes the model and manifest under models/.
+The command validates the confirmed export against the training partition and writes the model and manifest under the Git-ignored models/ directory.
 
-Predict one request using the verified local model:
+Select and freeze a confidence threshold using the confirmed, blind-reviewed development partition:
 
-    .venv/bin/nl2bash-classifier predict --request "Find all Python files under the current directory"
+    .venv/bin/nl2bash-classifier select-threshold
 
-The prediction command prints JSON with the public intent label, diagnostic top label, score, threshold, and low-confidence flag. It does not generate or execute a Bash command.
+The default output is artifacts/evaluation/frozen_dev_threshold.json. It records the chosen threshold, development metrics, model checksum, and development annotation checksums. The minimum prediction coverage defaults to 80%.
 
-At the current project state, the train command intentionally exits with an error because the confirmed annotation export is empty. Complete and validate the human-reviewed pilot first.
+Use the frozen threshold for ordinary prediction:
+
+    .venv/bin/nl2bash-classifier predict --request "Find all Python files under the current directory" --frozen-threshold artifacts/evaluation/frozen_dev_threshold.json
+
+The prediction command prints JSON with the public intent label, diagnostic top label, uncalibrated score, threshold, and low-confidence flag. The frozen threshold must belong to the loaded model.
+
+Run the final test evaluation only after the development threshold has been frozen:
+
+    .venv/bin/nl2bash-classifier evaluate-test
+
+The report is written to artifacts/evaluation/test_report.json. A separate test_evaluation.lock guard prevents another test evaluation in the same project workspace, including attempts that use a different output filename. A guard left in in_progress state after an interrupted process requires manual inspection before any reset.
+
+The classifier CLI also provides --help for each command and options for alternate input and artifact paths. It never generates or executes a Bash command.
 
 ## 8. Current limitation
 
-The annotation workflow currently has a 500-example training pilot. All 500 rows are pending and the confirmed export contains zero rows. Therefore no real classifier can be fitted or evaluated yet.
+The annotation workflow currently has a 500-example training pilot and blind development and test worklists of 375 rows each. All 1,250 rows are pending and all three confirmed exports contain zero rows. Therefore no real classifier can be fitted, no threshold can be selected, and no real test metrics can be reported yet.
 
 Implementation and offline verification may use temporary synthetic fixtures outside the repository. Such fixtures must never be committed, must never be added to the project's annotation data, and must never be presented as model results.

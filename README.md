@@ -6,7 +6,7 @@ The system displays the generated command, explains what it does, and checks its
 
 ## Project status
 
-The Python package foundation, reproducible NL2Bash dataset preparation, annotation workflow, and TF-IDF plus Logistic Regression intent-classifier implementation are in place. The 500-row training pilot and the 375-row blind development and test worklists are generated locally, but all labels are still pending human review. No project model has been trained and no accuracy result is available yet. Entity extraction, LLM command generation, Bash validation, and the end-to-end command-generation CLI remain planned.
+The Python package foundation, reproducible NL2Bash dataset preparation, annotation workflow, TF-IDF plus Logistic Regression classifier, prediction CLI, and held-out evaluation workflow are implemented. The 500-row training pilot and the 375-row blind development and test worklists are generated locally, but all 1,250 labels are still pending human review. No project model has been trained and no real performance result is available yet. Entity extraction, LLM command generation, Bash validation, and the end-to-end command-generation CLI remain planned.
 
 ## Project objectives
 
@@ -61,7 +61,7 @@ Detailed project documentation is maintained in the [docs](docs/) directory.
 - [Dataset and Evaluation](docs/DATASET_AND_EVALUATION.md): dataset audit, licensing, split strategy, metrics, and experiments.
 - [Intent Taxonomy](docs/INTENT_TAXONOMY.md): intent labels, definitions, boundary examples, and taxonomy rules.
 - [Annotation Guide](docs/ANNOTATION_GUIDE.md): commands and instructions for reviewing, confirming, and validating the training and held-out annotation worklists.
-- [Intent Classifier](docs/INTENT_CLASSIFIER.md): TF-IDF and Logistic Regression training contract, prediction behavior, and evaluation rules.
+- [Intent Classifier](docs/INTENT_CLASSIFIER.md): TF-IDF and Logistic Regression training, prediction, threshold selection, and one-time test evaluation commands.
 - [Implementation Roadmap](docs/IMPLEMENTATION_ROADMAP.md): ordered development steps, acceptance criteria, verification protocol, and commit strategy.
 
 ## Project evaluation

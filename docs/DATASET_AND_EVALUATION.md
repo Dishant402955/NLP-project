@@ -141,7 +141,7 @@ NL2Bash does not provide the intent labels needed to train our classifier. The p
 
 Begin with a manually reviewed pilot of approximately 50 examples per label. Review the pilot for unclear category boundaries before expanding it. The natural-language request is the classifier input; the paired command is supporting context for annotators, not a replacement for the request.
 
-The labelled data must use the same duplicate-aware partitions described above. The classifier is trained only on confirmed training examples, tuned using separately confirmed and blind-reviewed development examples, and evaluated once on blind-reviewed test examples after the configuration is frozen.
+The labelled data must use the same duplicate-aware partitions described above. The classifier is trained only on confirmed training examples, its confidence threshold is selected using separately confirmed and blind-reviewed development examples, and it is evaluated once on blind-reviewed test examples after the threshold is frozen. The default threshold-selection rule maximizes macro-F1 subject to at least 80% coverage; see Intent Classifier for the full protocol.
 
 Raw data, annotations, and generated split files are local project artifacts and will not be committed to Git.
 
@@ -162,7 +162,9 @@ Separate blind worklists are generated for development and test using one source
 - Accuracy.
 - Precision, recall, and F1-score.
 - Per-class precision, recall, and F1-score to expose class imbalance.
-- Confusion matrix to identify category overlap.
+- Macro averages over classes with confirmed support in the evaluated partition; the report records the number of contributing labels.
+- Confusion matrix to identify category overlap, retaining all taxonomy labels including zero-support classes.
+- Prediction coverage and low-confidence count after the development-selected confidence threshold is applied.
 
 ### Entity extraction
 

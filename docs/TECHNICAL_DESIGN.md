@@ -27,7 +27,7 @@ The implementation is expected to be organized around the following responsibili
 - Entity extractor: identify relevant values and conditions.
 - Command generator: construct the model prompt and obtain generated output.
 - Validator: parse commands and apply safety rules.
-- Evaluation: calculate metrics and run repeatable experiments.
+- Evaluation: select a confidence threshold using confirmed development labels, then evaluate once on the blind-reviewed test partition with provenance and a one-time run guard.
 
 ## 3. Model interaction
 
@@ -68,4 +68,4 @@ The NL2Bash source contains paired natural-language requests and Bash commands, 
 
 ## 9. Annotation data boundary
 
-Intent suggestions are generated from request-text rules only and remain separate from confirmed labels. Reviewers edit the local CSV worklist; the importer validates source identity, group identity, suggestion metadata, review status, and taxonomy labels. Only explicitly confirmed rows are exported for classifier training. Raw data, worklists, and confirmed annotations remain outside Git.
+Intent suggestions are generated from request-text rules only and remain separate from confirmed labels. Reviewers edit the local training CSV worklist; the importer validates source identity, group identity, suggestion metadata, review status, and taxonomy labels. Only explicitly confirmed rows are exported for classifier training. Development and test use separate blind worklists with no suggested labels and partition-specific confirmed exports. Raw data, worklists, and confirmed annotations remain outside Git.
