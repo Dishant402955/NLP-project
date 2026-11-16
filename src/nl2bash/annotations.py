@@ -40,12 +40,17 @@ WORKLIST_FIELDS = (
 
 ANNOTATION_STATUSES = ("pending", "confirmed", "ambiguous", "rejected")
 SUGGESTION_RULESET = "request-keywords-v1"
-_CSV_FORMULA_PREFIXES = ("=", "+", "-", "@", "\t", "\r")
+_CSV_FORMULA_PREFIXES = ("=", "+", "-", "@", "\t", "\r", "\n")
 
 
 def protect_spreadsheet_text(value: str) -> str:
     """Prefix formula-leading CSV text so spreadsheets treat it as text."""
-    if value.startswith("'") or value.startswith(_CSV_FORMULA_PREFIXES):
+    formula_after_whitespace = value.lstrip(" \t\r\n")
+    if (
+        value.startswith("'")
+        or value.startswith(_CSV_FORMULA_PREFIXES)
+        or formula_after_whitespace.startswith(("=", "+", "-", "@"))
+    ):
         return "'" + value
     return value
 
@@ -54,8 +59,14 @@ def restore_spreadsheet_text(value: str) -> str:
     """Reverse the worklist's formula-safe prefix without changing source text."""
     if value.startswith("''"):
         return value[1:]
-    if len(value) > 1 and value[0] == "'" and value[1] in _CSV_FORMULA_PREFIXES:
-        return value[1:]
+    if len(value) > 1 and value[0] == "'":
+        remainder = value[1:]
+        formula_after_whitespace = remainder.lstrip(" \t\r\n")
+        if (
+            remainder.startswith(_CSV_FORMULA_PREFIXES)
+            or formula_after_whitespace.startswith(("=", "+", "-", "@"))
+        ):
+            return remainder
     return value
 
 # Rules are ordered from the most specific/less frequent categories to the
