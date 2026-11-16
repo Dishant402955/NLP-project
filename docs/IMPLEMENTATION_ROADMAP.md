@@ -223,6 +223,12 @@ This stage is divided into three small implementation commits.
 
 ##### Step 3.2.c: annotation CLI and pilot generation
 
+**Status:** In progress.
+
+**Substep 3.2.c.a: annotation CLI entry point**
+
+Implemented in src/nl2bash/annotation_cli.py and exposed as nl2bash-annotations with create and validate subcommands. Both operations display a machine-readable summary and return a non-zero status on invalid inputs.
+
 **Work:**
 - Expose pilot creation and annotation validation through a small CLI.
 - Generate the balanced pilot from the verified training partition.
