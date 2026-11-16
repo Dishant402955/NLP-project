@@ -118,6 +118,10 @@ def _validate_training_data(
 ) -> dict[str, int]:
     if not isinstance(data, IntentTrainingData):
         raise TypeError("data must be validated IntentTrainingData")
+    if data.partition_name != "train":
+        raise ClassifierTrainingError(
+            f"classifier fitting accepts only training data, not {data.partition_name} data"
+        )
     lengths = {
         len(data.requests),
         len(data.labels),
