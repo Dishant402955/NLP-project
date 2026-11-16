@@ -174,6 +174,7 @@ This stage is divided into three small implementation commits.
 - A one-example-per-duplicate-group constraint across the entire pilot.
 - A CSV review worklist with blank confirmed labels and pending statuses.
 - A pilot manifest containing source checksums, seed, category quotas, and selected IDs.
+- Spreadsheet-safe escaping for formula-leading source text, with reversible handling during annotation import.
 - A reviewer guide in [Annotation Guide](ANNOTATION_GUIDE.md).
 
 **Verified pilot:** 500 rows, 50 per each of the ten labels, 500 distinct duplicate groups, zero confirmed labels, all statuses pending, and no shortages.

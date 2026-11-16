@@ -40,6 +40,23 @@ WORKLIST_FIELDS = (
 
 ANNOTATION_STATUSES = ("pending", "confirmed", "ambiguous", "rejected")
 SUGGESTION_RULESET = "request-keywords-v1"
+_CSV_FORMULA_PREFIXES = ("=", "+", "-", "@", "\t", "\r")
+
+
+def protect_spreadsheet_text(value: str) -> str:
+    """Prefix formula-leading CSV text so spreadsheets treat it as text."""
+    if value.startswith("'") or value.startswith(_CSV_FORMULA_PREFIXES):
+        return "'" + value
+    return value
+
+
+def restore_spreadsheet_text(value: str) -> str:
+    """Reverse the worklist's formula-safe prefix without changing source text."""
+    if value.startswith("''"):
+        return value[1:]
+    if len(value) > 1 and value[0] == "'" and value[1] in _CSV_FORMULA_PREFIXES:
+        return value[1:]
+    return value
 
 # Rules are ordered from the most specific/less frequent categories to the
 # broad categories. They inspect request text only; reference commands are
@@ -372,7 +389,11 @@ def create_annotation_worklist(
             csv_tmp_path = Path(stream.name)
             writer = csv.DictWriter(stream, fieldnames=WORKLIST_FIELDS, lineterminator="\n")
             writer.writeheader()
-            writer.writerows(rows)
+            safe_rows = [
+                {field: protect_spreadsheet_text(row[field]) for field in WORKLIST_FIELDS}
+                for row in rows
+            ]
+            writer.writerows(safe_rows)
             stream.flush()
             os.fsync(stream.fileno())
         os.replace(csv_tmp_path, output_path)

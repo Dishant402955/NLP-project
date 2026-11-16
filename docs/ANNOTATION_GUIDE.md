@@ -15,6 +15,8 @@ The annotation workflow creates these local files:
 
 These files are excluded from Git. Keep reviewed copies in the same local annotation directory.
 
+The CSV generator prefixes spreadsheet-formula-leading source text with an apostrophe so spreadsheet software treats it as text. The validator removes this protective prefix and verifies the original source text before importing annotations. Do not manually remove or alter the prefix.
+
 ## 3. CSV columns
 
 | Column | Reviewer action |
