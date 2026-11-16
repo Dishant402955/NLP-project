@@ -6,7 +6,7 @@ The system displays the generated command, explains what it does, and checks its
 
 ## Project status
 
-The Python package foundation, conservative request preprocessing, and reproducible NL2Bash dataset-preparation CLI are implemented. Intent annotation and classification are the next stages; parameter extraction, model generation, validation, and the end-to-end command-generation CLI remain planned.
+The Python package foundation, reproducible NL2Bash dataset preparation, annotation workflow, and TF-IDF plus Logistic Regression intent-classifier implementation are in place. The 500-row training pilot and the 375-row blind development and test worklists are generated locally, but all labels are still pending human review. No project model has been trained and no accuracy result is available yet. Entity extraction, LLM command generation, Bash validation, and the end-to-end command-generation CLI remain planned.
 
 ## Project objectives
 
@@ -60,7 +60,7 @@ Detailed project documentation is maintained in the [docs](docs/) directory.
 - [Technical Design](docs/TECHNICAL_DESIGN.md): planned modules, technology choices, and implementation boundaries.
 - [Dataset and Evaluation](docs/DATASET_AND_EVALUATION.md): dataset audit, licensing, split strategy, metrics, and experiments.
 - [Intent Taxonomy](docs/INTENT_TAXONOMY.md): intent labels, definitions, boundary examples, and taxonomy rules.
-- [Annotation Guide](docs/ANNOTATION_GUIDE.md): commands and instructions for reviewing, confirming, and validating the local intent pilot.
+- [Annotation Guide](docs/ANNOTATION_GUIDE.md): commands and instructions for reviewing, confirming, and validating the training and held-out annotation worklists.
 - [Intent Classifier](docs/INTENT_CLASSIFIER.md): TF-IDF and Logistic Regression training contract, prediction behavior, and evaluation rules.
 - [Implementation Roadmap](docs/IMPLEMENTATION_ROADMAP.md): ordered development steps, acceptance criteria, verification protocol, and commit strategy.
 

@@ -44,7 +44,32 @@ The validator reports the number of confirmed, pending, ambiguous, and rejected 
 
 Use the --help option on either subcommand to see options for alternate paths, pilot size, and seed.
 
-## 4. CSV columns
+## 4. Blind development and test review
+
+Development and test annotations are separate from the training pilot. They must be reviewed without heuristic suggestions so the evaluation labels are not influenced by the same rules used to create the training suggestions.
+
+Create both held-out review files:
+
+    .venv/bin/nl2bash-annotations create --partition dev
+    .venv/bin/nl2bash-annotations create --partition test
+
+Each command selects one original record from every duplicate group in that partition. The current partitions produce 375 review rows each. The suggestion columns are intentionally blank, and all rows begin pending.
+
+Review each request using the intent taxonomy. Do not use model predictions or the paired command to infer the label. The paired command is shown only as context when the request is genuinely underspecified. Mark a row ambiguous or rejected when one primary label cannot be established.
+
+Validate the reviewed files separately:
+
+    .venv/bin/nl2bash-annotations validate --partition dev
+    .venv/bin/nl2bash-annotations validate --partition test
+
+The resulting exports are:
+
+- data/annotations/dev_confirmed_intents.jsonl
+- data/annotations/test_confirmed_intents.jsonl
+
+Each export records its own partition name and checksum. The classifier training loader rejects development and test exports. Use development labels only for threshold/configuration selection. Keep test labels untouched until the classifier configuration is frozen, then evaluate on the test partition once.
+
+## 5. CSV columns
 
 | Column | Reviewer action |
 |---|---|
@@ -58,7 +83,7 @@ Use the --help option on either subcommand to see options for alternate paths, p
 | review_status | Change pending to confirmed, ambiguous, or rejected. |
 | reviewer_note | Record why an item is ambiguous/rejected. A note is required for other_or_ambiguous. |
 
-## 5. Review decisions
+## 6. Review decisions
 
 Use exactly these review statuses:
 
@@ -69,7 +94,7 @@ Use exactly these review statuses:
 
 Use other_or_ambiguous as a confirmed label when the request is clearly outside the supported operation categories or the requested outcome combines independent operations. Use the ambiguous status when a reliable single label cannot be selected even after considering the reference command.
 
-## 6. Annotation rules
+## 7. Annotation rules
 
 1. The natural-language request is the classifier input and the primary basis for its label.
 2. Read the entire request before deciding. Do not label a request solely from its first word or from the first utility in the reference command.
@@ -79,7 +104,7 @@ Use other_or_ambiguous as a confirmed label when the request is clearly outside 
 6. Correct a wrong suggested label by entering the appropriate label in confirmed_intent; do not edit the suggestion column.
 7. Do not confirm a label when the pair is unclear or mismatched. Use ambiguous or rejected with a note.
 
-## 7. Valid labels
+## 8. Valid labels
 
 The confirmed_intent field accepts only:
 
@@ -96,9 +121,10 @@ The confirmed_intent field accepts only:
 
 The spelling must match exactly.
 
-## 8. Import and training policy
+## 9. Import and training policy
 
 The annotation validator checks that:
+- The selected partition name and source checksum match the worklist manifest.
 - All pilot example IDs and group IDs are present exactly once.
 - Source request and command text have not been changed.
 - Suggested labels and reasons have not been modified.

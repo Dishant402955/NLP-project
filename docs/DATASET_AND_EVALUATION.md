@@ -141,7 +141,7 @@ NL2Bash does not provide the intent labels needed to train our classifier. The p
 
 Begin with a manually reviewed pilot of approximately 50 examples per label. Review the pilot for unclear category boundaries before expanding it. The natural-language request is the classifier input; the paired command is supporting context for annotators, not a replacement for the request.
 
-The labelled data must use the same duplicate-aware partitions described above. The classifier is trained only on training examples, tuned using development examples, and evaluated once on held-out test examples.
+The labelled data must use the same duplicate-aware partitions described above. The classifier is trained only on confirmed training examples, tuned using separately confirmed and blind-reviewed development examples, and evaluated once on blind-reviewed test examples after the configuration is frozen.
 
 Raw data, annotations, and generated split files are local project artifacts and will not be committed to Git.
 
@@ -152,6 +152,8 @@ The first pilot is generated from the training partition only. It contains 50 ca
 The pilot generator uses request-text rules only to suggest labels. It does not use the paired Bash command to assign a suggestion. Every row starts with a blank confirmed label and a pending review status. The suggestions are deliberately not treated as ground truth.
 
 The local worklist and its manifest are stored under data/annotations/ and are excluded from Git. Generate it with .venv/bin/nl2bash-annotations create and validate reviewer decisions with .venv/bin/nl2bash-annotations validate. See the [Annotation Guide](ANNOTATION_GUIDE.md) for the full review procedure and CSV field definitions. The current generated pilot contains 500 pending rows and zero confirmed labels. Only explicitly confirmed rows will be imported for classifier training.
+
+Separate blind worklists are generated for development and test using one source record per duplicate group. These worklists contain no heuristic label suggestions. Their confirmed exports are tagged with the matching partition name and checksum. The classifier training loader rejects either held-out export.
 
 ## 10. Evaluation metrics
 
