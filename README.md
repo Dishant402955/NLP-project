@@ -8,6 +8,10 @@ The system displays the generated command, explains what it does, and checks its
 
 The Python package foundation, reproducible NL2Bash dataset preparation, intent annotation workflow, TF-IDF plus Logistic Regression classifier, prediction/evaluation CLI, deterministic entity extractor, and exact-span entity metrics are implemented. The current training and development intent labels are AI-assisted provisional annotations, not independent human ground truth. The 375-example test worklist remains sealed and pending. A project-specific classifier has been fitted and a development threshold selected for engineering diagnostics only; see [Annotation Review Status](docs/ANNOTATION_REVIEW_STATUS.md). The entity extractor still needs an independently adjudicated benchmark. LLM command generation, Bash validation, and the end-to-end command-generation CLI remain to be built.
 
+## Versioned research artifacts
+
+The repository includes the licensed NL2Bash raw source files, reproducibly generated train/development/test partitions, intent annotation worklists and confirmed exports, the current provisional classifier, and its frozen development-threshold artifact. Their source revision, checksums, and annotation provenance are recorded in manifests and the [Annotation Review Status](docs/ANNOTATION_REVIEW_STATUS.md). The test partition is included, but its labels remain sealed and pending until the model and threshold are frozen. Test scripts, temporary fixtures, caches, virtual environments, and secrets are not committed.
+
 ## Project objectives
 
 - Accept Linux command requests written in plain English.
@@ -97,4 +101,4 @@ The project will investigate the NL2Bash dataset and the associated research:
 - [NL2Bash: A Corpus and Semantic Parser for Natural Language Interface to the Linux Operating System](https://arxiv.org/abs/1802.08979)
 - [NL2Bash repository](https://github.com/TellinaTool/nl2bash)
 
-The NL2Bash dataset license and structure have been audited. Raw data and annotations remain outside Git; see the dataset documentation for the audit findings and limitations.
+The NL2Bash dataset license and structure have been audited. The licensed raw data, processed splits, annotations, and provenance manifests are included in Git; see the dataset documentation for the audit findings and limitations.

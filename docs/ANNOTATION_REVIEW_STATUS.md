@@ -2,7 +2,7 @@
 
 **Status date:** 2026-11-16
 
-## Current local state
+## Current versioned annotation state
 
 | Partition | Worklist size | Confirmed export | Pending | Use
 |---|---:|---:|---:|---|
@@ -52,4 +52,4 @@ These values are engineering diagnostics only. Since the same AI annotator label
 3. Freeze the final taxonomy and model configuration.
 4. Only then review the 375 test requests without predictions or paired commands, validate the test export, and run the one-time test evaluation.
 
-The raw dataset, worklists, confirmed exports, model, and evaluation artifacts are local files under Git-ignored paths. They are intentionally not committed.
+The raw dataset and MIT notice, processed train/dev/test splits, annotation worklists and confirmed exports, classifier model and manifest, and frozen development-threshold artifact are versioned in Git. Their checksums and source revision are recorded in the accompanying manifests. Test labels remain pending and are not included in the confirmed export.

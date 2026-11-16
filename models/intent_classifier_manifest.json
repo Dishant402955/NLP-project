@@ -1,0 +1,73 @@
+{
+  "artifact": {
+    "file": "models/intent_classifier.joblib",
+    "sha256": "fe098fd7198e3469ddf94055811c00cd2880b0f486cc638e1bc8a3d6ac8768d7"
+  },
+  "dataset": "NL2Bash",
+  "evaluation_status": "not_evaluated",
+  "libraries": {
+    "joblib": "1.6.0",
+    "numpy": "2.2.6",
+    "scikit_learn": "1.7.2"
+  },
+  "model_type": "tfidf_logistic_regression",
+  "prediction": {
+    "default_confidence_threshold": 0.45,
+    "threshold_status": "provisional_not_selected_on_development_data"
+  },
+  "schema_version": 1,
+  "source": {
+    "annotation_manifest_sha256": "bf87fa9c950ec2fc53c8464efafeacd78a3a535bdab452a4c0906fa016949843",
+    "confirmed_annotations_sha256": "8cfcabf63184412f1ace998f30b20072d3cc4adad2941689613d09ea58d31b8a",
+    "dataset_revision": "d6b9f5bdff45621d190134e31ab63b7bf7002190",
+    "reviewed_csv_sha256": "c8f7e0840a7535206b7e77693d1db033ecaa772d7581e9ab86c90ae5350b75e3",
+    "training_partition_sha256": "15fbee9ac5b8341a14a31285288c5119702b8dbb5ac367903c3a6cb2ea879451"
+  },
+  "training": {
+    "class_counts": {
+      "archive_compression": 39,
+      "file_directory_management": 52,
+      "file_discovery": 57,
+      "network_remote_operations": 50,
+      "other_or_ambiguous": 54,
+      "permissions_ownership": 48,
+      "process_job_management": 42,
+      "shell_environment_session": 76,
+      "system_information": 22,
+      "text_search_processing": 60
+    },
+    "classifier_configuration": {
+      "C": 1.0,
+      "class_weight": null,
+      "max_iter": 2000,
+      "random_state": 42,
+      "solver": "lbfgs",
+      "type": "LogisticRegression"
+    },
+    "feature_configuration": {
+      "lowercase": true,
+      "max_features": 50000,
+      "ngram_range": [
+        1,
+        2
+      ],
+      "sublinear_tf": true,
+      "type": "TfidfVectorizer"
+    },
+    "labels": [
+      "file_discovery",
+      "text_search_processing",
+      "file_directory_management",
+      "permissions_ownership",
+      "process_job_management",
+      "system_information",
+      "network_remote_operations",
+      "archive_compression",
+      "shell_environment_session",
+      "other_or_ambiguous"
+    ],
+    "minimum_examples_per_label": 2,
+    "record_count": 500
+  },
+  "training_policy": "only explicitly confirmed annotations from the training partition are used"
+}

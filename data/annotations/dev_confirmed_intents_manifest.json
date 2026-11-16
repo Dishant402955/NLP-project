@@ -1,0 +1,32 @@
+{
+  "confirmed_output": {
+    "file": "data/annotations/dev_confirmed_intents.jsonl",
+    "record_count": 375,
+    "sha256": "3fa0cea374c3f80949c5098eb6954f2cbfcb4307c758edaaba4a571bf7a416c9"
+  },
+  "dataset": "NL2Bash",
+  "schema_version": 1,
+  "source": {
+    "dataset_manifest": "data/processed/nl2bash/manifest.json",
+    "dataset_revision": "d6b9f5bdff45621d190134e31ab63b7bf7002190",
+    "partition_file": "data/processed/nl2bash/dev.jsonl",
+    "partition_name": "dev",
+    "partition_sha256": "22f30b63140a34c9d12dfd98a0dc0110111f19d46cc8771088c9ddd65e6002f5",
+    "pilot_manifest": "data/annotations/dev_review_manifest.json",
+    "reviewed_csv": "data/annotations/dev_review.csv",
+    "reviewed_csv_sha256": "4cc60b17ca8fda1b62b57f37ef47dedf382100da6004c8194455973c7b7fe5f0"
+  },
+  "summary": {
+    "blind_manual_review": true,
+    "confirmed_records": 375,
+    "partition_records": 1261,
+    "pilot_records": 375,
+    "status_counts": {
+      "ambiguous": 0,
+      "confirmed": 375,
+      "pending": 0,
+      "rejected": 0
+    }
+  },
+  "training_policy": "only rows explicitly marked confirmed are exported; held-out exports must not be used for fitting"
+}

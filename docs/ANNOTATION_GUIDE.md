@@ -2,20 +2,20 @@
 
 ## 1. Purpose
 
-This guide explains how to review the local intent-annotation pilot for the Natural Language to Bash Command Generator.
+This guide explains how to review the versioned intent-annotation worklists for the Natural Language to Bash Command Generator.
 
-The pilot is a manually reviewed dataset artifact. The suggested labels are weak hints generated from request-text patterns. They are not ground truth and must not be used for model training until a reviewer confirms them.
+The pilot is a project annotation artifact. The suggested labels are weak hints generated from request-text patterns. They are not ground truth and must not be used for model training until a reviewer confirms them.
 
 **Current annotation provenance:** the local training and development worklists have an initial AI-assisted request-only annotation pass. Those labels are provisional and must not be described as independently human-reviewed. Before final academic evaluation, a human reviewer should audit or replace them using this guide. The test worklist remains pending and must stay sealed until the model and threshold are frozen. See [Annotation Review Status](ANNOTATION_REVIEW_STATUS.md).
 
 ## 2. Files
 
-The annotation workflow creates these local files:
+The annotation workflow creates these versioned project files:
 
 - data/annotations/intent_pilot.csv: the editable review worklist.
 - data/annotations/intent_pilot_manifest.json: source checksum, pilot seed, quotas, selected IDs, and suggestion metadata.
 
-These files are excluded from Git. Keep reviewed copies in the same local annotation directory.
+These files are tracked in Git so annotation decisions, source identity, and provenance remain reviewable. Edit the worklist locally, validate it, then commit the updated CSV, confirmed export, and regenerated manifests together.
 
 The CSV generator prefixes spreadsheet-formula-leading source text with an apostrophe so spreadsheet software treats it as text. The validator removes this protective prefix and verifies the original source text before importing annotations. Do not manually remove or alter the prefix.
 

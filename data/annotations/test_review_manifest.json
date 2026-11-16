@@ -1,0 +1,2660 @@
+{
+  "dataset": "NL2Bash",
+  "pilot_example_ids": [
+    "nl2bash-000015",
+    "nl2bash-000041",
+    "nl2bash-000047",
+    "nl2bash-000050",
+    "nl2bash-000095",
+    "nl2bash-000115",
+    "nl2bash-000116",
+    "nl2bash-000129",
+    "nl2bash-000132",
+    "nl2bash-000193",
+    "nl2bash-000209",
+    "nl2bash-000218",
+    "nl2bash-000228",
+    "nl2bash-000242",
+    "nl2bash-000362",
+    "nl2bash-000373",
+    "nl2bash-000382",
+    "nl2bash-000397",
+    "nl2bash-000403",
+    "nl2bash-000446",
+    "nl2bash-000450",
+    "nl2bash-000540",
+    "nl2bash-000550",
+    "nl2bash-000554",
+    "nl2bash-000570",
+    "nl2bash-000596",
+    "nl2bash-000634",
+    "nl2bash-000643",
+    "nl2bash-000647",
+    "nl2bash-000650",
+    "nl2bash-000655",
+    "nl2bash-000667",
+    "nl2bash-000701",
+    "nl2bash-000726",
+    "nl2bash-000842",
+    "nl2bash-000852",
+    "nl2bash-000942",
+    "nl2bash-000961",
+    "nl2bash-000966",
+    "nl2bash-000972",
+    "nl2bash-000973",
+    "nl2bash-001017",
+    "nl2bash-001068",
+    "nl2bash-001082",
+    "nl2bash-001161",
+    "nl2bash-001206",
+    "nl2bash-001288",
+    "nl2bash-001304",
+    "nl2bash-001327",
+    "nl2bash-001331",
+    "nl2bash-001349",
+    "nl2bash-001362",
+    "nl2bash-001373",
+    "nl2bash-001376",
+    "nl2bash-001379",
+    "nl2bash-001390",
+    "nl2bash-001404",
+    "nl2bash-001407",
+    "nl2bash-001434",
+    "nl2bash-001435",
+    "nl2bash-001447",
+    "nl2bash-001515",
+    "nl2bash-001538",
+    "nl2bash-001572",
+    "nl2bash-001607",
+    "nl2bash-001625",
+    "nl2bash-001641",
+    "nl2bash-001717",
+    "nl2bash-001743",
+    "nl2bash-001757",
+    "nl2bash-001959",
+    "nl2bash-001982",
+    "nl2bash-001991",
+    "nl2bash-002004",
+    "nl2bash-002006",
+    "nl2bash-002038",
+    "nl2bash-002098",
+    "nl2bash-002101",
+    "nl2bash-002124",
+    "nl2bash-002136",
+    "nl2bash-002154",
+    "nl2bash-002162",
+    "nl2bash-002194",
+    "nl2bash-002198",
+    "nl2bash-002242",
+    "nl2bash-002263",
+    "nl2bash-002269",
+    "nl2bash-002271",
+    "nl2bash-002308",
+    "nl2bash-002309",
+    "nl2bash-002326",
+    "nl2bash-002345",
+    "nl2bash-002346",
+    "nl2bash-002348",
+    "nl2bash-002351",
+    "nl2bash-002357",
+    "nl2bash-002361",
+    "nl2bash-002381",
+    "nl2bash-002383",
+    "nl2bash-002385",
+    "nl2bash-002404",
+    "nl2bash-002412",
+    "nl2bash-002448",
+    "nl2bash-002476",
+    "nl2bash-002494",
+    "nl2bash-002519",
+    "nl2bash-002537",
+    "nl2bash-002563",
+    "nl2bash-002568",
+    "nl2bash-002577",
+    "nl2bash-002611",
+    "nl2bash-002612",
+    "nl2bash-002653",
+    "nl2bash-002660",
+    "nl2bash-002672",
+    "nl2bash-002684",
+    "nl2bash-002722",
+    "nl2bash-002727",
+    "nl2bash-002746",
+    "nl2bash-002747",
+    "nl2bash-002750",
+    "nl2bash-002777",
+    "nl2bash-002818",
+    "nl2bash-002829",
+    "nl2bash-002885",
+    "nl2bash-002888",
+    "nl2bash-002896",
+    "nl2bash-002923",
+    "nl2bash-002924",
+    "nl2bash-002934",
+    "nl2bash-002958",
+    "nl2bash-002979",
+    "nl2bash-002986",
+    "nl2bash-002987",
+    "nl2bash-002989",
+    "nl2bash-003018",
+    "nl2bash-003072",
+    "nl2bash-003076",
+    "nl2bash-003111",
+    "nl2bash-003120",
+    "nl2bash-003122",
+    "nl2bash-003141",
+    "nl2bash-003146",
+    "nl2bash-003147",
+    "nl2bash-003149",
+    "nl2bash-003189",
+    "nl2bash-003193",
+    "nl2bash-003207",
+    "nl2bash-003265",
+    "nl2bash-003281",
+    "nl2bash-003295",
+    "nl2bash-003334",
+    "nl2bash-003338",
+    "nl2bash-003343",
+    "nl2bash-003352",
+    "nl2bash-003364",
+    "nl2bash-003473",
+    "nl2bash-003479",
+    "nl2bash-003487",
+    "nl2bash-003498",
+    "nl2bash-003570",
+    "nl2bash-003577",
+    "nl2bash-003578",
+    "nl2bash-003587",
+    "nl2bash-003589",
+    "nl2bash-003590",
+    "nl2bash-003611",
+    "nl2bash-003617",
+    "nl2bash-003619",
+    "nl2bash-003643",
+    "nl2bash-003646",
+    "nl2bash-003664",
+    "nl2bash-003678",
+    "nl2bash-003682",
+    "nl2bash-003706",
+    "nl2bash-003729",
+    "nl2bash-003740",
+    "nl2bash-003763",
+    "nl2bash-003791",
+    "nl2bash-003832",
+    "nl2bash-003893",
+    "nl2bash-003907",
+    "nl2bash-003911",
+    "nl2bash-003912",
+    "nl2bash-003921",
+    "nl2bash-003928",
+    "nl2bash-003960",
+    "nl2bash-003976",
+    "nl2bash-003980",
+    "nl2bash-003985",
+    "nl2bash-004029",
+    "nl2bash-004057",
+    "nl2bash-004074",
+    "nl2bash-004078",
+    "nl2bash-004092",
+    "nl2bash-004121",
+    "nl2bash-004163",
+    "nl2bash-004172",
+    "nl2bash-004189",
+    "nl2bash-004191",
+    "nl2bash-004209",
+    "nl2bash-004376",
+    "nl2bash-004392",
+    "nl2bash-004440",
+    "nl2bash-004537",
+    "nl2bash-004574",
+    "nl2bash-004608",
+    "nl2bash-004628",
+    "nl2bash-004661",
+    "nl2bash-004670",
+    "nl2bash-004678",
+    "nl2bash-004689",
+    "nl2bash-004705",
+    "nl2bash-004716",
+    "nl2bash-004761",
+    "nl2bash-004776",
+    "nl2bash-004869",
+    "nl2bash-004879",
+    "nl2bash-004892",
+    "nl2bash-004943",
+    "nl2bash-004950",
+    "nl2bash-004956",
+    "nl2bash-004979",
+    "nl2bash-004994",
+    "nl2bash-005031",
+    "nl2bash-005046",
+    "nl2bash-005069",
+    "nl2bash-005078",
+    "nl2bash-005079",
+    "nl2bash-005092",
+    "nl2bash-005107",
+    "nl2bash-005117",
+    "nl2bash-005142",
+    "nl2bash-005198",
+    "nl2bash-005215",
+    "nl2bash-005248",
+    "nl2bash-005255",
+    "nl2bash-005335",
+    "nl2bash-005370",
+    "nl2bash-005413",
+    "nl2bash-005428",
+    "nl2bash-005463",
+    "nl2bash-005534",
+    "nl2bash-005541",
+    "nl2bash-005586",
+    "nl2bash-005608",
+    "nl2bash-005631",
+    "nl2bash-005649",
+    "nl2bash-005939",
+    "nl2bash-005968",
+    "nl2bash-006035",
+    "nl2bash-006067",
+    "nl2bash-006121",
+    "nl2bash-006132",
+    "nl2bash-006200",
+    "nl2bash-006397",
+    "nl2bash-006445",
+    "nl2bash-006450",
+    "nl2bash-006529",
+    "nl2bash-006559",
+    "nl2bash-006563",
+    "nl2bash-006638",
+    "nl2bash-006670",
+    "nl2bash-006747",
+    "nl2bash-006768",
+    "nl2bash-006802",
+    "nl2bash-006877",
+    "nl2bash-006889",
+    "nl2bash-006974",
+    "nl2bash-007058",
+    "nl2bash-007181",
+    "nl2bash-007253",
+    "nl2bash-007265",
+    "nl2bash-007326",
+    "nl2bash-007343",
+    "nl2bash-007348",
+    "nl2bash-007357",
+    "nl2bash-007367",
+    "nl2bash-007380",
+    "nl2bash-007396",
+    "nl2bash-007409",
+    "nl2bash-007414",
+    "nl2bash-007427",
+    "nl2bash-007457",
+    "nl2bash-007461",
+    "nl2bash-007466",
+    "nl2bash-007468",
+    "nl2bash-007472",
+    "nl2bash-007493",
+    "nl2bash-007528",
+    "nl2bash-007550",
+    "nl2bash-007576",
+    "nl2bash-007623",
+    "nl2bash-007675",
+    "nl2bash-007736",
+    "nl2bash-007788",
+    "nl2bash-007846",
+    "nl2bash-007894",
+    "nl2bash-007919",
+    "nl2bash-007925",
+    "nl2bash-007930",
+    "nl2bash-007975",
+    "nl2bash-007983",
+    "nl2bash-008115",
+    "nl2bash-008187",
+    "nl2bash-008288",
+    "nl2bash-008446",
+    "nl2bash-008459",
+    "nl2bash-008460",
+    "nl2bash-008466",
+    "nl2bash-008524",
+    "nl2bash-008525",
+    "nl2bash-008527",
+    "nl2bash-008625",
+    "nl2bash-008667",
+    "nl2bash-008716",
+    "nl2bash-008729",
+    "nl2bash-008737",
+    "nl2bash-008744",
+    "nl2bash-008749",
+    "nl2bash-008761",
+    "nl2bash-008791",
+    "nl2bash-008830",
+    "nl2bash-008873",
+    "nl2bash-008937",
+    "nl2bash-008945",
+    "nl2bash-008961",
+    "nl2bash-008962",
+    "nl2bash-008980",
+    "nl2bash-009016",
+    "nl2bash-009160",
+    "nl2bash-009190",
+    "nl2bash-009248",
+    "nl2bash-009288",
+    "nl2bash-009310",
+    "nl2bash-009358",
+    "nl2bash-009475",
+    "nl2bash-009506",
+    "nl2bash-009560",
+    "nl2bash-009573",
+    "nl2bash-009677",
+    "nl2bash-009678",
+    "nl2bash-009729",
+    "nl2bash-009752",
+    "nl2bash-009846",
+    "nl2bash-009892",
+    "nl2bash-009894",
+    "nl2bash-010045",
+    "nl2bash-010083",
+    "nl2bash-010143",
+    "nl2bash-010172",
+    "nl2bash-010449",
+    "nl2bash-010464",
+    "nl2bash-010468",
+    "nl2bash-010473",
+    "nl2bash-010534",
+    "nl2bash-010562",
+    "nl2bash-010617",
+    "nl2bash-010851",
+    "nl2bash-011026",
+    "nl2bash-011133",
+    "nl2bash-011136",
+    "nl2bash-011176",
+    "nl2bash-011313",
+    "nl2bash-011413",
+    "nl2bash-011444",
+    "nl2bash-011554",
+    "nl2bash-011617",
+    "nl2bash-011671",
+    "nl2bash-011737",
+    "nl2bash-011758",
+    "nl2bash-011997",
+    "nl2bash-012119",
+    "nl2bash-012276",
+    "nl2bash-012388"
+  ],
+  "pilot_example_metadata": {
+    "nl2bash-000015": {
+      "group_id": "group-nl2bash-000015",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-000041": {
+      "group_id": "group-nl2bash-000041",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-000047": {
+      "group_id": "group-nl2bash-000047",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-000050": {
+      "group_id": "group-nl2bash-000050",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-000095": {
+      "group_id": "group-nl2bash-000095",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-000115": {
+      "group_id": "group-nl2bash-000115",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-000116": {
+      "group_id": "group-nl2bash-000116",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-000129": {
+      "group_id": "group-nl2bash-000129",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-000132": {
+      "group_id": "group-nl2bash-000132",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-000193": {
+      "group_id": "group-nl2bash-000193",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-000209": {
+      "group_id": "group-nl2bash-000209",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-000218": {
+      "group_id": "group-nl2bash-000218",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-000228": {
+      "group_id": "group-nl2bash-000228",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-000242": {
+      "group_id": "group-nl2bash-000242",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-000362": {
+      "group_id": "group-nl2bash-000362",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-000373": {
+      "group_id": "group-nl2bash-000373",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-000382": {
+      "group_id": "group-nl2bash-000382",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-000397": {
+      "group_id": "group-nl2bash-000397",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-000403": {
+      "group_id": "group-nl2bash-000403",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-000446": {
+      "group_id": "group-nl2bash-000446",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-000450": {
+      "group_id": "group-nl2bash-000450",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-000540": {
+      "group_id": "group-nl2bash-000540",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-000550": {
+      "group_id": "group-nl2bash-000550",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-000554": {
+      "group_id": "group-nl2bash-000554",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-000570": {
+      "group_id": "group-nl2bash-000570",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-000596": {
+      "group_id": "group-nl2bash-000596",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-000634": {
+      "group_id": "group-nl2bash-000634",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-000643": {
+      "group_id": "group-nl2bash-000643",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-000647": {
+      "group_id": "group-nl2bash-000647",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-000650": {
+      "group_id": "group-nl2bash-000650",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-000655": {
+      "group_id": "group-nl2bash-000655",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-000667": {
+      "group_id": "group-nl2bash-000667",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-000701": {
+      "group_id": "group-nl2bash-000701",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-000726": {
+      "group_id": "group-nl2bash-000726",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-000842": {
+      "group_id": "group-nl2bash-000842",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-000852": {
+      "group_id": "group-nl2bash-000852",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-000942": {
+      "group_id": "group-nl2bash-000942",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-000961": {
+      "group_id": "group-nl2bash-000961",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-000966": {
+      "group_id": "group-nl2bash-000966",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-000972": {
+      "group_id": "group-nl2bash-000972",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-000973": {
+      "group_id": "group-nl2bash-000973",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-001017": {
+      "group_id": "group-nl2bash-001017",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-001068": {
+      "group_id": "group-nl2bash-001068",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-001082": {
+      "group_id": "group-nl2bash-001082",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-001161": {
+      "group_id": "group-nl2bash-001161",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-001206": {
+      "group_id": "group-nl2bash-001206",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-001288": {
+      "group_id": "group-nl2bash-001288",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-001304": {
+      "group_id": "group-nl2bash-001304",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-001327": {
+      "group_id": "group-nl2bash-001327",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-001331": {
+      "group_id": "group-nl2bash-001331",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-001349": {
+      "group_id": "group-nl2bash-001349",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-001362": {
+      "group_id": "group-nl2bash-001362",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-001373": {
+      "group_id": "group-nl2bash-001373",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-001376": {
+      "group_id": "group-nl2bash-001376",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-001379": {
+      "group_id": "group-nl2bash-001379",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-001390": {
+      "group_id": "group-nl2bash-001390",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-001404": {
+      "group_id": "group-nl2bash-001404",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-001407": {
+      "group_id": "group-nl2bash-001407",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-001434": {
+      "group_id": "group-nl2bash-001434",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-001435": {
+      "group_id": "group-nl2bash-001435",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-001447": {
+      "group_id": "group-nl2bash-001447",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-001515": {
+      "group_id": "group-nl2bash-001515",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-001538": {
+      "group_id": "group-nl2bash-001538",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-001572": {
+      "group_id": "group-nl2bash-001572",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-001607": {
+      "group_id": "group-nl2bash-001607",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-001625": {
+      "group_id": "group-nl2bash-001625",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-001641": {
+      "group_id": "group-nl2bash-001641",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-001717": {
+      "group_id": "group-nl2bash-001717",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-001743": {
+      "group_id": "group-nl2bash-001743",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-001757": {
+      "group_id": "group-nl2bash-001757",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-001959": {
+      "group_id": "group-nl2bash-001959",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-001982": {
+      "group_id": "group-nl2bash-001982",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-001991": {
+      "group_id": "group-nl2bash-001991",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-002004": {
+      "group_id": "group-nl2bash-002004",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-002006": {
+      "group_id": "group-nl2bash-002006",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-002038": {
+      "group_id": "group-nl2bash-002038",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-002098": {
+      "group_id": "group-nl2bash-002098",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-002101": {
+      "group_id": "group-nl2bash-002101",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-002124": {
+      "group_id": "group-nl2bash-002124",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-002136": {
+      "group_id": "group-nl2bash-002136",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-002154": {
+      "group_id": "group-nl2bash-002154",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-002162": {
+      "group_id": "group-nl2bash-002162",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-002194": {
+      "group_id": "group-nl2bash-002194",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-002198": {
+      "group_id": "group-nl2bash-002198",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-002242": {
+      "group_id": "group-nl2bash-002242",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-002263": {
+      "group_id": "group-nl2bash-002263",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-002269": {
+      "group_id": "group-nl2bash-002269",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-002271": {
+      "group_id": "group-nl2bash-002271",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-002308": {
+      "group_id": "group-nl2bash-002308",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-002309": {
+      "group_id": "group-nl2bash-002309",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-002326": {
+      "group_id": "group-nl2bash-002326",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-002345": {
+      "group_id": "group-nl2bash-002345",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-002346": {
+      "group_id": "group-nl2bash-002346",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-002348": {
+      "group_id": "group-nl2bash-002348",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-002351": {
+      "group_id": "group-nl2bash-002351",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-002357": {
+      "group_id": "group-nl2bash-002357",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-002361": {
+      "group_id": "group-nl2bash-002361",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-002381": {
+      "group_id": "group-nl2bash-002381",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-002383": {
+      "group_id": "group-nl2bash-002383",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-002385": {
+      "group_id": "group-nl2bash-002385",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-002404": {
+      "group_id": "group-nl2bash-002404",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-002412": {
+      "group_id": "group-nl2bash-002412",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-002448": {
+      "group_id": "group-nl2bash-002448",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-002476": {
+      "group_id": "group-nl2bash-002476",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-002494": {
+      "group_id": "group-nl2bash-002494",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-002519": {
+      "group_id": "group-nl2bash-002519",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-002537": {
+      "group_id": "group-nl2bash-002537",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-002563": {
+      "group_id": "group-nl2bash-002563",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-002568": {
+      "group_id": "group-nl2bash-002568",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-002577": {
+      "group_id": "group-nl2bash-002577",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-002611": {
+      "group_id": "group-nl2bash-002611",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-002612": {
+      "group_id": "group-nl2bash-002612",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-002653": {
+      "group_id": "group-nl2bash-002653",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-002660": {
+      "group_id": "group-nl2bash-002660",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-002672": {
+      "group_id": "group-nl2bash-002672",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-002684": {
+      "group_id": "group-nl2bash-002684",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-002722": {
+      "group_id": "group-nl2bash-002722",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-002727": {
+      "group_id": "group-nl2bash-002727",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-002746": {
+      "group_id": "group-nl2bash-002746",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-002747": {
+      "group_id": "group-nl2bash-002747",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-002750": {
+      "group_id": "group-nl2bash-002750",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-002777": {
+      "group_id": "group-nl2bash-002777",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-002818": {
+      "group_id": "group-nl2bash-002818",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-002829": {
+      "group_id": "group-nl2bash-002829",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-002885": {
+      "group_id": "group-nl2bash-002885",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-002888": {
+      "group_id": "group-nl2bash-002888",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-002896": {
+      "group_id": "group-nl2bash-002896",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-002923": {
+      "group_id": "group-nl2bash-002923",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-002924": {
+      "group_id": "group-nl2bash-002924",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-002934": {
+      "group_id": "group-nl2bash-002934",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-002958": {
+      "group_id": "group-nl2bash-002958",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-002979": {
+      "group_id": "group-nl2bash-002979",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-002986": {
+      "group_id": "group-nl2bash-002986",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-002987": {
+      "group_id": "group-nl2bash-002987",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-002989": {
+      "group_id": "group-nl2bash-002989",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-003018": {
+      "group_id": "group-nl2bash-003018",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-003072": {
+      "group_id": "group-nl2bash-003072",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-003076": {
+      "group_id": "group-nl2bash-003076",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-003111": {
+      "group_id": "group-nl2bash-003111",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-003120": {
+      "group_id": "group-nl2bash-003120",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-003122": {
+      "group_id": "group-nl2bash-003122",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-003141": {
+      "group_id": "group-nl2bash-003141",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-003146": {
+      "group_id": "group-nl2bash-003146",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-003147": {
+      "group_id": "group-nl2bash-003147",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-003149": {
+      "group_id": "group-nl2bash-003149",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-003189": {
+      "group_id": "group-nl2bash-003189",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-003193": {
+      "group_id": "group-nl2bash-003193",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-003207": {
+      "group_id": "group-nl2bash-003207",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-003265": {
+      "group_id": "group-nl2bash-003265",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-003281": {
+      "group_id": "group-nl2bash-003281",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-003295": {
+      "group_id": "group-nl2bash-003295",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-003334": {
+      "group_id": "group-nl2bash-003334",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-003338": {
+      "group_id": "group-nl2bash-003338",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-003343": {
+      "group_id": "group-nl2bash-003343",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-003352": {
+      "group_id": "group-nl2bash-003352",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-003364": {
+      "group_id": "group-nl2bash-003364",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-003473": {
+      "group_id": "group-nl2bash-003473",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-003479": {
+      "group_id": "group-nl2bash-003479",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-003487": {
+      "group_id": "group-nl2bash-003487",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-003498": {
+      "group_id": "group-nl2bash-003498",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-003570": {
+      "group_id": "group-nl2bash-003570",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-003577": {
+      "group_id": "group-nl2bash-003577",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-003578": {
+      "group_id": "group-nl2bash-003578",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-003587": {
+      "group_id": "group-nl2bash-003587",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-003589": {
+      "group_id": "group-nl2bash-003589",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-003590": {
+      "group_id": "group-nl2bash-003590",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-003611": {
+      "group_id": "group-nl2bash-003611",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-003617": {
+      "group_id": "group-nl2bash-003617",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-003619": {
+      "group_id": "group-nl2bash-003619",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-003643": {
+      "group_id": "group-nl2bash-003643",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-003646": {
+      "group_id": "group-nl2bash-003646",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-003664": {
+      "group_id": "group-nl2bash-003664",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-003678": {
+      "group_id": "group-nl2bash-003678",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-003682": {
+      "group_id": "group-nl2bash-003682",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-003706": {
+      "group_id": "group-nl2bash-003706",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-003729": {
+      "group_id": "group-nl2bash-003729",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-003740": {
+      "group_id": "group-nl2bash-003740",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-003763": {
+      "group_id": "group-nl2bash-003763",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-003791": {
+      "group_id": "group-nl2bash-003791",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-003832": {
+      "group_id": "group-nl2bash-003832",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-003893": {
+      "group_id": "group-nl2bash-003893",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-003907": {
+      "group_id": "group-nl2bash-003907",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-003911": {
+      "group_id": "group-nl2bash-003911",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-003912": {
+      "group_id": "group-nl2bash-003912",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-003921": {
+      "group_id": "group-nl2bash-003921",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-003928": {
+      "group_id": "group-nl2bash-003928",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-003960": {
+      "group_id": "group-nl2bash-003960",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-003976": {
+      "group_id": "group-nl2bash-003976",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-003980": {
+      "group_id": "group-nl2bash-003980",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-003985": {
+      "group_id": "group-nl2bash-003985",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-004029": {
+      "group_id": "group-nl2bash-004029",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-004057": {
+      "group_id": "group-nl2bash-004057",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-004074": {
+      "group_id": "group-nl2bash-004074",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-004078": {
+      "group_id": "group-nl2bash-004078",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-004092": {
+      "group_id": "group-nl2bash-004092",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-004121": {
+      "group_id": "group-nl2bash-004121",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-004163": {
+      "group_id": "group-nl2bash-004163",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-004172": {
+      "group_id": "group-nl2bash-004172",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-004189": {
+      "group_id": "group-nl2bash-004189",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-004191": {
+      "group_id": "group-nl2bash-004191",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-004209": {
+      "group_id": "group-nl2bash-004209",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-004376": {
+      "group_id": "group-nl2bash-004376",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-004392": {
+      "group_id": "group-nl2bash-004392",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-004440": {
+      "group_id": "group-nl2bash-004440",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-004537": {
+      "group_id": "group-nl2bash-004537",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-004574": {
+      "group_id": "group-nl2bash-004574",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-004608": {
+      "group_id": "group-nl2bash-004608",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-004628": {
+      "group_id": "group-nl2bash-004628",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-004661": {
+      "group_id": "group-nl2bash-004661",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-004670": {
+      "group_id": "group-nl2bash-004670",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-004678": {
+      "group_id": "group-nl2bash-004678",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-004689": {
+      "group_id": "group-nl2bash-004689",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-004705": {
+      "group_id": "group-nl2bash-004705",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-004716": {
+      "group_id": "group-nl2bash-004716",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-004761": {
+      "group_id": "group-nl2bash-004761",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-004776": {
+      "group_id": "group-nl2bash-004776",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-004869": {
+      "group_id": "group-nl2bash-004869",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-004879": {
+      "group_id": "group-nl2bash-004879",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-004892": {
+      "group_id": "group-nl2bash-004892",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-004943": {
+      "group_id": "group-nl2bash-004943",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-004950": {
+      "group_id": "group-nl2bash-004950",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-004956": {
+      "group_id": "group-nl2bash-004956",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-004979": {
+      "group_id": "group-nl2bash-004979",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-004994": {
+      "group_id": "group-nl2bash-004994",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-005031": {
+      "group_id": "group-nl2bash-005031",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-005046": {
+      "group_id": "group-nl2bash-005046",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-005069": {
+      "group_id": "group-nl2bash-005069",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-005078": {
+      "group_id": "group-nl2bash-005078",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-005079": {
+      "group_id": "group-nl2bash-005079",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-005092": {
+      "group_id": "group-nl2bash-005092",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-005107": {
+      "group_id": "group-nl2bash-005107",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-005117": {
+      "group_id": "group-nl2bash-005117",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-005142": {
+      "group_id": "group-nl2bash-005142",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-005198": {
+      "group_id": "group-nl2bash-005198",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-005215": {
+      "group_id": "group-nl2bash-005215",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-005248": {
+      "group_id": "group-nl2bash-005248",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-005255": {
+      "group_id": "group-nl2bash-005255",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-005335": {
+      "group_id": "group-nl2bash-005335",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-005370": {
+      "group_id": "group-nl2bash-005370",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-005413": {
+      "group_id": "group-nl2bash-005413",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-005428": {
+      "group_id": "group-nl2bash-005428",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-005463": {
+      "group_id": "group-nl2bash-005463",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-005534": {
+      "group_id": "group-nl2bash-005534",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-005541": {
+      "group_id": "group-nl2bash-005541",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-005586": {
+      "group_id": "group-nl2bash-005586",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-005608": {
+      "group_id": "group-nl2bash-005608",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-005631": {
+      "group_id": "group-nl2bash-005631",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-005649": {
+      "group_id": "group-nl2bash-005649",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-005939": {
+      "group_id": "group-nl2bash-005939",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-005968": {
+      "group_id": "group-nl2bash-005968",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-006035": {
+      "group_id": "group-nl2bash-006035",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-006067": {
+      "group_id": "group-nl2bash-006067",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-006121": {
+      "group_id": "group-nl2bash-006121",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-006132": {
+      "group_id": "group-nl2bash-006132",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-006200": {
+      "group_id": "group-nl2bash-006200",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-006397": {
+      "group_id": "group-nl2bash-006397",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-006445": {
+      "group_id": "group-nl2bash-006445",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-006450": {
+      "group_id": "group-nl2bash-006450",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-006529": {
+      "group_id": "group-nl2bash-006529",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-006559": {
+      "group_id": "group-nl2bash-006559",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-006563": {
+      "group_id": "group-nl2bash-006563",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-006638": {
+      "group_id": "group-nl2bash-006638",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-006670": {
+      "group_id": "group-nl2bash-006670",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-006747": {
+      "group_id": "group-nl2bash-006747",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-006768": {
+      "group_id": "group-nl2bash-006768",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-006802": {
+      "group_id": "group-nl2bash-006802",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-006877": {
+      "group_id": "group-nl2bash-006877",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-006889": {
+      "group_id": "group-nl2bash-006889",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-006974": {
+      "group_id": "group-nl2bash-006974",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-007058": {
+      "group_id": "group-nl2bash-007058",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-007181": {
+      "group_id": "group-nl2bash-007181",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-007253": {
+      "group_id": "group-nl2bash-007253",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-007265": {
+      "group_id": "group-nl2bash-007265",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-007326": {
+      "group_id": "group-nl2bash-007326",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-007343": {
+      "group_id": "group-nl2bash-007343",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-007348": {
+      "group_id": "group-nl2bash-007348",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-007357": {
+      "group_id": "group-nl2bash-007357",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-007367": {
+      "group_id": "group-nl2bash-007367",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-007380": {
+      "group_id": "group-nl2bash-007380",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-007396": {
+      "group_id": "group-nl2bash-007396",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-007409": {
+      "group_id": "group-nl2bash-007409",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-007414": {
+      "group_id": "group-nl2bash-007414",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-007427": {
+      "group_id": "group-nl2bash-007427",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-007457": {
+      "group_id": "group-nl2bash-007457",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-007461": {
+      "group_id": "group-nl2bash-007461",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-007466": {
+      "group_id": "group-nl2bash-007466",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-007468": {
+      "group_id": "group-nl2bash-007468",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-007472": {
+      "group_id": "group-nl2bash-007472",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-007493": {
+      "group_id": "group-nl2bash-007493",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-007528": {
+      "group_id": "group-nl2bash-007528",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-007550": {
+      "group_id": "group-nl2bash-007550",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-007576": {
+      "group_id": "group-nl2bash-007576",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-007623": {
+      "group_id": "group-nl2bash-007623",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-007675": {
+      "group_id": "group-nl2bash-007675",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-007736": {
+      "group_id": "group-nl2bash-007736",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-007788": {
+      "group_id": "group-nl2bash-007788",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-007846": {
+      "group_id": "group-nl2bash-007846",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-007894": {
+      "group_id": "group-nl2bash-007894",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-007919": {
+      "group_id": "group-nl2bash-007919",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-007925": {
+      "group_id": "group-nl2bash-007925",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-007930": {
+      "group_id": "group-nl2bash-007930",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-007975": {
+      "group_id": "group-nl2bash-007975",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-007983": {
+      "group_id": "group-nl2bash-007983",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-008115": {
+      "group_id": "group-nl2bash-008115",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-008187": {
+      "group_id": "group-nl2bash-008187",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-008288": {
+      "group_id": "group-nl2bash-008288",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-008446": {
+      "group_id": "group-nl2bash-008446",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-008459": {
+      "group_id": "group-nl2bash-008459",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-008460": {
+      "group_id": "group-nl2bash-008460",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-008466": {
+      "group_id": "group-nl2bash-008466",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-008524": {
+      "group_id": "group-nl2bash-008524",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-008525": {
+      "group_id": "group-nl2bash-008525",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-008527": {
+      "group_id": "group-nl2bash-008527",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-008625": {
+      "group_id": "group-nl2bash-008625",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-008667": {
+      "group_id": "group-nl2bash-008667",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-008716": {
+      "group_id": "group-nl2bash-008716",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-008729": {
+      "group_id": "group-nl2bash-008729",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-008737": {
+      "group_id": "group-nl2bash-008737",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-008744": {
+      "group_id": "group-nl2bash-008744",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-008749": {
+      "group_id": "group-nl2bash-008749",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-008761": {
+      "group_id": "group-nl2bash-008761",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-008791": {
+      "group_id": "group-nl2bash-008791",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-008830": {
+      "group_id": "group-nl2bash-008830",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-008873": {
+      "group_id": "group-nl2bash-008873",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-008937": {
+      "group_id": "group-nl2bash-008937",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-008945": {
+      "group_id": "group-nl2bash-008945",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-008961": {
+      "group_id": "group-nl2bash-008961",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-008962": {
+      "group_id": "group-nl2bash-008962",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-008980": {
+      "group_id": "group-nl2bash-008980",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-009016": {
+      "group_id": "group-nl2bash-009016",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-009160": {
+      "group_id": "group-nl2bash-009160",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-009190": {
+      "group_id": "group-nl2bash-009190",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-009248": {
+      "group_id": "group-nl2bash-009248",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-009288": {
+      "group_id": "group-nl2bash-009288",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-009310": {
+      "group_id": "group-nl2bash-009310",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-009358": {
+      "group_id": "group-nl2bash-009358",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-009475": {
+      "group_id": "group-nl2bash-009475",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-009506": {
+      "group_id": "group-nl2bash-009506",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-009560": {
+      "group_id": "group-nl2bash-009560",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-009573": {
+      "group_id": "group-nl2bash-009573",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-009677": {
+      "group_id": "group-nl2bash-009677",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-009678": {
+      "group_id": "group-nl2bash-009678",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-009729": {
+      "group_id": "group-nl2bash-009729",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-009752": {
+      "group_id": "group-nl2bash-009752",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-009846": {
+      "group_id": "group-nl2bash-009846",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-009892": {
+      "group_id": "group-nl2bash-009892",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-009894": {
+      "group_id": "group-nl2bash-009894",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-010045": {
+      "group_id": "group-nl2bash-010045",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-010083": {
+      "group_id": "group-nl2bash-010083",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-010143": {
+      "group_id": "group-nl2bash-010143",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-010172": {
+      "group_id": "group-nl2bash-010172",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-010449": {
+      "group_id": "group-nl2bash-010449",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-010464": {
+      "group_id": "group-nl2bash-010464",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-010468": {
+      "group_id": "group-nl2bash-010468",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-010473": {
+      "group_id": "group-nl2bash-010473",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-010534": {
+      "group_id": "group-nl2bash-010534",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-010562": {
+      "group_id": "group-nl2bash-010562",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-010617": {
+      "group_id": "group-nl2bash-010617",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-010851": {
+      "group_id": "group-nl2bash-010851",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-011026": {
+      "group_id": "group-nl2bash-011026",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-011133": {
+      "group_id": "group-nl2bash-011133",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-011136": {
+      "group_id": "group-nl2bash-011136",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-011176": {
+      "group_id": "group-nl2bash-011176",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-011313": {
+      "group_id": "group-nl2bash-011313",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-011413": {
+      "group_id": "group-nl2bash-011413",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-011444": {
+      "group_id": "group-nl2bash-011444",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-011554": {
+      "group_id": "group-nl2bash-011554",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-011617": {
+      "group_id": "group-nl2bash-011617",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-011671": {
+      "group_id": "group-nl2bash-011671",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-011737": {
+      "group_id": "group-nl2bash-011737",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-011758": {
+      "group_id": "group-nl2bash-011758",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-011997": {
+      "group_id": "group-nl2bash-011997",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-012119": {
+      "group_id": "group-nl2bash-012119",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-012276": {
+      "group_id": "group-nl2bash-012276",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    },
+    "nl2bash-012388": {
+      "group_id": "group-nl2bash-012388",
+      "suggested_intent": "",
+      "suggestion_reason": "blind manual review; no heuristic suggestion supplied"
+    }
+  },
+  "pilot_group_ids": [
+    "group-nl2bash-000015",
+    "group-nl2bash-000041",
+    "group-nl2bash-000047",
+    "group-nl2bash-000050",
+    "group-nl2bash-000095",
+    "group-nl2bash-000115",
+    "group-nl2bash-000116",
+    "group-nl2bash-000129",
+    "group-nl2bash-000132",
+    "group-nl2bash-000193",
+    "group-nl2bash-000209",
+    "group-nl2bash-000218",
+    "group-nl2bash-000228",
+    "group-nl2bash-000242",
+    "group-nl2bash-000362",
+    "group-nl2bash-000373",
+    "group-nl2bash-000382",
+    "group-nl2bash-000397",
+    "group-nl2bash-000403",
+    "group-nl2bash-000446",
+    "group-nl2bash-000450",
+    "group-nl2bash-000540",
+    "group-nl2bash-000550",
+    "group-nl2bash-000554",
+    "group-nl2bash-000570",
+    "group-nl2bash-000596",
+    "group-nl2bash-000634",
+    "group-nl2bash-000643",
+    "group-nl2bash-000647",
+    "group-nl2bash-000650",
+    "group-nl2bash-000655",
+    "group-nl2bash-000667",
+    "group-nl2bash-000701",
+    "group-nl2bash-000726",
+    "group-nl2bash-000842",
+    "group-nl2bash-000852",
+    "group-nl2bash-000942",
+    "group-nl2bash-000961",
+    "group-nl2bash-000966",
+    "group-nl2bash-000972",
+    "group-nl2bash-000973",
+    "group-nl2bash-001017",
+    "group-nl2bash-001068",
+    "group-nl2bash-001082",
+    "group-nl2bash-001161",
+    "group-nl2bash-001206",
+    "group-nl2bash-001288",
+    "group-nl2bash-001304",
+    "group-nl2bash-001327",
+    "group-nl2bash-001331",
+    "group-nl2bash-001349",
+    "group-nl2bash-001362",
+    "group-nl2bash-001373",
+    "group-nl2bash-001376",
+    "group-nl2bash-001379",
+    "group-nl2bash-001390",
+    "group-nl2bash-001404",
+    "group-nl2bash-001407",
+    "group-nl2bash-001434",
+    "group-nl2bash-001435",
+    "group-nl2bash-001447",
+    "group-nl2bash-001515",
+    "group-nl2bash-001538",
+    "group-nl2bash-001572",
+    "group-nl2bash-001607",
+    "group-nl2bash-001625",
+    "group-nl2bash-001641",
+    "group-nl2bash-001717",
+    "group-nl2bash-001743",
+    "group-nl2bash-001757",
+    "group-nl2bash-001959",
+    "group-nl2bash-001982",
+    "group-nl2bash-001991",
+    "group-nl2bash-002004",
+    "group-nl2bash-002006",
+    "group-nl2bash-002038",
+    "group-nl2bash-002098",
+    "group-nl2bash-002101",
+    "group-nl2bash-002124",
+    "group-nl2bash-002136",
+    "group-nl2bash-002154",
+    "group-nl2bash-002162",
+    "group-nl2bash-002194",
+    "group-nl2bash-002198",
+    "group-nl2bash-002242",
+    "group-nl2bash-002263",
+    "group-nl2bash-002269",
+    "group-nl2bash-002271",
+    "group-nl2bash-002308",
+    "group-nl2bash-002309",
+    "group-nl2bash-002326",
+    "group-nl2bash-002345",
+    "group-nl2bash-002346",
+    "group-nl2bash-002348",
+    "group-nl2bash-002351",
+    "group-nl2bash-002357",
+    "group-nl2bash-002361",
+    "group-nl2bash-002381",
+    "group-nl2bash-002383",
+    "group-nl2bash-002385",
+    "group-nl2bash-002404",
+    "group-nl2bash-002412",
+    "group-nl2bash-002448",
+    "group-nl2bash-002476",
+    "group-nl2bash-002494",
+    "group-nl2bash-002519",
+    "group-nl2bash-002537",
+    "group-nl2bash-002563",
+    "group-nl2bash-002568",
+    "group-nl2bash-002577",
+    "group-nl2bash-002611",
+    "group-nl2bash-002612",
+    "group-nl2bash-002653",
+    "group-nl2bash-002660",
+    "group-nl2bash-002672",
+    "group-nl2bash-002684",
+    "group-nl2bash-002722",
+    "group-nl2bash-002727",
+    "group-nl2bash-002746",
+    "group-nl2bash-002747",
+    "group-nl2bash-002750",
+    "group-nl2bash-002777",
+    "group-nl2bash-002818",
+    "group-nl2bash-002829",
+    "group-nl2bash-002885",
+    "group-nl2bash-002888",
+    "group-nl2bash-002896",
+    "group-nl2bash-002923",
+    "group-nl2bash-002924",
+    "group-nl2bash-002934",
+    "group-nl2bash-002958",
+    "group-nl2bash-002979",
+    "group-nl2bash-002986",
+    "group-nl2bash-002987",
+    "group-nl2bash-002989",
+    "group-nl2bash-003018",
+    "group-nl2bash-003072",
+    "group-nl2bash-003076",
+    "group-nl2bash-003111",
+    "group-nl2bash-003120",
+    "group-nl2bash-003122",
+    "group-nl2bash-003141",
+    "group-nl2bash-003146",
+    "group-nl2bash-003147",
+    "group-nl2bash-003149",
+    "group-nl2bash-003189",
+    "group-nl2bash-003193",
+    "group-nl2bash-003207",
+    "group-nl2bash-003265",
+    "group-nl2bash-003281",
+    "group-nl2bash-003295",
+    "group-nl2bash-003334",
+    "group-nl2bash-003338",
+    "group-nl2bash-003343",
+    "group-nl2bash-003352",
+    "group-nl2bash-003364",
+    "group-nl2bash-003473",
+    "group-nl2bash-003479",
+    "group-nl2bash-003487",
+    "group-nl2bash-003498",
+    "group-nl2bash-003570",
+    "group-nl2bash-003577",
+    "group-nl2bash-003578",
+    "group-nl2bash-003587",
+    "group-nl2bash-003589",
+    "group-nl2bash-003590",
+    "group-nl2bash-003611",
+    "group-nl2bash-003617",
+    "group-nl2bash-003619",
+    "group-nl2bash-003643",
+    "group-nl2bash-003646",
+    "group-nl2bash-003664",
+    "group-nl2bash-003678",
+    "group-nl2bash-003682",
+    "group-nl2bash-003706",
+    "group-nl2bash-003729",
+    "group-nl2bash-003740",
+    "group-nl2bash-003763",
+    "group-nl2bash-003791",
+    "group-nl2bash-003832",
+    "group-nl2bash-003893",
+    "group-nl2bash-003907",
+    "group-nl2bash-003911",
+    "group-nl2bash-003912",
+    "group-nl2bash-003921",
+    "group-nl2bash-003928",
+    "group-nl2bash-003960",
+    "group-nl2bash-003976",
+    "group-nl2bash-003980",
+    "group-nl2bash-003985",
+    "group-nl2bash-004029",
+    "group-nl2bash-004057",
+    "group-nl2bash-004074",
+    "group-nl2bash-004078",
+    "group-nl2bash-004092",
+    "group-nl2bash-004121",
+    "group-nl2bash-004163",
+    "group-nl2bash-004172",
+    "group-nl2bash-004189",
+    "group-nl2bash-004191",
+    "group-nl2bash-004209",
+    "group-nl2bash-004376",
+    "group-nl2bash-004392",
+    "group-nl2bash-004440",
+    "group-nl2bash-004537",
+    "group-nl2bash-004574",
+    "group-nl2bash-004608",
+    "group-nl2bash-004628",
+    "group-nl2bash-004661",
+    "group-nl2bash-004670",
+    "group-nl2bash-004678",
+    "group-nl2bash-004689",
+    "group-nl2bash-004705",
+    "group-nl2bash-004716",
+    "group-nl2bash-004761",
+    "group-nl2bash-004776",
+    "group-nl2bash-004869",
+    "group-nl2bash-004879",
+    "group-nl2bash-004892",
+    "group-nl2bash-004943",
+    "group-nl2bash-004950",
+    "group-nl2bash-004956",
+    "group-nl2bash-004979",
+    "group-nl2bash-004994",
+    "group-nl2bash-005031",
+    "group-nl2bash-005046",
+    "group-nl2bash-005069",
+    "group-nl2bash-005078",
+    "group-nl2bash-005079",
+    "group-nl2bash-005092",
+    "group-nl2bash-005107",
+    "group-nl2bash-005117",
+    "group-nl2bash-005142",
+    "group-nl2bash-005198",
+    "group-nl2bash-005215",
+    "group-nl2bash-005248",
+    "group-nl2bash-005255",
+    "group-nl2bash-005335",
+    "group-nl2bash-005370",
+    "group-nl2bash-005413",
+    "group-nl2bash-005428",
+    "group-nl2bash-005463",
+    "group-nl2bash-005534",
+    "group-nl2bash-005541",
+    "group-nl2bash-005586",
+    "group-nl2bash-005608",
+    "group-nl2bash-005631",
+    "group-nl2bash-005649",
+    "group-nl2bash-005939",
+    "group-nl2bash-005968",
+    "group-nl2bash-006035",
+    "group-nl2bash-006067",
+    "group-nl2bash-006121",
+    "group-nl2bash-006132",
+    "group-nl2bash-006200",
+    "group-nl2bash-006397",
+    "group-nl2bash-006445",
+    "group-nl2bash-006450",
+    "group-nl2bash-006529",
+    "group-nl2bash-006559",
+    "group-nl2bash-006563",
+    "group-nl2bash-006638",
+    "group-nl2bash-006670",
+    "group-nl2bash-006747",
+    "group-nl2bash-006768",
+    "group-nl2bash-006802",
+    "group-nl2bash-006877",
+    "group-nl2bash-006889",
+    "group-nl2bash-006974",
+    "group-nl2bash-007058",
+    "group-nl2bash-007181",
+    "group-nl2bash-007253",
+    "group-nl2bash-007265",
+    "group-nl2bash-007326",
+    "group-nl2bash-007343",
+    "group-nl2bash-007348",
+    "group-nl2bash-007357",
+    "group-nl2bash-007367",
+    "group-nl2bash-007380",
+    "group-nl2bash-007396",
+    "group-nl2bash-007409",
+    "group-nl2bash-007414",
+    "group-nl2bash-007427",
+    "group-nl2bash-007457",
+    "group-nl2bash-007461",
+    "group-nl2bash-007466",
+    "group-nl2bash-007468",
+    "group-nl2bash-007472",
+    "group-nl2bash-007493",
+    "group-nl2bash-007528",
+    "group-nl2bash-007550",
+    "group-nl2bash-007576",
+    "group-nl2bash-007623",
+    "group-nl2bash-007675",
+    "group-nl2bash-007736",
+    "group-nl2bash-007788",
+    "group-nl2bash-007846",
+    "group-nl2bash-007894",
+    "group-nl2bash-007919",
+    "group-nl2bash-007925",
+    "group-nl2bash-007930",
+    "group-nl2bash-007975",
+    "group-nl2bash-007983",
+    "group-nl2bash-008115",
+    "group-nl2bash-008187",
+    "group-nl2bash-008288",
+    "group-nl2bash-008446",
+    "group-nl2bash-008459",
+    "group-nl2bash-008460",
+    "group-nl2bash-008466",
+    "group-nl2bash-008524",
+    "group-nl2bash-008525",
+    "group-nl2bash-008527",
+    "group-nl2bash-008625",
+    "group-nl2bash-008667",
+    "group-nl2bash-008716",
+    "group-nl2bash-008729",
+    "group-nl2bash-008737",
+    "group-nl2bash-008744",
+    "group-nl2bash-008749",
+    "group-nl2bash-008761",
+    "group-nl2bash-008791",
+    "group-nl2bash-008830",
+    "group-nl2bash-008873",
+    "group-nl2bash-008937",
+    "group-nl2bash-008945",
+    "group-nl2bash-008961",
+    "group-nl2bash-008962",
+    "group-nl2bash-008980",
+    "group-nl2bash-009016",
+    "group-nl2bash-009160",
+    "group-nl2bash-009190",
+    "group-nl2bash-009248",
+    "group-nl2bash-009288",
+    "group-nl2bash-009310",
+    "group-nl2bash-009358",
+    "group-nl2bash-009475",
+    "group-nl2bash-009506",
+    "group-nl2bash-009560",
+    "group-nl2bash-009573",
+    "group-nl2bash-009677",
+    "group-nl2bash-009678",
+    "group-nl2bash-009729",
+    "group-nl2bash-009752",
+    "group-nl2bash-009846",
+    "group-nl2bash-009892",
+    "group-nl2bash-009894",
+    "group-nl2bash-010045",
+    "group-nl2bash-010083",
+    "group-nl2bash-010143",
+    "group-nl2bash-010172",
+    "group-nl2bash-010449",
+    "group-nl2bash-010464",
+    "group-nl2bash-010468",
+    "group-nl2bash-010473",
+    "group-nl2bash-010534",
+    "group-nl2bash-010562",
+    "group-nl2bash-010617",
+    "group-nl2bash-010851",
+    "group-nl2bash-011026",
+    "group-nl2bash-011133",
+    "group-nl2bash-011136",
+    "group-nl2bash-011176",
+    "group-nl2bash-011313",
+    "group-nl2bash-011413",
+    "group-nl2bash-011444",
+    "group-nl2bash-011554",
+    "group-nl2bash-011617",
+    "group-nl2bash-011671",
+    "group-nl2bash-011737",
+    "group-nl2bash-011758",
+    "group-nl2bash-011997",
+    "group-nl2bash-012119",
+    "group-nl2bash-012276",
+    "group-nl2bash-012388"
+  ],
+  "review_file": "data/annotations/test_review.csv",
+  "schema_version": 1,
+  "selection": {
+    "candidate_unique_groups": {},
+    "method": "one_source_record_per_duplicate_group_blind_manual_review",
+    "requested_per_label": null,
+    "ruleset": null,
+    "seed": 42,
+    "selected_per_label": {},
+    "shortages": {}
+  },
+  "source": {
+    "dataset_manifest": "data/processed/nl2bash/manifest.json",
+    "dataset_revision": "d6b9f5bdff45621d190134e31ab63b7bf7002190",
+    "partition_file": "data/processed/nl2bash/test.jsonl",
+    "partition_name": "test",
+    "partition_sha256": "0af4b99c3d49cbf32a4d75a30cebe0412a93d3305c66263cb702aff9900dec66"
+  },
+  "summary": {
+    "all_review_statuses_pending": true,
+    "blind_manual_review": true,
+    "partition_groups_available": 375,
+    "partition_records_available": 1261,
+    "pilot_records": 375,
+    "unique_duplicate_groups": 375
+  }
+}

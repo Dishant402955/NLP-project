@@ -57,7 +57,8 @@ The initial target is a local Linux environment with Python. Ollama and the sele
 
 - Prefer small, testable modules.
 - Keep dependencies limited to those required by the project.
-- Keep datasets and model weights out of Git unless their size and licensing make inclusion appropriate.
+- Version the licensed raw dataset, processed partitions, annotation worklists/exports, model artifacts, and evaluation configuration with their provenance manifests.
+- Keep test source code, temporary fixtures, generated caches, virtual environments, and secrets out of Git.
 - Record model version and experiment configuration for reproducibility.
 - Do not store secrets or machine-specific configuration in source control.
 
@@ -67,8 +68,8 @@ Executable checks are required for each implementation step. By project requirem
 
 ## 8. Dataset boundary
 
-The NL2Bash source contains paired natural-language requests and Bash commands, but no project-specific intent labels or entity annotations. The dataset preparation CLI creates duplicate-aware partitions and a checksum manifest. Raw data, annotations, and processed splits remain local and are not committed to Git. See [Dataset and Evaluation](DATASET_AND_EVALUATION.md).
+The NL2Bash source contains paired natural-language requests and Bash commands, but no project-specific intent labels or entity annotations. The dataset preparation CLI creates duplicate-aware partitions and a checksum manifest. The licensed raw dataset, annotation artifacts, and processed train/dev/test splits are versioned in Git with checksums and provenance manifests. See [Dataset and Evaluation](DATASET_AND_EVALUATION.md).
 
 ## 9. Annotation data boundary
 
-Intent suggestions are generated from request-text rules only and remain separate from confirmed labels. Reviewers edit the local training CSV worklist; the importer validates source identity, group identity, suggestion metadata, review status, and taxonomy labels. Only explicitly confirmed rows are exported for classifier training. Development and test use separate blind worklists with no suggested labels and partition-specific confirmed exports. Raw data, worklists, and confirmed annotations remain outside Git.
+Intent suggestions are generated from request-text rules only and remain separate from confirmed labels. Reviewers edit the versioned training CSV worklist; the importer validates source identity, group identity, suggestion metadata, review status, and taxonomy labels. Only explicitly confirmed rows are exported for classifier training. Development and test use separate blind worklists with no suggested labels and partition-specific confirmed exports. Raw data, worklists, confirmed annotations, and manifests are versioned in Git; the test worklist remains unlabelled until the final evaluation is ready.

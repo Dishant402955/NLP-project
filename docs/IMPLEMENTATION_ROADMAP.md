@@ -58,7 +58,7 @@ The original request must remain available through the pipeline. NLP output must
 **Work:**
 - Create a minimal Python package using a src layout.
 - Declare the minimum supported Python version and build configuration.
-- Add repository ignore rules for generated environments, caches, secrets, raw datasets, and model artifacts.
+- Add repository ignore rules for generated environments, caches, secrets, test source code, and temporary verification fixtures while keeping project data and model artifacts versioned.
 - Define a small, stable request-preprocessing API.
 - Remove only leading and trailing whitespace from the request.
 - Reject inputs that are not strings or contain no meaningful text.
@@ -71,7 +71,7 @@ The original request must remain available through the pipeline. NLP output must
 - Empty and invalid input produces a clear, documented error.
 - Inputs containing quotes, paths, punctuation, mixed case, internal whitespace, and Unicode are preserved apart from trimming surrounding whitespace.
 - No generated command is executed.
-- No test source, test directory, test fixture, model weight, or raw dataset is committed.
+- No test source, test directory, temporary test fixture, cache, or secret is committed. Licensed raw data, processed splits, annotation artifacts, model weights, and evaluation configuration are committed with provenance.
 
 **Verification:** Run isolated checks from a temporary directory outside the repository. Review installation, import behavior, input cases, error paths, and package contents before committing.
 
@@ -97,7 +97,7 @@ The original request must remain available through the pipeline. NLP output must
 - Define a project intent taxonomy from the command and request patterns.
 - Define a representation for utterances, reference commands, intent labels, and extracted entities.
 - Define duplicate-aware, deterministic data partitioning.
-- Keep raw and processed dataset files outside Git.
+- Version the licensed raw dataset and processed partitions with their source revision and checksum manifests.
 
 **Acceptance criteria:**
 - Dataset source, revision, license, and citation are recorded.
@@ -105,7 +105,7 @@ The original request must remain available through the pipeline. NLP output must
 - Intent labels have written definitions, examples, and annotation rules.
 - Split strategy keeps duplicate requests and duplicate commands in a single partition.
 - Filtering and split discrepancies are documented rather than hidden.
-- Raw data, annotations, and split outputs are excluded from Git.
+- Raw data, annotations, and split outputs are versioned in Git with their licensing and provenance metadata.
 
 ### Step 3: Intent classification
 
@@ -150,7 +150,7 @@ Implemented in src/nl2bash/dataset_cli.py and exposed as nl2bash-prepare-dataset
 - Validate row counts, empty records, encoding, and source checksums.
 - Link rows that share an exact request or exact command after trimming surrounding whitespace.
 - Assign entire duplicate-linked groups to train, development, or test using a fixed seed and 80:10:10 target ratios.
-- Write JSONL partitions and a manifest under ignored local data directories.
+- Write JSONL partitions and a manifest under `data/processed/`, which is versioned with the raw source files.
 - Record source revision, checksums, seed, ratios, group counts, record counts, and verified cross-partition overlap.
 
 **Acceptance criteria:**
@@ -158,7 +158,7 @@ Implemented in src/nl2bash/dataset_cli.py and exposed as nl2bash-prepare-dataset
 - The same inputs and seed produce byte-for-byte identical partitions and manifest data.
 - No request or command duplicate crosses partitions.
 - Group sizes, split counts, checksums, and source revision appear in the manifest.
-- Raw and processed files remain outside Git.
+- Raw and processed files are versioned in Git; their manifests verify provenance and reproducibility.
 
 #### Step 3.2: Annotation workflow and pilot
 
@@ -228,7 +228,7 @@ This stage is divided into three small implementation commits.
 **Delivered:**
 - Installed nl2bash-annotations console command with create and validate subcommands.
 - Machine-readable summaries and non-zero error status for invalid inputs.
-- Default CSV, manifests, and confirmed export under the Git-ignored data/annotations/ directory.
+- Default CSV, manifests, and confirmed export under the versioned `data/annotations/` directory.
 - Reviewer instructions and reproducible command examples in the Annotation Guide.
 
 **Verified current state:** The local pilot contains 500 rows, 50 suggested examples per taxonomy label, 500 unique duplicate groups, 500 pending statuses, and zero confirmed labels. The confirmed export is therefore empty until a reviewer completes and validates the worklist.
@@ -305,7 +305,7 @@ The implementation is divided into small commits. See [Intent Classifier](INTENT
 - train command loads the checksum-verified confirmed training export and persists the local model.
 - predict command loads a checksum-verified local model and prints a JSON intent result.
 - Input/output path collision checks and concise non-zero error handling.
-- Model files default to the Git-ignored models/ directory.
+- Model files default to the versioned `models/` directory.
 
 **Verification:** Temporary fixture files outside the repository were used to train through the CLI, predict a known-feature request, exercise the zero-known-feature fallback, and verify output collision and missing-model errors. The actual project train command was also checked and correctly refuses the current empty confirmed-label export.
 
@@ -456,7 +456,7 @@ The implementation is divided into small commits. See [Intent Classifier](INTENT
 **Acceptance criteria:**
 - Documentation matches the implementation.
 - A clean environment can follow the setup instructions.
-- No secrets, model weights, raw datasets, test source, or temporary artifacts are tracked.
+- No secrets, test source, temporary fixtures, caches, or virtual environments are tracked. Licensed datasets, processed splits, annotation artifacts, model weights, and final evaluation reports are tracked with their provenance.
 - The final Git history contains small, meaningful commits.
 
 ## 5. Per-step engineering and review protocol

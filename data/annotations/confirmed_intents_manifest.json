@@ -1,0 +1,33 @@
+{
+  "confirmed_output": {
+    "file": "data/annotations/confirmed_intents.jsonl",
+    "record_count": 500,
+    "sha256": "8cfcabf63184412f1ace998f30b20072d3cc4adad2941689613d09ea58d31b8a"
+  },
+  "dataset": "NL2Bash",
+  "schema_version": 1,
+  "source": {
+    "dataset_manifest": "data/processed/nl2bash/manifest.json",
+    "dataset_revision": "d6b9f5bdff45621d190134e31ab63b7bf7002190",
+    "partition_file": "data/processed/nl2bash/train.jsonl",
+    "partition_name": "train",
+    "partition_sha256": "15fbee9ac5b8341a14a31285288c5119702b8dbb5ac367903c3a6cb2ea879451",
+    "pilot_manifest": "data/annotations/intent_pilot_manifest.json",
+    "reviewed_csv": "data/annotations/intent_pilot.csv",
+    "reviewed_csv_sha256": "c8f7e0840a7535206b7e77693d1db033ecaa772d7581e9ab86c90ae5350b75e3",
+    "training_sha256": "15fbee9ac5b8341a14a31285288c5119702b8dbb5ac367903c3a6cb2ea879451"
+  },
+  "summary": {
+    "blind_manual_review": false,
+    "confirmed_records": 500,
+    "partition_records": 10085,
+    "pilot_records": 500,
+    "status_counts": {
+      "ambiguous": 0,
+      "confirmed": 500,
+      "pending": 0,
+      "rejected": 0
+    }
+  },
+  "training_policy": "only rows explicitly marked confirmed are exported"
+}

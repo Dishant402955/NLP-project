@@ -1,0 +1,53 @@
+{
+  "dataset": "NL2Bash",
+  "leakage_checks": {
+    "command_overlap_across_partitions": 0,
+    "request_overlap_across_partitions": 0
+  },
+  "partitions": {
+    "dev": {
+      "file": "dev.jsonl",
+      "group_count": 375,
+      "record_count": 1261,
+      "sha256": "22f30b63140a34c9d12dfd98a0dc0110111f19d46cc8771088c9ddd65e6002f5"
+    },
+    "test": {
+      "file": "test.jsonl",
+      "group_count": 375,
+      "record_count": 1261,
+      "sha256": "0af4b99c3d49cbf32a4d75a30cebe0412a93d3305c66263cb702aff9900dec66"
+    },
+    "train": {
+      "file": "train.jsonl",
+      "group_count": 8701,
+      "record_count": 10085,
+      "sha256": "15fbee9ac5b8341a14a31285288c5119702b8dbb5ac367903c3a6cb2ea879451"
+    }
+  },
+  "schema_version": 1,
+  "source": {
+    "command_file": {
+      "filename": "all.cm",
+      "sha256": "3a72eaced7fa14a0938354cefc42b2dcafb2d47297102f1279086e18c3abe57e"
+    },
+    "request_file": {
+      "filename": "all.nl",
+      "sha256": "1db0c529c350b463919624550b8f5882a97c42ad5051c7d49fbc496bc4e8b770"
+    },
+    "revision": "d6b9f5bdff45621d190134e31ab63b7bf7002190"
+  },
+  "split_configuration": {
+    "algorithm": "seeded_greedy_largest_group_first_normalized_squared_error",
+    "ratios": {
+      "dev": 0.1,
+      "test": 0.1,
+      "train": 0.8
+    },
+    "seed": 42
+  },
+  "summary": {
+    "duplicate_group_count": 9451,
+    "largest_group_size": 45,
+    "record_count": 12607
+  }
+}

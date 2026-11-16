@@ -48,9 +48,9 @@ These are baseline settings, not claimed optimal hyperparameters. Changes must b
 
 Training fits one Scikit-learn pipeline so that inference always uses the exact same fitted TF-IDF vocabulary and Logistic Regression parameters.
 
-The generated model and its JSON manifest live under the ignored models/ directory. The manifest records the source dataset revision, training-partition checksum, confirmed-annotation checksum, label counts, feature settings, classifier settings, and Scikit-learn version.
+The generated model and its JSON manifest live under the versioned `models/` directory. The manifest records the source dataset revision, training-partition checksum, confirmed-annotation checksum, label counts, feature settings, classifier settings, and Scikit-learn version. The current model is committed for reproducibility but remains provisional because its training annotations are AI-assisted; see [Annotation Review Status](ANNOTATION_REVIEW_STATUS.md).
 
-Model files are generated locally and are not committed to Git. The serialized joblib file must be treated as a trusted local artifact; do not load model files from untrusted sources because joblib uses Python object serialization.
+The serialized joblib file must be treated as a trusted project artifact; do not load model files from untrusted sources because joblib uses Python object serialization.
 
 The trainer must fail before writing model artifacts when the confirmed training data is empty, invalid, or below the per-label minimum. The data loader enforces this contract before any Scikit-learn component is called.
 
@@ -97,7 +97,7 @@ Train the model after the confirmed training export meets the per-label minimum:
 
     .venv/bin/nl2bash-classifier train
 
-The command validates the confirmed export against the training partition and writes the model and manifest under the Git-ignored models/ directory.
+The command validates the confirmed export against the training partition and writes the model and manifest under the versioned `models/` directory. Commit the updated model and manifest together after training.
 
 Select and freeze a confidence threshold using the confirmed, blind-reviewed development partition:
 

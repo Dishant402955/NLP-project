@@ -1,0 +1,3554 @@
+{
+  "dataset": "NL2Bash",
+  "pilot_example_ids": [
+    "nl2bash-010338",
+    "nl2bash-003441",
+    "nl2bash-003884",
+    "nl2bash-003814",
+    "nl2bash-011032",
+    "nl2bash-011300",
+    "nl2bash-005174",
+    "nl2bash-011487",
+    "nl2bash-010157",
+    "nl2bash-001529",
+    "nl2bash-010814",
+    "nl2bash-003964",
+    "nl2bash-003800",
+    "nl2bash-010576",
+    "nl2bash-004305",
+    "nl2bash-002834",
+    "nl2bash-003199",
+    "nl2bash-003571",
+    "nl2bash-012160",
+    "nl2bash-002909",
+    "nl2bash-011770",
+    "nl2bash-010752",
+    "nl2bash-010287",
+    "nl2bash-003316",
+    "nl2bash-011316",
+    "nl2bash-010266",
+    "nl2bash-011046",
+    "nl2bash-001987",
+    "nl2bash-002530",
+    "nl2bash-010259",
+    "nl2bash-002932",
+    "nl2bash-002255",
+    "nl2bash-005232",
+    "nl2bash-003879",
+    "nl2bash-002715",
+    "nl2bash-004027",
+    "nl2bash-011324",
+    "nl2bash-001090",
+    "nl2bash-002157",
+    "nl2bash-003947",
+    "nl2bash-010641",
+    "nl2bash-010872",
+    "nl2bash-010512",
+    "nl2bash-002484",
+    "nl2bash-003289",
+    "nl2bash-010474",
+    "nl2bash-002145",
+    "nl2bash-011304",
+    "nl2bash-003034",
+    "nl2bash-003963",
+    "nl2bash-008001",
+    "nl2bash-008388",
+    "nl2bash-004815",
+    "nl2bash-012372",
+    "nl2bash-011515",
+    "nl2bash-012180",
+    "nl2bash-001256",
+    "nl2bash-009326",
+    "nl2bash-008366",
+    "nl2bash-005660",
+    "nl2bash-012358",
+    "nl2bash-009330",
+    "nl2bash-005659",
+    "nl2bash-009060",
+    "nl2bash-010087",
+    "nl2bash-000965",
+    "nl2bash-002767",
+    "nl2bash-011984",
+    "nl2bash-008443",
+    "nl2bash-004441",
+    "nl2bash-008386",
+    "nl2bash-008393",
+    "nl2bash-008452",
+    "nl2bash-008579",
+    "nl2bash-000662",
+    "nl2bash-004834",
+    "nl2bash-005657",
+    "nl2bash-008412",
+    "nl2bash-004829",
+    "nl2bash-012297",
+    "nl2bash-008437",
+    "nl2bash-005667",
+    "nl2bash-008588",
+    "nl2bash-001040",
+    "nl2bash-012105",
+    "nl2bash-001929",
+    "nl2bash-008587",
+    "nl2bash-009328",
+    "nl2bash-004298",
+    "nl2bash-005668",
+    "nl2bash-006677",
+    "nl2bash-007395",
+    "nl2bash-002703",
+    "nl2bash-011436",
+    "nl2bash-007504",
+    "nl2bash-000912",
+    "nl2bash-012374",
+    "nl2bash-009329",
+    "nl2bash-000917",
+    "nl2bash-012382",
+    "nl2bash-012213",
+    "nl2bash-005477",
+    "nl2bash-001078",
+    "nl2bash-005620",
+    "nl2bash-005609",
+    "nl2bash-000863",
+    "nl2bash-005604",
+    "nl2bash-000853",
+    "nl2bash-011642",
+    "nl2bash-001353",
+    "nl2bash-011443",
+    "nl2bash-004509",
+    "nl2bash-007353",
+    "nl2bash-000857",
+    "nl2bash-007393",
+    "nl2bash-007233",
+    "nl2bash-000835",
+    "nl2bash-005408",
+    "nl2bash-001093",
+    "nl2bash-000165",
+    "nl2bash-004503",
+    "nl2bash-009949",
+    "nl2bash-001443",
+    "nl2bash-001351",
+    "nl2bash-007622",
+    "nl2bash-009941",
+    "nl2bash-001341",
+    "nl2bash-001365",
+    "nl2bash-004502",
+    "nl2bash-002297",
+    "nl2bash-009976",
+    "nl2bash-005410",
+    "nl2bash-005593",
+    "nl2bash-011693",
+    "nl2bash-010607",
+    "nl2bash-005628",
+    "nl2bash-005405",
+    "nl2bash-007549",
+    "nl2bash-001198",
+    "nl2bash-007719",
+    "nl2bash-011708",
+    "nl2bash-009903",
+    "nl2bash-000870",
+    "nl2bash-007726",
+    "nl2bash-001422",
+    "nl2bash-007565",
+    "nl2bash-001396",
+    "nl2bash-009933",
+    "nl2bash-001411",
+    "nl2bash-011943",
+    "nl2bash-003475",
+    "nl2bash-002608",
+    "nl2bash-000396",
+    "nl2bash-000410",
+    "nl2bash-009103",
+    "nl2bash-009794",
+    "nl2bash-009121",
+    "nl2bash-009781",
+    "nl2bash-000415",
+    "nl2bash-007036",
+    "nl2bash-000470",
+    "nl2bash-000442",
+    "nl2bash-009855",
+    "nl2bash-002582",
+    "nl2bash-000349",
+    "nl2bash-002957",
+    "nl2bash-003903",
+    "nl2bash-011910",
+    "nl2bash-004141",
+    "nl2bash-011221",
+    "nl2bash-009750",
+    "nl2bash-002063",
+    "nl2bash-007049",
+    "nl2bash-003631",
+    "nl2bash-007077",
+    "nl2bash-009829",
+    "nl2bash-002714",
+    "nl2bash-001765",
+    "nl2bash-007035",
+    "nl2bash-009150",
+    "nl2bash-000443",
+    "nl2bash-000474",
+    "nl2bash-009847",
+    "nl2bash-009088",
+    "nl2bash-009784",
+    "nl2bash-000350",
+    "nl2bash-009854",
+    "nl2bash-009113",
+    "nl2bash-009853",
+    "nl2bash-003023",
+    "nl2bash-003110",
+    "nl2bash-009843",
+    "nl2bash-012300",
+    "nl2bash-000476",
+    "nl2bash-000392",
+    "nl2bash-000069",
+    "nl2bash-009109",
+    "nl2bash-009749",
+    "nl2bash-009776",
+    "nl2bash-000071",
+    "nl2bash-006772",
+    "nl2bash-006839",
+    "nl2bash-006840",
+    "nl2bash-009041",
+    "nl2bash-009032",
+    "nl2bash-003595",
+    "nl2bash-004775",
+    "nl2bash-006844",
+    "nl2bash-009626",
+    "nl2bash-000002",
+    "nl2bash-000557",
+    "nl2bash-006845",
+    "nl2bash-003701",
+    "nl2bash-009045",
+    "nl2bash-000017",
+    "nl2bash-000003",
+    "nl2bash-006850",
+    "nl2bash-012456",
+    "nl2bash-000371",
+    "nl2bash-006363",
+    "nl2bash-009131",
+    "nl2bash-006846",
+    "nl2bash-006869",
+    "nl2bash-000018",
+    "nl2bash-006727",
+    "nl2bash-006186",
+    "nl2bash-004362",
+    "nl2bash-004571",
+    "nl2bash-009038",
+    "nl2bash-000010",
+    "nl2bash-005858",
+    "nl2bash-006081",
+    "nl2bash-006848",
+    "nl2bash-005886",
+    "nl2bash-006857",
+    "nl2bash-004619",
+    "nl2bash-000036",
+    "nl2bash-011713",
+    "nl2bash-006048",
+    "nl2bash-000043",
+    "nl2bash-012472",
+    "nl2bash-012022",
+    "nl2bash-000616",
+    "nl2bash-009052",
+    "nl2bash-006847",
+    "nl2bash-007942",
+    "nl2bash-001911",
+    "nl2bash-006779",
+    "nl2bash-011714",
+    "nl2bash-006851",
+    "nl2bash-005382",
+    "nl2bash-007333",
+    "nl2bash-001545",
+    "nl2bash-009210",
+    "nl2bash-009256",
+    "nl2bash-000333",
+    "nl2bash-006142",
+    "nl2bash-006141",
+    "nl2bash-008195",
+    "nl2bash-007962",
+    "nl2bash-001585",
+    "nl2bash-004630",
+    "nl2bash-006472",
+    "nl2bash-006189",
+    "nl2bash-001787",
+    "nl2bash-000534",
+    "nl2bash-001603",
+    "nl2bash-000037",
+    "nl2bash-008181",
+    "nl2bash-006457",
+    "nl2bash-006522",
+    "nl2bash-001874",
+    "nl2bash-008111",
+    "nl2bash-008107",
+    "nl2bash-005039",
+    "nl2bash-008143",
+    "nl2bash-009140",
+    "nl2bash-000032",
+    "nl2bash-000039",
+    "nl2bash-001254",
+    "nl2bash-009197",
+    "nl2bash-008066",
+    "nl2bash-009196",
+    "nl2bash-008056",
+    "nl2bash-008191",
+    "nl2bash-006145",
+    "nl2bash-008194",
+    "nl2bash-008129",
+    "nl2bash-006144",
+    "nl2bash-005501",
+    "nl2bash-000035",
+    "nl2bash-009139",
+    "nl2bash-000354",
+    "nl2bash-008190",
+    "nl2bash-008093",
+    "nl2bash-000031",
+    "nl2bash-001596",
+    "nl2bash-009126",
+    "nl2bash-006595",
+    "nl2bash-001574",
+    "nl2bash-001095",
+    "nl2bash-001800",
+    "nl2bash-005759",
+    "nl2bash-001700",
+    "nl2bash-005756",
+    "nl2bash-007900",
+    "nl2bash-012563",
+    "nl2bash-001087",
+    "nl2bash-010687",
+    "nl2bash-006864",
+    "nl2bash-001713",
+    "nl2bash-004613",
+    "nl2bash-000367",
+    "nl2bash-004653",
+    "nl2bash-007898",
+    "nl2bash-001184",
+    "nl2bash-005674",
+    "nl2bash-012566",
+    "nl2bash-004420",
+    "nl2bash-007140",
+    "nl2bash-009076",
+    "nl2bash-005861",
+    "nl2bash-001210",
+    "nl2bash-007998",
+    "nl2bash-000239",
+    "nl2bash-000678",
+    "nl2bash-000536",
+    "nl2bash-007907",
+    "nl2bash-008047",
+    "nl2bash-007599",
+    "nl2bash-004780",
+    "nl2bash-001689",
+    "nl2bash-005803",
+    "nl2bash-004002",
+    "nl2bash-004398",
+    "nl2bash-001688",
+    "nl2bash-004607",
+    "nl2bash-004657",
+    "nl2bash-006025",
+    "nl2bash-002891",
+    "nl2bash-000208",
+    "nl2bash-005781",
+    "nl2bash-000675",
+    "nl2bash-000168",
+    "nl2bash-004564",
+    "nl2bash-008950",
+    "nl2bash-010690",
+    "nl2bash-000671",
+    "nl2bash-009071",
+    "nl2bash-009054",
+    "nl2bash-001267",
+    "nl2bash-002107",
+    "nl2bash-009576",
+    "nl2bash-009567",
+    "nl2bash-001271",
+    "nl2bash-001882",
+    "nl2bash-001264",
+    "nl2bash-000205",
+    "nl2bash-009971",
+    "nl2bash-000177",
+    "nl2bash-009536",
+    "nl2bash-001071",
+    "nl2bash-001260",
+    "nl2bash-000623",
+    "nl2bash-010707",
+    "nl2bash-009566",
+    "nl2bash-000635",
+    "nl2bash-000629",
+    "nl2bash-009501",
+    "nl2bash-009954",
+    "nl2bash-009967",
+    "nl2bash-001204",
+    "nl2bash-012156",
+    "nl2bash-003402",
+    "nl2bash-004253",
+    "nl2bash-000137",
+    "nl2bash-009403",
+    "nl2bash-009952",
+    "nl2bash-003820",
+    "nl2bash-012591",
+    "nl2bash-009471",
+    "nl2bash-000219",
+    "nl2bash-009553",
+    "nl2bash-002742",
+    "nl2bash-002106",
+    "nl2bash-000217",
+    "nl2bash-008373",
+    "nl2bash-009924",
+    "nl2bash-001147",
+    "nl2bash-009554",
+    "nl2bash-008539",
+    "nl2bash-000625",
+    "nl2bash-008902",
+    "nl2bash-000114",
+    "nl2bash-007290",
+    "nl2bash-001265",
+    "nl2bash-011532",
+    "nl2bash-009565",
+    "nl2bash-009927",
+    "nl2bash-011529",
+    "nl2bash-001491",
+    "nl2bash-001734",
+    "nl2bash-009291",
+    "nl2bash-001727",
+    "nl2bash-009132",
+    "nl2bash-012480",
+    "nl2bash-009293",
+    "nl2bash-009128",
+    "nl2bash-012174",
+    "nl2bash-012421",
+    "nl2bash-009533",
+    "nl2bash-000092",
+    "nl2bash-011876",
+    "nl2bash-012428",
+    "nl2bash-000355",
+    "nl2bash-006443",
+    "nl2bash-012445",
+    "nl2bash-007837",
+    "nl2bash-008053",
+    "nl2bash-012434",
+    "nl2bash-004725",
+    "nl2bash-009762",
+    "nl2bash-009515",
+    "nl2bash-008255",
+    "nl2bash-012453",
+    "nl2bash-007946",
+    "nl2bash-012469",
+    "nl2bash-008885",
+    "nl2bash-012460",
+    "nl2bash-006714",
+    "nl2bash-012315",
+    "nl2bash-001867",
+    "nl2bash-012429",
+    "nl2bash-008380",
+    "nl2bash-006180",
+    "nl2bash-001731",
+    "nl2bash-012439",
+    "nl2bash-000365",
+    "nl2bash-009525",
+    "nl2bash-001936",
+    "nl2bash-001868",
+    "nl2bash-006860",
+    "nl2bash-007681",
+    "nl2bash-012459",
+    "nl2bash-001460",
+    "nl2bash-012464",
+    "nl2bash-012454",
+    "nl2bash-009642",
+    "nl2bash-012475",
+    "nl2bash-000582",
+    "nl2bash-012021",
+    "nl2bash-005566",
+    "nl2bash-004479",
+    "nl2bash-004018",
+    "nl2bash-000344",
+    "nl2bash-009986",
+    "nl2bash-007955",
+    "nl2bash-004771",
+    "nl2bash-001918",
+    "nl2bash-006077",
+    "nl2bash-000881",
+    "nl2bash-004905",
+    "nl2bash-004494",
+    "nl2bash-004411",
+    "nl2bash-001927",
+    "nl2bash-006842",
+    "nl2bash-002151",
+    "nl2bash-009985",
+    "nl2bash-007958",
+    "nl2bash-004410",
+    "nl2bash-002135",
+    "nl2bash-001187",
+    "nl2bash-005226",
+    "nl2bash-011850",
+    "nl2bash-006535",
+    "nl2bash-012419",
+    "nl2bash-003983",
+    "nl2bash-007956",
+    "nl2bash-000223",
+    "nl2bash-004916",
+    "nl2bash-002112",
+    "nl2bash-006773",
+    "nl2bash-001186",
+    "nl2bash-000058",
+    "nl2bash-001925",
+    "nl2bash-004309",
+    "nl2bash-006902",
+    "nl2bash-004019",
+    "nl2bash-006899",
+    "nl2bash-001697",
+    "nl2bash-012292",
+    "nl2bash-006513",
+    "nl2bash-004918",
+    "nl2bash-004801",
+    "nl2bash-009497",
+    "nl2bash-001710",
+    "nl2bash-006863",
+    "nl2bash-000064",
+    "nl2bash-000065",
+    "nl2bash-000244"
+  ],
+  "pilot_example_metadata": {
+    "nl2bash-000002": {
+      "group_id": "group-nl2bash-000002",
+      "suggested_intent": "process_job_management",
+      "suggestion_reason": "request-text rule matched: processes belonging"
+    },
+    "nl2bash-000003": {
+      "group_id": "group-nl2bash-000003",
+      "suggested_intent": "process_job_management",
+      "suggestion_reason": "request-text rule matched: CPU usage"
+    },
+    "nl2bash-000010": {
+      "group_id": "group-nl2bash-000010",
+      "suggested_intent": "process_job_management",
+      "suggestion_reason": "request-text rule matched: process information"
+    },
+    "nl2bash-000017": {
+      "group_id": "group-nl2bash-000017",
+      "suggested_intent": "process_job_management",
+      "suggestion_reason": "request-text rule matched: Monitor all processes"
+    },
+    "nl2bash-000018": {
+      "group_id": "group-nl2bash-000018",
+      "suggested_intent": "process_job_management",
+      "suggestion_reason": "request-text rule matched: Monitor all processes"
+    },
+    "nl2bash-000031": {
+      "group_id": "group-nl2bash-000031",
+      "suggested_intent": "system_information",
+      "suggestion_reason": "request-text rule matched: current kernel"
+    },
+    "nl2bash-000032": {
+      "group_id": "group-nl2bash-000032",
+      "suggested_intent": "system_information",
+      "suggestion_reason": "request-text rule matched: current kernel"
+    },
+    "nl2bash-000035": {
+      "group_id": "group-nl2bash-000035",
+      "suggested_intent": "system_information",
+      "suggestion_reason": "request-text rule matched: current kernel"
+    },
+    "nl2bash-000036": {
+      "group_id": "group-nl2bash-000036",
+      "suggested_intent": "process_job_management",
+      "suggestion_reason": "request-text rule matched: PID"
+    },
+    "nl2bash-000037": {
+      "group_id": "group-nl2bash-000037",
+      "suggested_intent": "system_information",
+      "suggestion_reason": "request-text rule matched: current kernel"
+    },
+    "nl2bash-000039": {
+      "group_id": "group-nl2bash-000039",
+      "suggested_intent": "system_information",
+      "suggestion_reason": "request-text rule matched: current kernel"
+    },
+    "nl2bash-000043": {
+      "group_id": "group-nl2bash-000043",
+      "suggested_intent": "process_job_management",
+      "suggestion_reason": "request-text rule matched: process information"
+    },
+    "nl2bash-000058": {
+      "group_id": "group-nl2bash-000058",
+      "suggested_intent": "other_or_ambiguous",
+      "suggestion_reason": "request-text rule matched: cron"
+    },
+    "nl2bash-000064": {
+      "group_id": "group-nl2bash-000064",
+      "suggested_intent": "other_or_ambiguous",
+      "suggestion_reason": "request-text rule matched: cron"
+    },
+    "nl2bash-000065": {
+      "group_id": "group-nl2bash-000065",
+      "suggested_intent": "other_or_ambiguous",
+      "suggestion_reason": "request-text rule matched: cron"
+    },
+    "nl2bash-000069": {
+      "group_id": "group-nl2bash-000069",
+      "suggested_intent": "permissions_ownership",
+      "suggestion_reason": "request-text rule matched: Add executable permission"
+    },
+    "nl2bash-000071": {
+      "group_id": "group-nl2bash-000071",
+      "suggested_intent": "permissions_ownership",
+      "suggestion_reason": "request-text rule matched: Add execute permission"
+    },
+    "nl2bash-000092": {
+      "group_id": "group-nl2bash-000092",
+      "suggested_intent": "shell_environment_session",
+      "suggestion_reason": "request-text rule matched: Alias"
+    },
+    "nl2bash-000114": {
+      "group_id": "group-nl2bash-000114",
+      "suggested_intent": "archive_compression",
+      "suggestion_reason": "request-text rule matched: tar archive"
+    },
+    "nl2bash-000137": {
+      "group_id": "group-nl2bash-000137",
+      "suggested_intent": "archive_compression",
+      "suggestion_reason": "request-text rule matched: compress"
+    },
+    "nl2bash-000165": {
+      "group_id": "group-nl2bash-000165",
+      "suggested_intent": "file_directory_management",
+      "suggestion_reason": "request-text rule matched: copy\" to \"path/to/export\" excluding files or directories"
+    },
+    "nl2bash-000168": {
+      "group_id": "group-nl2bash-000168",
+      "suggested_intent": "network_remote_operations",
+      "suggestion_reason": "request-text rule matched: via ssh"
+    },
+    "nl2bash-000177": {
+      "group_id": "group-nl2bash-000177",
+      "suggested_intent": "archive_compression",
+      "suggestion_reason": "request-text rule matched: Archive a"
+    },
+    "nl2bash-000205": {
+      "group_id": "group-nl2bash-000205",
+      "suggested_intent": "archive_compression",
+      "suggestion_reason": "request-text rule matched: Archive file"
+    },
+    "nl2bash-000208": {
+      "group_id": "group-nl2bash-000208",
+      "suggested_intent": "network_remote_operations",
+      "suggestion_reason": "request-text rule matched: ssh"
+    },
+    "nl2bash-000217": {
+      "group_id": "group-nl2bash-000217",
+      "suggested_intent": "archive_compression",
+      "suggestion_reason": "request-text rule matched: Archive the"
+    },
+    "nl2bash-000219": {
+      "group_id": "group-nl2bash-000219",
+      "suggested_intent": "archive_compression",
+      "suggestion_reason": "request-text rule matched: Archive the"
+    },
+    "nl2bash-000223": {
+      "group_id": "group-nl2bash-000223",
+      "suggested_intent": "other_or_ambiguous",
+      "suggestion_reason": "request-text rule matched: cron"
+    },
+    "nl2bash-000239": {
+      "group_id": "group-nl2bash-000239",
+      "suggested_intent": "network_remote_operations",
+      "suggestion_reason": "request-text rule matched: ssh"
+    },
+    "nl2bash-000244": {
+      "group_id": "group-nl2bash-000244",
+      "suggested_intent": "other_or_ambiguous",
+      "suggestion_reason": "request-text rule matched: rpm -"
+    },
+    "nl2bash-000333": {
+      "group_id": "group-nl2bash-000333",
+      "suggested_intent": "system_information",
+      "suggestion_reason": "request-text rule matched: host name"
+    },
+    "nl2bash-000344": {
+      "group_id": "group-nl2bash-000343",
+      "suggested_intent": "other_or_ambiguous",
+      "suggestion_reason": "request-text rule matched: cron"
+    },
+    "nl2bash-000349": {
+      "group_id": "group-nl2bash-000349",
+      "suggested_intent": "permissions_ownership",
+      "suggestion_reason": "request-text rule matched: Change all files in the current directory tree to owner"
+    },
+    "nl2bash-000350": {
+      "group_id": "group-nl2bash-000350",
+      "suggested_intent": "permissions_ownership",
+      "suggestion_reason": "request-text rule matched: Change all files with no user under \"/var/www\" to have owner"
+    },
+    "nl2bash-000354": {
+      "group_id": "group-nl2bash-000354",
+      "suggested_intent": "system_information",
+      "suggestion_reason": "request-text rule matched: current kernel"
+    },
+    "nl2bash-000355": {
+      "group_id": "group-nl2bash-000355",
+      "suggested_intent": "shell_environment_session",
+      "suggestion_reason": "request-text rule matched: Change directory"
+    },
+    "nl2bash-000365": {
+      "group_id": "group-nl2bash-000365",
+      "suggested_intent": "shell_environment_session",
+      "suggestion_reason": "request-text rule matched: Change directory"
+    },
+    "nl2bash-000367": {
+      "group_id": "group-nl2bash-000367",
+      "suggested_intent": "network_remote_operations",
+      "suggestion_reason": "request-text rule matched: download"
+    },
+    "nl2bash-000371": {
+      "group_id": "group-nl2bash-000371",
+      "suggested_intent": "process_job_management",
+      "suggestion_reason": "request-text rule matched: PID"
+    },
+    "nl2bash-000392": {
+      "group_id": "group-nl2bash-000392",
+      "suggested_intent": "permissions_ownership",
+      "suggestion_reason": "request-text rule matched: Change owner"
+    },
+    "nl2bash-000396": {
+      "group_id": "group-nl2bash-000396",
+      "suggested_intent": "permissions_ownership",
+      "suggestion_reason": "request-text rule matched: Change ownership"
+    },
+    "nl2bash-000410": {
+      "group_id": "group-nl2bash-000410",
+      "suggested_intent": "permissions_ownership",
+      "suggestion_reason": "request-text rule matched: Change permissions"
+    },
+    "nl2bash-000415": {
+      "group_id": "group-nl2bash-000415",
+      "suggested_intent": "permissions_ownership",
+      "suggestion_reason": "request-text rule matched: Change permissions"
+    },
+    "nl2bash-000442": {
+      "group_id": "group-nl2bash-000442",
+      "suggested_intent": "permissions_ownership",
+      "suggestion_reason": "request-text rule matched: Change permissions"
+    },
+    "nl2bash-000443": {
+      "group_id": "group-nl2bash-000443",
+      "suggested_intent": "permissions_ownership",
+      "suggestion_reason": "request-text rule matched: Change permissions"
+    },
+    "nl2bash-000470": {
+      "group_id": "group-nl2bash-000470",
+      "suggested_intent": "permissions_ownership",
+      "suggestion_reason": "request-text rule matched: Change the owner"
+    },
+    "nl2bash-000474": {
+      "group_id": "group-nl2bash-000474",
+      "suggested_intent": "permissions_ownership",
+      "suggestion_reason": "request-text rule matched: Change the owner"
+    },
+    "nl2bash-000476": {
+      "group_id": "group-nl2bash-000476",
+      "suggested_intent": "permissions_ownership",
+      "suggestion_reason": "request-text rule matched: Change the owner"
+    },
+    "nl2bash-000534": {
+      "group_id": "group-nl2bash-000534",
+      "suggested_intent": "system_information",
+      "suggestion_reason": "request-text rule matched: mount point"
+    },
+    "nl2bash-000536": {
+      "group_id": "group-nl2bash-000536",
+      "suggested_intent": "network_remote_operations",
+      "suggestion_reason": "request-text rule matched: remote host"
+    },
+    "nl2bash-000557": {
+      "group_id": "group-nl2bash-000557",
+      "suggested_intent": "process_job_management",
+      "suggestion_reason": "request-text rule matched: process ID"
+    },
+    "nl2bash-000582": {
+      "group_id": "group-nl2bash-000582",
+      "suggested_intent": "shell_environment_session",
+      "suggestion_reason": "request-text rule matched: history"
+    },
+    "nl2bash-000616": {
+      "group_id": "group-nl2bash-000616",
+      "suggested_intent": "process_job_management",
+      "suggestion_reason": "request-text rule matched: process tree"
+    },
+    "nl2bash-000623": {
+      "group_id": "group-nl2bash-000623",
+      "suggested_intent": "archive_compression",
+      "suggestion_reason": "request-text rule matched: Compress"
+    },
+    "nl2bash-000625": {
+      "group_id": "group-nl2bash-000625",
+      "suggested_intent": "archive_compression",
+      "suggestion_reason": "request-text rule matched: Compress"
+    },
+    "nl2bash-000629": {
+      "group_id": "group-nl2bash-000629",
+      "suggested_intent": "archive_compression",
+      "suggestion_reason": "request-text rule matched: Compress"
+    },
+    "nl2bash-000635": {
+      "group_id": "group-nl2bash-000635",
+      "suggested_intent": "archive_compression",
+      "suggestion_reason": "request-text rule matched: Compress"
+    },
+    "nl2bash-000662": {
+      "group_id": "group-nl2bash-000662",
+      "suggested_intent": "text_search_processing",
+      "suggestion_reason": "request-text rule matched: word count"
+    },
+    "nl2bash-000671": {
+      "group_id": "group-nl2bash-000671",
+      "suggested_intent": "network_remote_operations",
+      "suggestion_reason": "request-text rule matched: Connect to host"
+    },
+    "nl2bash-000675": {
+      "group_id": "group-nl2bash-000675",
+      "suggested_intent": "network_remote_operations",
+      "suggestion_reason": "request-text rule matched: Connect to host"
+    },
+    "nl2bash-000678": {
+      "group_id": "group-nl2bash-000678",
+      "suggested_intent": "network_remote_operations",
+      "suggestion_reason": "request-text rule matched: ssh"
+    },
+    "nl2bash-000835": {
+      "group_id": "group-nl2bash-000835",
+      "suggested_intent": "file_directory_management",
+      "suggestion_reason": "request-text rule matched: Copy all files/directories excluding *.flac files"
+    },
+    "nl2bash-000853": {
+      "group_id": "group-nl2bash-000853",
+      "suggested_intent": "file_directory_management",
+      "suggestion_reason": "request-text rule matched: Copy file \"exist\" from directory \"/file/that\" to a new file"
+    },
+    "nl2bash-000857": {
+      "group_id": "group-nl2bash-000857",
+      "suggested_intent": "file_directory_management",
+      "suggestion_reason": "request-text rule matched: Copy file"
+    },
+    "nl2bash-000863": {
+      "group_id": "group-nl2bash-000863",
+      "suggested_intent": "file_directory_management",
+      "suggestion_reason": "request-text rule matched: Copy local file"
+    },
+    "nl2bash-000870": {
+      "group_id": "group-nl2bash-000766",
+      "suggested_intent": "file_directory_management",
+      "suggestion_reason": "request-text rule matched: Copy the 3 specified files"
+    },
+    "nl2bash-000881": {
+      "group_id": "group-nl2bash-000881",
+      "suggested_intent": "other_or_ambiguous",
+      "suggestion_reason": "request-text rule matched: docker container"
+    },
+    "nl2bash-000912": {
+      "group_id": "group-nl2bash-000912",
+      "suggested_intent": "text_search_processing",
+      "suggestion_reason": "request-text rule matched: Count number"
+    },
+    "nl2bash-000917": {
+      "group_id": "group-nl2bash-000917",
+      "suggested_intent": "text_search_processing",
+      "suggestion_reason": "request-text rule matched: Count the number"
+    },
+    "nl2bash-000965": {
+      "group_id": "group-nl2bash-000965",
+      "suggested_intent": "text_search_processing",
+      "suggestion_reason": "request-text rule matched: Count the number"
+    },
+    "nl2bash-001040": {
+      "group_id": "group-nl2bash-001040",
+      "suggested_intent": "text_search_processing",
+      "suggestion_reason": "request-text rule matched: number of lines"
+    },
+    "nl2bash-001071": {
+      "group_id": "group-nl2bash-001071",
+      "suggested_intent": "archive_compression",
+      "suggestion_reason": "request-text rule matched: Create a compressed archive"
+    },
+    "nl2bash-001078": {
+      "group_id": "group-nl2bash-001078",
+      "suggested_intent": "file_directory_management",
+      "suggestion_reason": "request-text rule matched: Create a full path symbolic link \"$newlink\" from a relative path symbolic link"
+    },
+    "nl2bash-001087": {
+      "group_id": "group-nl2bash-001087",
+      "suggested_intent": "network_remote_operations",
+      "suggestion_reason": "request-text rule matched: ssh"
+    },
+    "nl2bash-001090": {
+      "group_id": "group-nl2bash-001090",
+      "suggested_intent": "file_discovery",
+      "suggestion_reason": "request-text rule matched: find /path"
+    },
+    "nl2bash-001093": {
+      "group_id": "group-nl2bash-001093",
+      "suggested_intent": "file_directory_management",
+      "suggestion_reason": "request-text rule matched: Create a sorted unique list of new or modified files"
+    },
+    "nl2bash-001095": {
+      "group_id": "group-nl2bash-001095",
+      "suggested_intent": "network_remote_operations",
+      "suggestion_reason": "request-text rule matched: ssh"
+    },
+    "nl2bash-001147": {
+      "group_id": "group-nl2bash-001147",
+      "suggested_intent": "archive_compression",
+      "suggestion_reason": "request-text rule matched: zip file"
+    },
+    "nl2bash-001184": {
+      "group_id": "group-nl2bash-001184",
+      "suggested_intent": "network_remote_operations",
+      "suggestion_reason": "request-text rule matched: SSH"
+    },
+    "nl2bash-001186": {
+      "group_id": "group-nl2bash-001186",
+      "suggested_intent": "other_or_ambiguous",
+      "suggestion_reason": "request-text rule matched: crontab"
+    },
+    "nl2bash-001187": {
+      "group_id": "group-nl2bash-001187",
+      "suggested_intent": "other_or_ambiguous",
+      "suggestion_reason": "request-text rule matched: crontab"
+    },
+    "nl2bash-001198": {
+      "group_id": "group-nl2bash-001198",
+      "suggested_intent": "file_directory_management",
+      "suggestion_reason": "request-text rule matched: Create symlinks to all /home/folder1/*.txt files"
+    },
+    "nl2bash-001204": {
+      "group_id": "group-nl2bash-001204",
+      "suggested_intent": "archive_compression",
+      "suggestion_reason": "request-text rule matched: Create tar archive"
+    },
+    "nl2bash-001210": {
+      "group_id": "group-nl2bash-001210",
+      "suggested_intent": "network_remote_operations",
+      "suggestion_reason": "request-text rule matched: network interface"
+    },
+    "nl2bash-001254": {
+      "group_id": "group-nl2bash-001254",
+      "suggested_intent": "system_information",
+      "suggestion_reason": "request-text rule matched: host name"
+    },
+    "nl2bash-001256": {
+      "group_id": "group-nl2bash-001256",
+      "suggested_intent": "text_search_processing",
+      "suggestion_reason": "request-text rule matched: Cut"
+    },
+    "nl2bash-001260": {
+      "group_id": "group-nl2bash-001260",
+      "suggested_intent": "archive_compression",
+      "suggestion_reason": "request-text rule matched: Decompress"
+    },
+    "nl2bash-001264": {
+      "group_id": "group-nl2bash-001263",
+      "suggested_intent": "archive_compression",
+      "suggestion_reason": "request-text rule matched: Decompress"
+    },
+    "nl2bash-001265": {
+      "group_id": "group-nl2bash-001265",
+      "suggested_intent": "archive_compression",
+      "suggestion_reason": "request-text rule matched: Decompress"
+    },
+    "nl2bash-001267": {
+      "group_id": "group-nl2bash-001267",
+      "suggested_intent": "archive_compression",
+      "suggestion_reason": "request-text rule matched: Decompress"
+    },
+    "nl2bash-001271": {
+      "group_id": "group-nl2bash-001271",
+      "suggested_intent": "archive_compression",
+      "suggestion_reason": "request-text rule matched: Decompress"
+    },
+    "nl2bash-001341": {
+      "group_id": "group-nl2bash-001341",
+      "suggested_intent": "file_directory_management",
+      "suggestion_reason": "request-text rule matched: Delete all files"
+    },
+    "nl2bash-001351": {
+      "group_id": "group-nl2bash-001351",
+      "suggested_intent": "file_directory_management",
+      "suggestion_reason": "request-text rule matched: Delete all files"
+    },
+    "nl2bash-001353": {
+      "group_id": "group-nl2bash-001353",
+      "suggested_intent": "file_directory_management",
+      "suggestion_reason": "request-text rule matched: Delete all files"
+    },
+    "nl2bash-001365": {
+      "group_id": "group-nl2bash-001365",
+      "suggested_intent": "file_directory_management",
+      "suggestion_reason": "request-text rule matched: Delete all files"
+    },
+    "nl2bash-001396": {
+      "group_id": "group-nl2bash-001394",
+      "suggested_intent": "file_directory_management",
+      "suggestion_reason": "request-text rule matched: Delete all hidden files"
+    },
+    "nl2bash-001411": {
+      "group_id": "group-nl2bash-001411",
+      "suggested_intent": "file_directory_management",
+      "suggestion_reason": "request-text rule matched: Delete all regular files"
+    },
+    "nl2bash-001422": {
+      "group_id": "group-nl2bash-001422",
+      "suggested_intent": "file_directory_management",
+      "suggestion_reason": "request-text rule matched: Delete all the 'test' directories from all directories"
+    },
+    "nl2bash-001443": {
+      "group_id": "group-nl2bash-001443",
+      "suggested_intent": "file_directory_management",
+      "suggestion_reason": "request-text rule matched: Delete files"
+    },
+    "nl2bash-001460": {
+      "group_id": "group-nl2bash-001460",
+      "suggested_intent": "shell_environment_session",
+      "suggestion_reason": "request-text rule matched: history"
+    },
+    "nl2bash-001491": {
+      "group_id": "group-nl2bash-001491",
+      "suggested_intent": "shell_environment_session",
+      "suggestion_reason": "request-text rule matched: shell option"
+    },
+    "nl2bash-001529": {
+      "group_id": "group-nl2bash-001528",
+      "suggested_intent": "file_discovery",
+      "suggestion_reason": "request-text rule matched: Display all files"
+    },
+    "nl2bash-001545": {
+      "group_id": "group-nl2bash-001545",
+      "suggested_intent": "system_information",
+      "suggestion_reason": "request-text rule matched: hostname"
+    },
+    "nl2bash-001574": {
+      "group_id": "group-nl2bash-001574",
+      "suggested_intent": "system_information",
+      "suggestion_reason": "request-text rule matched: current kernel"
+    },
+    "nl2bash-001585": {
+      "group_id": "group-nl2bash-001585",
+      "suggested_intent": "system_information",
+      "suggestion_reason": "request-text rule matched: Display kernel name"
+    },
+    "nl2bash-001596": {
+      "group_id": "group-nl2bash-001595",
+      "suggested_intent": "system_information",
+      "suggestion_reason": "request-text rule matched: kernel version"
+    },
+    "nl2bash-001603": {
+      "group_id": "group-nl2bash-001603",
+      "suggested_intent": "system_information",
+      "suggestion_reason": "request-text rule matched: mount point"
+    },
+    "nl2bash-001688": {
+      "group_id": "group-nl2bash-001688",
+      "suggested_intent": "network_remote_operations",
+      "suggestion_reason": "request-text rule matched: Download"
+    },
+    "nl2bash-001689": {
+      "group_id": "group-nl2bash-001689",
+      "suggested_intent": "network_remote_operations",
+      "suggestion_reason": "request-text rule matched: Download"
+    },
+    "nl2bash-001697": {
+      "group_id": "group-nl2bash-001697",
+      "suggested_intent": "other_or_ambiguous",
+      "suggestion_reason": "request-text rule matched: pg_dump"
+    },
+    "nl2bash-001700": {
+      "group_id": "group-nl2bash-001700",
+      "suggested_intent": "network_remote_operations",
+      "suggestion_reason": "request-text rule matched: ssh"
+    },
+    "nl2bash-001710": {
+      "group_id": "group-nl2bash-001710",
+      "suggested_intent": "other_or_ambiguous",
+      "suggestion_reason": "request-text rule matched: cron"
+    },
+    "nl2bash-001713": {
+      "group_id": "group-nl2bash-001713",
+      "suggested_intent": "network_remote_operations",
+      "suggestion_reason": "request-text rule matched: IP address"
+    },
+    "nl2bash-001727": {
+      "group_id": "group-nl2bash-001727",
+      "suggested_intent": "shell_environment_session",
+      "suggestion_reason": "request-text rule matched: shell option"
+    },
+    "nl2bash-001731": {
+      "group_id": "group-nl2bash-001731",
+      "suggested_intent": "shell_environment_session",
+      "suggestion_reason": "request-text rule matched: shell option"
+    },
+    "nl2bash-001734": {
+      "group_id": "group-nl2bash-001734",
+      "suggested_intent": "shell_environment_session",
+      "suggestion_reason": "request-text rule matched: shell option"
+    },
+    "nl2bash-001765": {
+      "group_id": "group-nl2bash-001765",
+      "suggested_intent": "permissions_ownership",
+      "suggestion_reason": "request-text rule matched: chown"
+    },
+    "nl2bash-001787": {
+      "group_id": "group-nl2bash-001786",
+      "suggested_intent": "system_information",
+      "suggestion_reason": "request-text rule matched: host name"
+    },
+    "nl2bash-001800": {
+      "group_id": "group-nl2bash-001800",
+      "suggested_intent": "network_remote_operations",
+      "suggestion_reason": "request-text rule matched: wget"
+    },
+    "nl2bash-001867": {
+      "group_id": "group-nl2bash-001867",
+      "suggested_intent": "shell_environment_session",
+      "suggestion_reason": "request-text rule matched: Export variable"
+    },
+    "nl2bash-001868": {
+      "group_id": "group-nl2bash-001868",
+      "suggested_intent": "shell_environment_session",
+      "suggestion_reason": "request-text rule matched: Export variable"
+    },
+    "nl2bash-001874": {
+      "group_id": "group-nl2bash-001874",
+      "suggested_intent": "system_information",
+      "suggestion_reason": "request-text rule matched: hostname"
+    },
+    "nl2bash-001882": {
+      "group_id": "group-nl2bash-001882",
+      "suggested_intent": "archive_compression",
+      "suggestion_reason": "request-text rule matched: .tar"
+    },
+    "nl2bash-001911": {
+      "group_id": "group-nl2bash-001911",
+      "suggested_intent": "process_job_management",
+      "suggestion_reason": "request-text rule matched: process ID"
+    },
+    "nl2bash-001918": {
+      "group_id": "group-nl2bash-001918",
+      "suggested_intent": "other_or_ambiguous",
+      "suggestion_reason": "request-text rule matched: cron"
+    },
+    "nl2bash-001925": {
+      "group_id": "group-nl2bash-001925",
+      "suggested_intent": "other_or_ambiguous",
+      "suggestion_reason": "request-text rule matched: crontab"
+    },
+    "nl2bash-001927": {
+      "group_id": "group-nl2bash-001927",
+      "suggested_intent": "other_or_ambiguous",
+      "suggestion_reason": "request-text rule matched: crontab"
+    },
+    "nl2bash-001929": {
+      "group_id": "group-nl2bash-001929",
+      "suggested_intent": "text_search_processing",
+      "suggestion_reason": "request-text rule matched: search for \"$SrchStr\" in those files"
+    },
+    "nl2bash-001936": {
+      "group_id": "group-nl2bash-001936",
+      "suggested_intent": "shell_environment_session",
+      "suggestion_reason": "request-text rule matched: change directory"
+    },
+    "nl2bash-001987": {
+      "group_id": "group-nl2bash-001986",
+      "suggested_intent": "file_discovery",
+      "suggestion_reason": "request-text rule matched: Find .rmv files"
+    },
+    "nl2bash-002063": {
+      "group_id": "group-nl2bash-002063",
+      "suggested_intent": "permissions_ownership",
+      "suggestion_reason": "request-text rule matched: change their permission"
+    },
+    "nl2bash-002106": {
+      "group_id": "group-nl2bash-002106",
+      "suggested_intent": "archive_compression",
+      "suggestion_reason": "request-text rule matched: compress"
+    },
+    "nl2bash-002107": {
+      "group_id": "group-nl2bash-002107",
+      "suggested_intent": "archive_compression",
+      "suggestion_reason": "request-text rule matched: compress"
+    },
+    "nl2bash-002112": {
+      "group_id": "group-nl2bash-002112",
+      "suggested_intent": "other_or_ambiguous",
+      "suggestion_reason": "request-text rule matched: ffmpeg"
+    },
+    "nl2bash-002135": {
+      "group_id": "group-nl2bash-002135",
+      "suggested_intent": "other_or_ambiguous",
+      "suggestion_reason": "request-text rule matched: ffmpeg"
+    },
+    "nl2bash-002145": {
+      "group_id": "group-nl2bash-002144",
+      "suggested_intent": "file_discovery",
+      "suggestion_reason": "request-text rule matched: Find all *.mp3 files under current directory and run mplayer with these files"
+    },
+    "nl2bash-002151": {
+      "group_id": "group-nl2bash-002151",
+      "suggested_intent": "other_or_ambiguous",
+      "suggestion_reason": "request-text rule matched: ffmpeg"
+    },
+    "nl2bash-002157": {
+      "group_id": "group-nl2bash-002157",
+      "suggested_intent": "file_discovery",
+      "suggestion_reason": "request-text rule matched: Find all *.ogg (case insensitive) files/directories"
+    },
+    "nl2bash-002255": {
+      "group_id": "group-nl2bash-002255",
+      "suggested_intent": "file_discovery",
+      "suggestion_reason": "request-text rule matched: Find all *.txt files/directories"
+    },
+    "nl2bash-002297": {
+      "group_id": "group-nl2bash-002297",
+      "suggested_intent": "file_directory_management",
+      "suggestion_reason": "request-text rule matched: move all regular files inside those directories"
+    },
+    "nl2bash-002484": {
+      "group_id": "group-nl2bash-002484",
+      "suggested_intent": "file_discovery",
+      "suggestion_reason": "request-text rule matched: Find all btree*.c files"
+    },
+    "nl2bash-002530": {
+      "group_id": "group-nl2bash-002530",
+      "suggested_intent": "file_discovery",
+      "suggestion_reason": "request-text rule matched: Find all directories"
+    },
+    "nl2bash-002582": {
+      "group_id": "group-nl2bash-002582",
+      "suggested_intent": "permissions_ownership",
+      "suggestion_reason": "request-text rule matched: set their permission"
+    },
+    "nl2bash-002608": {
+      "group_id": "group-nl2bash-002608",
+      "suggested_intent": "permissions_ownership",
+      "suggestion_reason": "request-text rule matched: change their permission"
+    },
+    "nl2bash-002703": {
+      "group_id": "group-nl2bash-002703",
+      "suggested_intent": "text_search_processing",
+      "suggestion_reason": "request-text rule matched: sort"
+    },
+    "nl2bash-002714": {
+      "group_id": "group-nl2bash-002714",
+      "suggested_intent": "permissions_ownership",
+      "suggestion_reason": "request-text rule matched: remove the permission"
+    },
+    "nl2bash-002715": {
+      "group_id": "group-nl2bash-002715",
+      "suggested_intent": "file_discovery",
+      "suggestion_reason": "request-text rule matched: Find all files"
+    },
+    "nl2bash-002742": {
+      "group_id": "group-nl2bash-002742",
+      "suggested_intent": "archive_compression",
+      "suggestion_reason": "request-text rule matched: compress"
+    },
+    "nl2bash-002767": {
+      "group_id": "group-nl2bash-002767",
+      "suggested_intent": "text_search_processing",
+      "suggestion_reason": "request-text rule matched: search for 'searchName' in those files and show errors for files"
+    },
+    "nl2bash-002834": {
+      "group_id": "group-nl2bash-002834",
+      "suggested_intent": "file_discovery",
+      "suggestion_reason": "request-text rule matched: Find all files in the level 6 subdirecotries of /usr/src and below, ignoring CVS files"
+    },
+    "nl2bash-002891": {
+      "group_id": "group-nl2bash-002891",
+      "suggested_intent": "network_remote_operations",
+      "suggestion_reason": "request-text rule matched: ssh"
+    },
+    "nl2bash-002909": {
+      "group_id": "group-nl2bash-002909",
+      "suggested_intent": "file_discovery",
+      "suggestion_reason": "request-text rule matched: Find all files"
+    },
+    "nl2bash-002932": {
+      "group_id": "group-nl2bash-002932",
+      "suggested_intent": "file_discovery",
+      "suggestion_reason": "request-text rule matched: Find all files"
+    },
+    "nl2bash-002957": {
+      "group_id": "group-nl2bash-002957",
+      "suggested_intent": "permissions_ownership",
+      "suggestion_reason": "request-text rule matched: set read-write permission for owner and group and no permission"
+    },
+    "nl2bash-003023": {
+      "group_id": "group-nl2bash-003023",
+      "suggested_intent": "permissions_ownership",
+      "suggestion_reason": "request-text rule matched: change their permission"
+    },
+    "nl2bash-003034": {
+      "group_id": "group-nl2bash-003034",
+      "suggested_intent": "file_discovery",
+      "suggestion_reason": "request-text rule matched: Find all files"
+    },
+    "nl2bash-003110": {
+      "group_id": "group-nl2bash-003110",
+      "suggested_intent": "permissions_ownership",
+      "suggestion_reason": "request-text rule matched: change their ownership"
+    },
+    "nl2bash-003199": {
+      "group_id": "group-nl2bash-003199",
+      "suggested_intent": "file_discovery",
+      "suggestion_reason": "request-text rule matched: Find all files/directories in the paths"
+    },
+    "nl2bash-003289": {
+      "group_id": "group-nl2bash-003289",
+      "suggested_intent": "file_discovery",
+      "suggestion_reason": "request-text rule matched: Find all files/directories"
+    },
+    "nl2bash-003316": {
+      "group_id": "group-nl2bash-003316",
+      "suggested_intent": "file_discovery",
+      "suggestion_reason": "request-text rule matched: Find all files/directories"
+    },
+    "nl2bash-003402": {
+      "group_id": "group-nl2bash-003275",
+      "suggested_intent": "archive_compression",
+      "suggestion_reason": "request-text rule matched: .tar.gz"
+    },
+    "nl2bash-003441": {
+      "group_id": "group-nl2bash-003441",
+      "suggested_intent": "file_discovery",
+      "suggestion_reason": "request-text rule matched: Find all files/directories"
+    },
+    "nl2bash-003475": {
+      "group_id": "group-nl2bash-002988",
+      "suggested_intent": "permissions_ownership",
+      "suggestion_reason": "request-text rule matched: execute permission"
+    },
+    "nl2bash-003571": {
+      "group_id": "group-nl2bash-003571",
+      "suggested_intent": "file_discovery",
+      "suggestion_reason": "request-text rule matched: Find all regular files in the current directory tree ignoring GIT and SVN directories"
+    },
+    "nl2bash-003595": {
+      "group_id": "group-nl2bash-003595",
+      "suggested_intent": "process_job_management",
+      "suggestion_reason": "request-text rule matched: process id"
+    },
+    "nl2bash-003631": {
+      "group_id": "group-nl2bash-003631",
+      "suggested_intent": "permissions_ownership",
+      "suggestion_reason": "request-text rule matched: change their permissions"
+    },
+    "nl2bash-003701": {
+      "group_id": "group-nl2bash-003701",
+      "suggested_intent": "process_job_management",
+      "suggestion_reason": "request-text rule matched: pid"
+    },
+    "nl2bash-003800": {
+      "group_id": "group-nl2bash-003800",
+      "suggested_intent": "file_discovery",
+      "suggestion_reason": "request-text rule matched: Find all the regular files"
+    },
+    "nl2bash-003814": {
+      "group_id": "group-nl2bash-003814",
+      "suggested_intent": "file_discovery",
+      "suggestion_reason": "request-text rule matched: Find all xx* files/directories excluding 'xxx' files/directories"
+    },
+    "nl2bash-003820": {
+      "group_id": "group-nl2bash-003820",
+      "suggested_intent": "archive_compression",
+      "suggestion_reason": "request-text rule matched: compress"
+    },
+    "nl2bash-003879": {
+      "group_id": "group-nl2bash-003879",
+      "suggested_intent": "file_discovery",
+      "suggestion_reason": "request-text rule matched: Find directories"
+    },
+    "nl2bash-003884": {
+      "group_id": "group-nl2bash-003884",
+      "suggested_intent": "file_discovery",
+      "suggestion_reason": "request-text rule matched: Find directories in the current directory (no sub-directories"
+    },
+    "nl2bash-003903": {
+      "group_id": "group-nl2bash-002658",
+      "suggested_intent": "permissions_ownership",
+      "suggestion_reason": "request-text rule matched: modify them to have \"700\" permissions"
+    },
+    "nl2bash-003947": {
+      "group_id": "group-nl2bash-003947",
+      "suggested_intent": "file_discovery",
+      "suggestion_reason": "request-text rule matched: Find files and directories"
+    },
+    "nl2bash-003963": {
+      "group_id": "group-nl2bash-003963",
+      "suggested_intent": "file_discovery",
+      "suggestion_reason": "request-text rule matched: Find files"
+    },
+    "nl2bash-003964": {
+      "group_id": "group-nl2bash-003964",
+      "suggested_intent": "file_discovery",
+      "suggestion_reason": "request-text rule matched: Find files"
+    },
+    "nl2bash-003983": {
+      "group_id": "group-nl2bash-003983",
+      "suggested_intent": "other_or_ambiguous",
+      "suggestion_reason": "request-text rule matched: git diff"
+    },
+    "nl2bash-004002": {
+      "group_id": "group-nl2bash-004002",
+      "suggested_intent": "network_remote_operations",
+      "suggestion_reason": "request-text rule matched: download"
+    },
+    "nl2bash-004018": {
+      "group_id": "group-nl2bash-004018",
+      "suggested_intent": "other_or_ambiguous",
+      "suggestion_reason": "request-text rule matched: git diff"
+    },
+    "nl2bash-004019": {
+      "group_id": "group-nl2bash-004019",
+      "suggested_intent": "other_or_ambiguous",
+      "suggestion_reason": "request-text rule matched: git diff"
+    },
+    "nl2bash-004027": {
+      "group_id": "group-nl2bash-004027",
+      "suggested_intent": "file_discovery",
+      "suggestion_reason": "request-text rule matched: Find files named 'fileName.txt' under '/path"
+    },
+    "nl2bash-004141": {
+      "group_id": "group-nl2bash-004141",
+      "suggested_intent": "permissions_ownership",
+      "suggestion_reason": "request-text rule matched: change their permission"
+    },
+    "nl2bash-004253": {
+      "group_id": "group-nl2bash-004253",
+      "suggested_intent": "archive_compression",
+      "suggestion_reason": "request-text rule matched: zip file"
+    },
+    "nl2bash-004298": {
+      "group_id": "group-nl2bash-003661",
+      "suggested_intent": "text_search_processing",
+      "suggestion_reason": "request-text rule matched: files containing"
+    },
+    "nl2bash-004305": {
+      "group_id": "group-nl2bash-004305",
+      "suggested_intent": "file_discovery",
+      "suggestion_reason": "request-text rule matched: Find string \"STRING\" in files"
+    },
+    "nl2bash-004309": {
+      "group_id": "group-nl2bash-004309",
+      "suggested_intent": "other_or_ambiguous",
+      "suggestion_reason": "request-text rule matched: systemctl"
+    },
+    "nl2bash-004362": {
+      "group_id": "group-nl2bash-004362",
+      "suggested_intent": "process_job_management",
+      "suggestion_reason": "request-text rule matched: process id"
+    },
+    "nl2bash-004398": {
+      "group_id": "group-nl2bash-004398",
+      "suggested_intent": "network_remote_operations",
+      "suggestion_reason": "request-text rule matched: IP address"
+    },
+    "nl2bash-004410": {
+      "group_id": "group-nl2bash-001984",
+      "suggested_intent": "other_or_ambiguous",
+      "suggestion_reason": "request-text rule matched: ffmpeg"
+    },
+    "nl2bash-004411": {
+      "group_id": "group-nl2bash-001985",
+      "suggested_intent": "other_or_ambiguous",
+      "suggestion_reason": "request-text rule matched: ffmpeg"
+    },
+    "nl2bash-004420": {
+      "group_id": "group-nl2bash-004420",
+      "suggested_intent": "network_remote_operations",
+      "suggestion_reason": "request-text rule matched: via ssh"
+    },
+    "nl2bash-004441": {
+      "group_id": "group-nl2bash-004441",
+      "suggested_intent": "text_search_processing",
+      "suggestion_reason": "request-text rule matched: grep"
+    },
+    "nl2bash-004479": {
+      "group_id": "group-nl2bash-004479",
+      "suggested_intent": "other_or_ambiguous",
+      "suggestion_reason": "request-text rule matched: cron"
+    },
+    "nl2bash-004494": {
+      "group_id": "group-nl2bash-004494",
+      "suggested_intent": "other_or_ambiguous",
+      "suggestion_reason": "request-text rule matched: cron"
+    },
+    "nl2bash-004502": {
+      "group_id": "group-nl2bash-004502",
+      "suggested_intent": "file_directory_management",
+      "suggestion_reason": "request-text rule matched: create a symbolic link as a file"
+    },
+    "nl2bash-004503": {
+      "group_id": "group-nl2bash-004503",
+      "suggested_intent": "file_directory_management",
+      "suggestion_reason": "request-text rule matched: create a symbolic link in \"/usr/bin/\" for each file"
+    },
+    "nl2bash-004509": {
+      "group_id": "group-nl2bash-004509",
+      "suggested_intent": "file_directory_management",
+      "suggestion_reason": "request-text rule matched: create a symbolic link"
+    },
+    "nl2bash-004564": {
+      "group_id": "group-nl2bash-004564",
+      "suggested_intent": "network_remote_operations",
+      "suggestion_reason": "request-text rule matched: SSH"
+    },
+    "nl2bash-004571": {
+      "group_id": "group-nl2bash-004571",
+      "suggested_intent": "process_job_management",
+      "suggestion_reason": "request-text rule matched: PID"
+    },
+    "nl2bash-004607": {
+      "group_id": "group-nl2bash-004607",
+      "suggested_intent": "network_remote_operations",
+      "suggestion_reason": "request-text rule matched: IP address"
+    },
+    "nl2bash-004613": {
+      "group_id": "group-nl2bash-004613",
+      "suggested_intent": "network_remote_operations",
+      "suggestion_reason": "request-text rule matched: DNS record"
+    },
+    "nl2bash-004619": {
+      "group_id": "group-nl2bash-004619",
+      "suggested_intent": "process_job_management",
+      "suggestion_reason": "request-text rule matched: PID"
+    },
+    "nl2bash-004630": {
+      "group_id": "group-nl2bash-004630",
+      "suggested_intent": "system_information",
+      "suggestion_reason": "request-text rule matched: disk space"
+    },
+    "nl2bash-004653": {
+      "group_id": "group-nl2bash-004653",
+      "suggested_intent": "network_remote_operations",
+      "suggestion_reason": "request-text rule matched: IP address"
+    },
+    "nl2bash-004657": {
+      "group_id": "group-nl2bash-004657",
+      "suggested_intent": "network_remote_operations",
+      "suggestion_reason": "request-text rule matched: IP address"
+    },
+    "nl2bash-004725": {
+      "group_id": "group-nl2bash-004725",
+      "suggested_intent": "shell_environment_session",
+      "suggestion_reason": "request-text rule matched: history"
+    },
+    "nl2bash-004771": {
+      "group_id": "group-nl2bash-004771",
+      "suggested_intent": "other_or_ambiguous",
+      "suggestion_reason": "request-text rule matched: cron"
+    },
+    "nl2bash-004775": {
+      "group_id": "group-nl2bash-004775",
+      "suggested_intent": "process_job_management",
+      "suggestion_reason": "request-text rule matched: processes listening"
+    },
+    "nl2bash-004780": {
+      "group_id": "group-nl2bash-004780",
+      "suggested_intent": "network_remote_operations",
+      "suggestion_reason": "request-text rule matched: ssh"
+    },
+    "nl2bash-004801": {
+      "group_id": "group-nl2bash-004801",
+      "suggested_intent": "other_or_ambiguous",
+      "suggestion_reason": "request-text rule matched: ffmpeg"
+    },
+    "nl2bash-004815": {
+      "group_id": "group-nl2bash-004815",
+      "suggested_intent": "text_search_processing",
+      "suggestion_reason": "request-text rule matched: lines containing"
+    },
+    "nl2bash-004829": {
+      "group_id": "group-nl2bash-004829",
+      "suggested_intent": "text_search_processing",
+      "suggestion_reason": "request-text rule matched: Join"
+    },
+    "nl2bash-004834": {
+      "group_id": "group-nl2bash-004834",
+      "suggested_intent": "text_search_processing",
+      "suggestion_reason": "request-text rule matched: Join"
+    },
+    "nl2bash-004905": {
+      "group_id": "group-nl2bash-004905",
+      "suggested_intent": "other_or_ambiguous",
+      "suggestion_reason": "request-text rule matched: cron"
+    },
+    "nl2bash-004916": {
+      "group_id": "group-nl2bash-004916",
+      "suggested_intent": "other_or_ambiguous",
+      "suggestion_reason": "request-text rule matched: cron"
+    },
+    "nl2bash-004918": {
+      "group_id": "group-nl2bash-004917",
+      "suggested_intent": "other_or_ambiguous",
+      "suggestion_reason": "request-text rule matched: cron"
+    },
+    "nl2bash-005039": {
+      "group_id": "group-nl2bash-005039",
+      "suggested_intent": "system_information",
+      "suggestion_reason": "request-text rule matched: disk space"
+    },
+    "nl2bash-005174": {
+      "group_id": "group-nl2bash-005174",
+      "suggested_intent": "file_discovery",
+      "suggestion_reason": "request-text rule matched: List files"
+    },
+    "nl2bash-005226": {
+      "group_id": "group-nl2bash-005226",
+      "suggested_intent": "other_or_ambiguous",
+      "suggestion_reason": "request-text rule matched: cron"
+    },
+    "nl2bash-005232": {
+      "group_id": "group-nl2bash-005232",
+      "suggested_intent": "file_discovery",
+      "suggestion_reason": "request-text rule matched: List the files"
+    },
+    "nl2bash-005382": {
+      "group_id": "group-nl2bash-005382",
+      "suggested_intent": "system_information",
+      "suggestion_reason": "request-text rule matched: hostname"
+    },
+    "nl2bash-005405": {
+      "group_id": "group-nl2bash-005405",
+      "suggested_intent": "file_directory_management",
+      "suggestion_reason": "request-text rule matched: Make directories"
+    },
+    "nl2bash-005408": {
+      "group_id": "group-nl2bash-005408",
+      "suggested_intent": "file_directory_management",
+      "suggestion_reason": "request-text rule matched: Make directories"
+    },
+    "nl2bash-005410": {
+      "group_id": "group-nl2bash-005410",
+      "suggested_intent": "file_directory_management",
+      "suggestion_reason": "request-text rule matched: Make directories"
+    },
+    "nl2bash-005477": {
+      "group_id": "group-nl2bash-001214",
+      "suggested_intent": "file_directory_management",
+      "suggestion_reason": "request-text rule matched: Make directory and parents as needed for the directory name of file"
+    },
+    "nl2bash-005501": {
+      "group_id": "group-nl2bash-004627",
+      "suggested_intent": "system_information",
+      "suggestion_reason": "request-text rule matched: disk space"
+    },
+    "nl2bash-005566": {
+      "group_id": "group-nl2bash-005566",
+      "suggested_intent": "other_or_ambiguous",
+      "suggestion_reason": "request-text rule matched: docker container"
+    },
+    "nl2bash-005593": {
+      "group_id": "group-nl2bash-005593",
+      "suggested_intent": "file_directory_management",
+      "suggestion_reason": "request-text rule matched: Move all directories"
+    },
+    "nl2bash-005604": {
+      "group_id": "group-nl2bash-005603",
+      "suggested_intent": "file_directory_management",
+      "suggestion_reason": "request-text rule matched: Move all files and directories"
+    },
+    "nl2bash-005609": {
+      "group_id": "group-nl2bash-005609",
+      "suggested_intent": "file_directory_management",
+      "suggestion_reason": "request-text rule matched: Move all files"
+    },
+    "nl2bash-005620": {
+      "group_id": "group-nl2bash-005620",
+      "suggested_intent": "file_directory_management",
+      "suggestion_reason": "request-text rule matched: Move all files including hidden files"
+    },
+    "nl2bash-005628": {
+      "group_id": "group-nl2bash-005628",
+      "suggested_intent": "file_directory_management",
+      "suggestion_reason": "request-text rule matched: Move all files"
+    },
+    "nl2bash-005657": {
+      "group_id": "group-nl2bash-005657",
+      "suggested_intent": "text_search_processing",
+      "suggestion_reason": "request-text rule matched: sort"
+    },
+    "nl2bash-005659": {
+      "group_id": "group-nl2bash-005659",
+      "suggested_intent": "text_search_processing",
+      "suggestion_reason": "request-text rule matched: sort"
+    },
+    "nl2bash-005660": {
+      "group_id": "group-nl2bash-005660",
+      "suggested_intent": "text_search_processing",
+      "suggestion_reason": "request-text rule matched: sort"
+    },
+    "nl2bash-005667": {
+      "group_id": "group-nl2bash-005667",
+      "suggested_intent": "text_search_processing",
+      "suggestion_reason": "request-text rule matched: sort"
+    },
+    "nl2bash-005668": {
+      "group_id": "group-nl2bash-005668",
+      "suggested_intent": "text_search_processing",
+      "suggestion_reason": "request-text rule matched: sort"
+    },
+    "nl2bash-005674": {
+      "group_id": "group-nl2bash-005674",
+      "suggested_intent": "network_remote_operations",
+      "suggestion_reason": "request-text rule matched: ssh"
+    },
+    "nl2bash-005756": {
+      "group_id": "group-nl2bash-005756",
+      "suggested_intent": "network_remote_operations",
+      "suggestion_reason": "request-text rule matched: Ping all"
+    },
+    "nl2bash-005759": {
+      "group_id": "group-nl2bash-005759",
+      "suggested_intent": "network_remote_operations",
+      "suggestion_reason": "request-text rule matched: Ping hostname"
+    },
+    "nl2bash-005781": {
+      "group_id": "group-nl2bash-005781",
+      "suggested_intent": "network_remote_operations",
+      "suggestion_reason": "request-text rule matched: ping output"
+    },
+    "nl2bash-005803": {
+      "group_id": "group-nl2bash-005802",
+      "suggested_intent": "network_remote_operations",
+      "suggestion_reason": "request-text rule matched: ping -c"
+    },
+    "nl2bash-005858": {
+      "group_id": "group-nl2bash-005858",
+      "suggested_intent": "process_job_management",
+      "suggestion_reason": "request-text rule matched: CPU usage"
+    },
+    "nl2bash-005861": {
+      "group_id": "group-nl2bash-005861",
+      "suggested_intent": "network_remote_operations",
+      "suggestion_reason": "request-text rule matched: IP address"
+    },
+    "nl2bash-005886": {
+      "group_id": "group-nl2bash-005886",
+      "suggested_intent": "process_job_management",
+      "suggestion_reason": "request-text rule matched: CPU usage"
+    },
+    "nl2bash-006025": {
+      "group_id": "group-nl2bash-006025",
+      "suggested_intent": "network_remote_operations",
+      "suggestion_reason": "request-text rule matched: IP address"
+    },
+    "nl2bash-006048": {
+      "group_id": "group-nl2bash-006048",
+      "suggested_intent": "process_job_management",
+      "suggestion_reason": "request-text rule matched: PID"
+    },
+    "nl2bash-006077": {
+      "group_id": "group-nl2bash-006077",
+      "suggested_intent": "other_or_ambiguous",
+      "suggestion_reason": "request-text rule matched: crontab"
+    },
+    "nl2bash-006081": {
+      "group_id": "group-nl2bash-006081",
+      "suggested_intent": "process_job_management",
+      "suggestion_reason": "request-text rule matched: process ID"
+    },
+    "nl2bash-006141": {
+      "group_id": "group-nl2bash-006141",
+      "suggested_intent": "system_information",
+      "suggestion_reason": "request-text rule matched: disk space"
+    },
+    "nl2bash-006142": {
+      "group_id": "group-nl2bash-006142",
+      "suggested_intent": "system_information",
+      "suggestion_reason": "request-text rule matched: disk space"
+    },
+    "nl2bash-006144": {
+      "group_id": "group-nl2bash-006144",
+      "suggested_intent": "system_information",
+      "suggestion_reason": "request-text rule matched: disk space"
+    },
+    "nl2bash-006145": {
+      "group_id": "group-nl2bash-006145",
+      "suggested_intent": "system_information",
+      "suggestion_reason": "request-text rule matched: disk space"
+    },
+    "nl2bash-006180": {
+      "group_id": "group-nl2bash-006179",
+      "suggested_intent": "shell_environment_session",
+      "suggestion_reason": "request-text rule matched: history"
+    },
+    "nl2bash-006186": {
+      "group_id": "group-nl2bash-006186",
+      "suggested_intent": "process_job_management",
+      "suggestion_reason": "request-text rule matched: pid"
+    },
+    "nl2bash-006189": {
+      "group_id": "group-nl2bash-006189",
+      "suggested_intent": "system_information",
+      "suggestion_reason": "request-text rule matched: mount point"
+    },
+    "nl2bash-006363": {
+      "group_id": "group-nl2bash-003882",
+      "suggested_intent": "process_job_management",
+      "suggestion_reason": "request-text rule matched: PID"
+    },
+    "nl2bash-006443": {
+      "group_id": "group-nl2bash-006443",
+      "suggested_intent": "shell_environment_session",
+      "suggestion_reason": "request-text rule matched: Print the current working directory"
+    },
+    "nl2bash-006457": {
+      "group_id": "group-nl2bash-006457",
+      "suggested_intent": "system_information",
+      "suggestion_reason": "request-text rule matched: mount point"
+    },
+    "nl2bash-006472": {
+      "group_id": "group-nl2bash-006472",
+      "suggested_intent": "system_information",
+      "suggestion_reason": "request-text rule matched: disk space"
+    },
+    "nl2bash-006513": {
+      "group_id": "group-nl2bash-006513",
+      "suggested_intent": "other_or_ambiguous",
+      "suggestion_reason": "request-text rule matched: git log"
+    },
+    "nl2bash-006522": {
+      "group_id": "group-nl2bash-006522",
+      "suggested_intent": "system_information",
+      "suggestion_reason": "request-text rule matched: host name"
+    },
+    "nl2bash-006535": {
+      "group_id": "group-nl2bash-006535",
+      "suggested_intent": "other_or_ambiguous",
+      "suggestion_reason": "request-text rule matched: cron"
+    },
+    "nl2bash-006595": {
+      "group_id": "group-nl2bash-006595",
+      "suggested_intent": "system_information",
+      "suggestion_reason": "request-text rule matched: mount point"
+    },
+    "nl2bash-006677": {
+      "group_id": "group-nl2bash-006677",
+      "suggested_intent": "text_search_processing",
+      "suggestion_reason": "request-text rule matched: unique lines"
+    },
+    "nl2bash-006714": {
+      "group_id": "group-nl2bash-006714",
+      "suggested_intent": "shell_environment_session",
+      "suggestion_reason": "request-text rule matched: Print working directory"
+    },
+    "nl2bash-006727": {
+      "group_id": "group-nl2bash-006727",
+      "suggested_intent": "process_job_management",
+      "suggestion_reason": "request-text rule matched: process tree"
+    },
+    "nl2bash-006772": {
+      "group_id": "group-nl2bash-006772",
+      "suggested_intent": "process_job_management",
+      "suggestion_reason": "request-text rule matched: process tree"
+    },
+    "nl2bash-006773": {
+      "group_id": "group-nl2bash-006773",
+      "suggested_intent": "other_or_ambiguous",
+      "suggestion_reason": "request-text rule matched: git log"
+    },
+    "nl2bash-006779": {
+      "group_id": "group-nl2bash-006779",
+      "suggested_intent": "process_job_management",
+      "suggestion_reason": "request-text rule matched: process tree"
+    },
+    "nl2bash-006839": {
+      "group_id": "group-nl2bash-006839",
+      "suggested_intent": "process_job_management",
+      "suggestion_reason": "request-text rule matched: process tree"
+    },
+    "nl2bash-006840": {
+      "group_id": "group-nl2bash-006840",
+      "suggested_intent": "process_job_management",
+      "suggestion_reason": "request-text rule matched: process tree"
+    },
+    "nl2bash-006842": {
+      "group_id": "group-nl2bash-006842",
+      "suggested_intent": "other_or_ambiguous",
+      "suggestion_reason": "request-text rule matched: cron"
+    },
+    "nl2bash-006844": {
+      "group_id": "group-nl2bash-006844",
+      "suggested_intent": "process_job_management",
+      "suggestion_reason": "request-text rule matched: process tree"
+    },
+    "nl2bash-006845": {
+      "group_id": "group-nl2bash-006845",
+      "suggested_intent": "process_job_management",
+      "suggestion_reason": "request-text rule matched: process tree"
+    },
+    "nl2bash-006846": {
+      "group_id": "group-nl2bash-006846",
+      "suggested_intent": "process_job_management",
+      "suggestion_reason": "request-text rule matched: process tree"
+    },
+    "nl2bash-006847": {
+      "group_id": "group-nl2bash-006847",
+      "suggested_intent": "process_job_management",
+      "suggestion_reason": "request-text rule matched: process tree"
+    },
+    "nl2bash-006848": {
+      "group_id": "group-nl2bash-006848",
+      "suggested_intent": "process_job_management",
+      "suggestion_reason": "request-text rule matched: process tree"
+    },
+    "nl2bash-006850": {
+      "group_id": "group-nl2bash-006850",
+      "suggested_intent": "process_job_management",
+      "suggestion_reason": "request-text rule matched: process tree"
+    },
+    "nl2bash-006851": {
+      "group_id": "group-nl2bash-006851",
+      "suggested_intent": "process_job_management",
+      "suggestion_reason": "request-text rule matched: process tree"
+    },
+    "nl2bash-006857": {
+      "group_id": "group-nl2bash-006857",
+      "suggested_intent": "process_job_management",
+      "suggestion_reason": "request-text rule matched: pid"
+    },
+    "nl2bash-006860": {
+      "group_id": "group-nl2bash-006860",
+      "suggested_intent": "shell_environment_session",
+      "suggestion_reason": "request-text rule matched: shell option"
+    },
+    "nl2bash-006863": {
+      "group_id": "group-nl2bash-006863",
+      "suggested_intent": "other_or_ambiguous",
+      "suggestion_reason": "request-text rule matched: cron"
+    },
+    "nl2bash-006864": {
+      "group_id": "group-nl2bash-006864",
+      "suggested_intent": "network_remote_operations",
+      "suggestion_reason": "request-text rule matched: network interface"
+    },
+    "nl2bash-006869": {
+      "group_id": "group-nl2bash-006869",
+      "suggested_intent": "process_job_management",
+      "suggestion_reason": "request-text rule matched: PID"
+    },
+    "nl2bash-006899": {
+      "group_id": "group-nl2bash-006899",
+      "suggested_intent": "other_or_ambiguous",
+      "suggestion_reason": "request-text rule matched: cron"
+    },
+    "nl2bash-006902": {
+      "group_id": "group-nl2bash-006902",
+      "suggested_intent": "other_or_ambiguous",
+      "suggestion_reason": "request-text rule matched: cron"
+    },
+    "nl2bash-007035": {
+      "group_id": "group-nl2bash-007035",
+      "suggested_intent": "permissions_ownership",
+      "suggestion_reason": "request-text rule matched: add read and execute permissions"
+    },
+    "nl2bash-007036": {
+      "group_id": "group-nl2bash-007036",
+      "suggested_intent": "permissions_ownership",
+      "suggestion_reason": "request-text rule matched: add user write permission"
+    },
+    "nl2bash-007049": {
+      "group_id": "group-nl2bash-007049",
+      "suggested_intent": "permissions_ownership",
+      "suggestion_reason": "request-text rule matched: change owner"
+    },
+    "nl2bash-007077": {
+      "group_id": "group-nl2bash-007077",
+      "suggested_intent": "permissions_ownership",
+      "suggestion_reason": "request-text rule matched: change the owner"
+    },
+    "nl2bash-007140": {
+      "group_id": "group-nl2bash-007140",
+      "suggested_intent": "network_remote_operations",
+      "suggestion_reason": "request-text rule matched: ssh"
+    },
+    "nl2bash-007233": {
+      "group_id": "group-nl2bash-007233",
+      "suggested_intent": "file_directory_management",
+      "suggestion_reason": "request-text rule matched: remove all \"*.txt\" files"
+    },
+    "nl2bash-007290": {
+      "group_id": "group-nl2bash-007290",
+      "suggested_intent": "archive_compression",
+      "suggestion_reason": "request-text rule matched: unzip"
+    },
+    "nl2bash-007333": {
+      "group_id": "group-nl2bash-007333",
+      "suggested_intent": "system_information",
+      "suggestion_reason": "request-text rule matched: host name"
+    },
+    "nl2bash-007353": {
+      "group_id": "group-nl2bash-007353",
+      "suggested_intent": "file_directory_management",
+      "suggestion_reason": "request-text rule matched: Remove all *.sql files"
+    },
+    "nl2bash-007393": {
+      "group_id": "group-nl2bash-007392",
+      "suggested_intent": "file_directory_management",
+      "suggestion_reason": "request-text rule matched: Remove all broken symlinks"
+    },
+    "nl2bash-007395": {
+      "group_id": "group-nl2bash-007395",
+      "suggested_intent": "text_search_processing",
+      "suggestion_reason": "request-text rule matched: Remove all characters"
+    },
+    "nl2bash-007504": {
+      "group_id": "group-nl2bash-007504",
+      "suggested_intent": "text_search_processing",
+      "suggestion_reason": "request-text rule matched: Remove characters"
+    },
+    "nl2bash-007549": {
+      "group_id": "group-nl2bash-007549",
+      "suggested_intent": "file_directory_management",
+      "suggestion_reason": "request-text rule matched: Remove gitlab.site.org from root's known hosts file"
+    },
+    "nl2bash-007565": {
+      "group_id": "group-nl2bash-007565",
+      "suggested_intent": "file_directory_management",
+      "suggestion_reason": "request-text rule matched: Remove regular files"
+    },
+    "nl2bash-007599": {
+      "group_id": "group-nl2bash-007599",
+      "suggested_intent": "network_remote_operations",
+      "suggestion_reason": "request-text rule matched: ssh"
+    },
+    "nl2bash-007622": {
+      "group_id": "group-nl2bash-007622",
+      "suggested_intent": "file_directory_management",
+      "suggestion_reason": "request-text rule matched: Remove trailing white spaces from all files"
+    },
+    "nl2bash-007681": {
+      "group_id": "group-nl2bash-007681",
+      "suggested_intent": "shell_environment_session",
+      "suggestion_reason": "request-text rule matched: alias"
+    },
+    "nl2bash-007719": {
+      "group_id": "group-nl2bash-007719",
+      "suggested_intent": "file_directory_management",
+      "suggestion_reason": "request-text rule matched: Rename all *.jpg files"
+    },
+    "nl2bash-007726": {
+      "group_id": "group-nl2bash-000456",
+      "suggested_intent": "file_directory_management",
+      "suggestion_reason": "request-text rule matched: Rename all .txt files"
+    },
+    "nl2bash-007837": {
+      "group_id": "group-nl2bash-007837",
+      "suggested_intent": "shell_environment_session",
+      "suggestion_reason": "request-text rule matched: history"
+    },
+    "nl2bash-007898": {
+      "group_id": "group-nl2bash-007898",
+      "suggested_intent": "network_remote_operations",
+      "suggestion_reason": "request-text rule matched: DNS record"
+    },
+    "nl2bash-007900": {
+      "group_id": "group-nl2bash-007900",
+      "suggested_intent": "network_remote_operations",
+      "suggestion_reason": "request-text rule matched: IP address"
+    },
+    "nl2bash-007907": {
+      "group_id": "group-nl2bash-007907",
+      "suggested_intent": "network_remote_operations",
+      "suggestion_reason": "request-text rule matched: ssh"
+    },
+    "nl2bash-007942": {
+      "group_id": "group-nl2bash-007942",
+      "suggested_intent": "process_job_management",
+      "suggestion_reason": "request-text rule matched: pid"
+    },
+    "nl2bash-007946": {
+      "group_id": "group-nl2bash-007946",
+      "suggested_intent": "shell_environment_session",
+      "suggestion_reason": "request-text rule matched: environment variable"
+    },
+    "nl2bash-007955": {
+      "group_id": "group-nl2bash-007955",
+      "suggested_intent": "other_or_ambiguous",
+      "suggestion_reason": "request-text rule matched: git pull"
+    },
+    "nl2bash-007956": {
+      "group_id": "group-nl2bash-007956",
+      "suggested_intent": "other_or_ambiguous",
+      "suggestion_reason": "request-text rule matched: git pull"
+    },
+    "nl2bash-007958": {
+      "group_id": "group-nl2bash-007958",
+      "suggested_intent": "other_or_ambiguous",
+      "suggestion_reason": "request-text rule matched: git pull"
+    },
+    "nl2bash-007962": {
+      "group_id": "group-nl2bash-007962",
+      "suggested_intent": "system_information",
+      "suggestion_reason": "request-text rule matched: current kernel"
+    },
+    "nl2bash-007998": {
+      "group_id": "group-nl2bash-007998",
+      "suggested_intent": "network_remote_operations",
+      "suggestion_reason": "request-text rule matched: remote host"
+    },
+    "nl2bash-008001": {
+      "group_id": "group-nl2bash-008001",
+      "suggested_intent": "text_search_processing",
+      "suggestion_reason": "request-text rule matched: sed"
+    },
+    "nl2bash-008047": {
+      "group_id": "group-nl2bash-008047",
+      "suggested_intent": "network_remote_operations",
+      "suggestion_reason": "request-text rule matched: SSH"
+    },
+    "nl2bash-008053": {
+      "group_id": "group-nl2bash-008053",
+      "suggested_intent": "shell_environment_session",
+      "suggestion_reason": "request-text rule matched: history"
+    },
+    "nl2bash-008056": {
+      "group_id": "group-nl2bash-008056",
+      "suggested_intent": "system_information",
+      "suggestion_reason": "request-text rule matched: host name"
+    },
+    "nl2bash-008066": {
+      "group_id": "group-nl2bash-008066",
+      "suggested_intent": "system_information",
+      "suggestion_reason": "request-text rule matched: host name"
+    },
+    "nl2bash-008093": {
+      "group_id": "group-nl2bash-008093",
+      "suggested_intent": "system_information",
+      "suggestion_reason": "request-text rule matched: host name"
+    },
+    "nl2bash-008107": {
+      "group_id": "group-nl2bash-008107",
+      "suggested_intent": "system_information",
+      "suggestion_reason": "request-text rule matched: system information"
+    },
+    "nl2bash-008111": {
+      "group_id": "group-nl2bash-008111",
+      "suggested_intent": "system_information",
+      "suggestion_reason": "request-text rule matched: host name"
+    },
+    "nl2bash-008129": {
+      "group_id": "group-nl2bash-008129",
+      "suggested_intent": "system_information",
+      "suggestion_reason": "request-text rule matched: host name"
+    },
+    "nl2bash-008143": {
+      "group_id": "group-nl2bash-008143",
+      "suggested_intent": "system_information",
+      "suggestion_reason": "request-text rule matched: host name"
+    },
+    "nl2bash-008181": {
+      "group_id": "group-nl2bash-008181",
+      "suggested_intent": "system_information",
+      "suggestion_reason": "request-text rule matched: hostname"
+    },
+    "nl2bash-008190": {
+      "group_id": "group-nl2bash-008190",
+      "suggested_intent": "system_information",
+      "suggestion_reason": "request-text rule matched: host name"
+    },
+    "nl2bash-008191": {
+      "group_id": "group-nl2bash-008191",
+      "suggested_intent": "system_information",
+      "suggestion_reason": "request-text rule matched: host name"
+    },
+    "nl2bash-008194": {
+      "group_id": "group-nl2bash-008194",
+      "suggested_intent": "system_information",
+      "suggestion_reason": "request-text rule matched: host name"
+    },
+    "nl2bash-008195": {
+      "group_id": "group-nl2bash-008195",
+      "suggested_intent": "system_information",
+      "suggestion_reason": "request-text rule matched: host name"
+    },
+    "nl2bash-008255": {
+      "group_id": "group-nl2bash-008255",
+      "suggested_intent": "shell_environment_session",
+      "suggestion_reason": "request-text rule matched: history"
+    },
+    "nl2bash-008366": {
+      "group_id": "group-nl2bash-008366",
+      "suggested_intent": "text_search_processing",
+      "suggestion_reason": "request-text rule matched: lines containing"
+    },
+    "nl2bash-008373": {
+      "group_id": "group-nl2bash-008373",
+      "suggested_intent": "archive_compression",
+      "suggestion_reason": "request-text rule matched: gzip file"
+    },
+    "nl2bash-008380": {
+      "group_id": "group-nl2bash-008380",
+      "suggested_intent": "shell_environment_session",
+      "suggestion_reason": "request-text rule matched: history"
+    },
+    "nl2bash-008386": {
+      "group_id": "group-nl2bash-008386",
+      "suggested_intent": "text_search_processing",
+      "suggestion_reason": "request-text rule matched: Search for \"pattern\" in all the .c files"
+    },
+    "nl2bash-008388": {
+      "group_id": "group-nl2bash-008388",
+      "suggested_intent": "text_search_processing",
+      "suggestion_reason": "request-text rule matched: Search for \"vid=123\" in all compressed files"
+    },
+    "nl2bash-008393": {
+      "group_id": "group-nl2bash-008393",
+      "suggested_intent": "text_search_processing",
+      "suggestion_reason": "request-text rule matched: Search for '/usr/bin/perl' in all regular files"
+    },
+    "nl2bash-008412": {
+      "group_id": "group-nl2bash-008412",
+      "suggested_intent": "text_search_processing",
+      "suggestion_reason": "request-text rule matched: Search for 'foo' in all regular files"
+    },
+    "nl2bash-008437": {
+      "group_id": "group-nl2bash-008437",
+      "suggested_intent": "text_search_processing",
+      "suggestion_reason": "request-text rule matched: Search for 'string-to-find' in all files"
+    },
+    "nl2bash-008443": {
+      "group_id": "group-nl2bash-008443",
+      "suggested_intent": "text_search_processing",
+      "suggestion_reason": "request-text rule matched: Search for '“foobar”' in all files"
+    },
+    "nl2bash-008452": {
+      "group_id": "group-nl2bash-008452",
+      "suggested_intent": "text_search_processing",
+      "suggestion_reason": "request-text rule matched: Search for a string in all gzip'd files"
+    },
+    "nl2bash-008539": {
+      "group_id": "group-nl2bash-008539",
+      "suggested_intent": "archive_compression",
+      "suggestion_reason": "request-text rule matched: create an archive"
+    },
+    "nl2bash-008579": {
+      "group_id": "group-nl2bash-008579",
+      "suggested_intent": "text_search_processing",
+      "suggestion_reason": "request-text rule matched: Search for the regex \"\\$wp_version =\" in all the regular files"
+    },
+    "nl2bash-008587": {
+      "group_id": "group-nl2bash-008587",
+      "suggested_intent": "text_search_processing",
+      "suggestion_reason": "request-text rule matched: Search for the regex \\s1$ in all files"
+    },
+    "nl2bash-008588": {
+      "group_id": "group-nl2bash-008588",
+      "suggested_intent": "text_search_processing",
+      "suggestion_reason": "request-text rule matched: Search for the regex ^catalina in the first line of each file"
+    },
+    "nl2bash-008885": {
+      "group_id": "group-nl2bash-008885",
+      "suggested_intent": "shell_environment_session",
+      "suggestion_reason": "request-text rule matched: shell variable"
+    },
+    "nl2bash-008902": {
+      "group_id": "group-nl2bash-008902",
+      "suggested_intent": "archive_compression",
+      "suggestion_reason": "request-text rule matched: .tar"
+    },
+    "nl2bash-008950": {
+      "group_id": "group-nl2bash-008950",
+      "suggested_intent": "network_remote_operations",
+      "suggestion_reason": "request-text rule matched: scp"
+    },
+    "nl2bash-009032": {
+      "group_id": "group-nl2bash-009032",
+      "suggested_intent": "process_job_management",
+      "suggestion_reason": "request-text rule matched: processes using"
+    },
+    "nl2bash-009038": {
+      "group_id": "group-nl2bash-009038",
+      "suggested_intent": "process_job_management",
+      "suggestion_reason": "request-text rule matched: processes using"
+    },
+    "nl2bash-009041": {
+      "group_id": "group-nl2bash-009041",
+      "suggested_intent": "process_job_management",
+      "suggestion_reason": "request-text rule matched: processes running"
+    },
+    "nl2bash-009045": {
+      "group_id": "group-nl2bash-004847",
+      "suggested_intent": "process_job_management",
+      "suggestion_reason": "request-text rule matched: process tree"
+    },
+    "nl2bash-009052": {
+      "group_id": "group-nl2bash-009052",
+      "suggested_intent": "process_job_management",
+      "suggestion_reason": "request-text rule matched: pid"
+    },
+    "nl2bash-009054": {
+      "group_id": "group-nl2bash-009054",
+      "suggested_intent": "network_remote_operations",
+      "suggestion_reason": "request-text rule matched: ping request"
+    },
+    "nl2bash-009060": {
+      "group_id": "group-nl2bash-009060",
+      "suggested_intent": "text_search_processing",
+      "suggestion_reason": "request-text rule matched: awk"
+    },
+    "nl2bash-009071": {
+      "group_id": "group-nl2bash-009071",
+      "suggested_intent": "network_remote_operations",
+      "suggestion_reason": "request-text rule matched: ping requests"
+    },
+    "nl2bash-009076": {
+      "group_id": "group-nl2bash-009076",
+      "suggested_intent": "network_remote_operations",
+      "suggestion_reason": "request-text rule matched: ping requests"
+    },
+    "nl2bash-009088": {
+      "group_id": "group-nl2bash-009088",
+      "suggested_intent": "permissions_ownership",
+      "suggestion_reason": "request-text rule matched: Set 644 permission"
+    },
+    "nl2bash-009103": {
+      "group_id": "group-nl2bash-009103",
+      "suggested_intent": "permissions_ownership",
+      "suggestion_reason": "request-text rule matched: Set permissions"
+    },
+    "nl2bash-009109": {
+      "group_id": "group-nl2bash-009109",
+      "suggested_intent": "permissions_ownership",
+      "suggestion_reason": "request-text rule matched: Set permissions"
+    },
+    "nl2bash-009113": {
+      "group_id": "group-nl2bash-002607",
+      "suggested_intent": "permissions_ownership",
+      "suggestion_reason": "request-text rule matched: Set permissions"
+    },
+    "nl2bash-009121": {
+      "group_id": "group-nl2bash-002643",
+      "suggested_intent": "permissions_ownership",
+      "suggestion_reason": "request-text rule matched: Set permissions"
+    },
+    "nl2bash-009126": {
+      "group_id": "group-nl2bash-009126",
+      "suggested_intent": "system_information",
+      "suggestion_reason": "request-text rule matched: host name"
+    },
+    "nl2bash-009128": {
+      "group_id": "group-nl2bash-009128",
+      "suggested_intent": "shell_environment_session",
+      "suggestion_reason": "request-text rule matched: shell option"
+    },
+    "nl2bash-009131": {
+      "group_id": "group-nl2bash-009131",
+      "suggested_intent": "process_job_management",
+      "suggestion_reason": "request-text rule matched: PID"
+    },
+    "nl2bash-009132": {
+      "group_id": "group-nl2bash-009132",
+      "suggested_intent": "shell_environment_session",
+      "suggestion_reason": "request-text rule matched: shell variable"
+    },
+    "nl2bash-009139": {
+      "group_id": "group-nl2bash-009139",
+      "suggested_intent": "system_information",
+      "suggestion_reason": "request-text rule matched: hostname"
+    },
+    "nl2bash-009140": {
+      "group_id": "group-nl2bash-009140",
+      "suggested_intent": "system_information",
+      "suggestion_reason": "request-text rule matched: host name"
+    },
+    "nl2bash-009150": {
+      "group_id": "group-nl2bash-002619",
+      "suggested_intent": "permissions_ownership",
+      "suggestion_reason": "request-text rule matched: Set the permissions"
+    },
+    "nl2bash-009196": {
+      "group_id": "group-nl2bash-009196",
+      "suggested_intent": "system_information",
+      "suggestion_reason": "request-text rule matched: current kernel"
+    },
+    "nl2bash-009197": {
+      "group_id": "group-nl2bash-009197",
+      "suggested_intent": "system_information",
+      "suggestion_reason": "request-text rule matched: current kernel"
+    },
+    "nl2bash-009210": {
+      "group_id": "group-nl2bash-009210",
+      "suggested_intent": "system_information",
+      "suggestion_reason": "request-text rule matched: host name"
+    },
+    "nl2bash-009256": {
+      "group_id": "group-nl2bash-001609",
+      "suggested_intent": "system_information",
+      "suggestion_reason": "request-text rule matched: system information"
+    },
+    "nl2bash-009291": {
+      "group_id": "group-nl2bash-009291",
+      "suggested_intent": "shell_environment_session",
+      "suggestion_reason": "request-text rule matched: shell option"
+    },
+    "nl2bash-009293": {
+      "group_id": "group-nl2bash-009293",
+      "suggested_intent": "shell_environment_session",
+      "suggestion_reason": "request-text rule matched: shell option"
+    },
+    "nl2bash-009326": {
+      "group_id": "group-nl2bash-001928",
+      "suggested_intent": "text_search_processing",
+      "suggestion_reason": "request-text rule matched: Sort"
+    },
+    "nl2bash-009328": {
+      "group_id": "group-nl2bash-009328",
+      "suggested_intent": "text_search_processing",
+      "suggestion_reason": "request-text rule matched: Sort"
+    },
+    "nl2bash-009329": {
+      "group_id": "group-nl2bash-009329",
+      "suggested_intent": "text_search_processing",
+      "suggestion_reason": "request-text rule matched: Sort"
+    },
+    "nl2bash-009330": {
+      "group_id": "group-nl2bash-009330",
+      "suggested_intent": "text_search_processing",
+      "suggestion_reason": "request-text rule matched: Sort"
+    },
+    "nl2bash-009403": {
+      "group_id": "group-nl2bash-009381",
+      "suggested_intent": "archive_compression",
+      "suggestion_reason": "request-text rule matched: .tar.gz"
+    },
+    "nl2bash-009471": {
+      "group_id": "group-nl2bash-009471",
+      "suggested_intent": "archive_compression",
+      "suggestion_reason": "request-text rule matched: .tar.gz"
+    },
+    "nl2bash-009497": {
+      "group_id": "group-nl2bash-009497",
+      "suggested_intent": "other_or_ambiguous",
+      "suggestion_reason": "request-text rule matched: cron"
+    },
+    "nl2bash-009501": {
+      "group_id": "group-nl2bash-009501",
+      "suggested_intent": "archive_compression",
+      "suggestion_reason": "request-text rule matched: Uncompress"
+    },
+    "nl2bash-009515": {
+      "group_id": "group-nl2bash-009515",
+      "suggested_intent": "shell_environment_session",
+      "suggestion_reason": "request-text rule matched: history"
+    },
+    "nl2bash-009525": {
+      "group_id": "group-nl2bash-009525",
+      "suggested_intent": "shell_environment_session",
+      "suggestion_reason": "request-text rule matched: environment variable"
+    },
+    "nl2bash-009533": {
+      "group_id": "group-nl2bash-009533",
+      "suggested_intent": "shell_environment_session",
+      "suggestion_reason": "request-text rule matched: shell variable"
+    },
+    "nl2bash-009536": {
+      "group_id": "group-nl2bash-009536",
+      "suggested_intent": "archive_compression",
+      "suggestion_reason": "request-text rule matched: Unzip"
+    },
+    "nl2bash-009553": {
+      "group_id": "group-nl2bash-009553",
+      "suggested_intent": "archive_compression",
+      "suggestion_reason": "request-text rule matched: Unzip"
+    },
+    "nl2bash-009554": {
+      "group_id": "group-nl2bash-009554",
+      "suggested_intent": "archive_compression",
+      "suggestion_reason": "request-text rule matched: Unzip"
+    },
+    "nl2bash-009565": {
+      "group_id": "group-nl2bash-009565",
+      "suggested_intent": "archive_compression",
+      "suggestion_reason": "request-text rule matched: Unzip"
+    },
+    "nl2bash-009566": {
+      "group_id": "group-nl2bash-009566",
+      "suggested_intent": "archive_compression",
+      "suggestion_reason": "request-text rule matched: Unzip"
+    },
+    "nl2bash-009567": {
+      "group_id": "group-nl2bash-009567",
+      "suggested_intent": "archive_compression",
+      "suggestion_reason": "request-text rule matched: Unzip"
+    },
+    "nl2bash-009576": {
+      "group_id": "group-nl2bash-009576",
+      "suggested_intent": "archive_compression",
+      "suggestion_reason": "request-text rule matched: Unzip"
+    },
+    "nl2bash-009626": {
+      "group_id": "group-nl2bash-009626",
+      "suggested_intent": "process_job_management",
+      "suggestion_reason": "request-text rule matched: PID"
+    },
+    "nl2bash-009642": {
+      "group_id": "group-nl2bash-009642",
+      "suggested_intent": "shell_environment_session",
+      "suggestion_reason": "request-text rule matched: history"
+    },
+    "nl2bash-009749": {
+      "group_id": "group-nl2bash-009153",
+      "suggested_intent": "permissions_ownership",
+      "suggestion_reason": "request-text rule matched: add read permission"
+    },
+    "nl2bash-009750": {
+      "group_id": "group-nl2bash-009750",
+      "suggested_intent": "permissions_ownership",
+      "suggestion_reason": "request-text rule matched: add read,write permissions"
+    },
+    "nl2bash-009762": {
+      "group_id": "group-nl2bash-009762",
+      "suggested_intent": "shell_environment_session",
+      "suggestion_reason": "request-text rule matched: pwd"
+    },
+    "nl2bash-009776": {
+      "group_id": "group-nl2bash-000479",
+      "suggested_intent": "permissions_ownership",
+      "suggestion_reason": "request-text rule matched: change owner"
+    },
+    "nl2bash-009781": {
+      "group_id": "group-nl2bash-000472",
+      "suggested_intent": "permissions_ownership",
+      "suggestion_reason": "request-text rule matched: change owner"
+    },
+    "nl2bash-009784": {
+      "group_id": "group-nl2bash-000467",
+      "suggested_intent": "permissions_ownership",
+      "suggestion_reason": "request-text rule matched: change owner"
+    },
+    "nl2bash-009794": {
+      "group_id": "group-nl2bash-009794",
+      "suggested_intent": "permissions_ownership",
+      "suggestion_reason": "request-text rule matched: change permissions"
+    },
+    "nl2bash-009829": {
+      "group_id": "group-nl2bash-009828",
+      "suggested_intent": "permissions_ownership",
+      "suggestion_reason": "request-text rule matched: change the ownership"
+    },
+    "nl2bash-009843": {
+      "group_id": "group-nl2bash-009843",
+      "suggested_intent": "permissions_ownership",
+      "suggestion_reason": "request-text rule matched: change the permissions"
+    },
+    "nl2bash-009847": {
+      "group_id": "group-nl2bash-009847",
+      "suggested_intent": "permissions_ownership",
+      "suggestion_reason": "request-text rule matched: change the permissions"
+    },
+    "nl2bash-009853": {
+      "group_id": "group-nl2bash-009853",
+      "suggested_intent": "permissions_ownership",
+      "suggestion_reason": "request-text rule matched: change the permissions"
+    },
+    "nl2bash-009854": {
+      "group_id": "group-nl2bash-009854",
+      "suggested_intent": "permissions_ownership",
+      "suggestion_reason": "request-text rule matched: change the permissions"
+    },
+    "nl2bash-009855": {
+      "group_id": "group-nl2bash-009855",
+      "suggested_intent": "permissions_ownership",
+      "suggestion_reason": "request-text rule matched: change the permissions"
+    },
+    "nl2bash-009903": {
+      "group_id": "group-nl2bash-009903",
+      "suggested_intent": "file_directory_management",
+      "suggestion_reason": "request-text rule matched: copy all the regular files"
+    },
+    "nl2bash-009924": {
+      "group_id": "group-nl2bash-009924",
+      "suggested_intent": "archive_compression",
+      "suggestion_reason": "request-text rule matched: create a compressed archive"
+    },
+    "nl2bash-009927": {
+      "group_id": "group-nl2bash-009927",
+      "suggested_intent": "archive_compression",
+      "suggestion_reason": "request-text rule matched: create a compressed archive"
+    },
+    "nl2bash-009933": {
+      "group_id": "group-nl2bash-009933",
+      "suggested_intent": "file_directory_management",
+      "suggestion_reason": "request-text rule matched: create a hard link"
+    },
+    "nl2bash-009941": {
+      "group_id": "group-nl2bash-009941",
+      "suggested_intent": "file_directory_management",
+      "suggestion_reason": "request-text rule matched: create a symbolic link named \"$ORACLE_HOME/include\" to file"
+    },
+    "nl2bash-009949": {
+      "group_id": "group-nl2bash-009949",
+      "suggested_intent": "file_directory_management",
+      "suggestion_reason": "request-text rule matched: create a symbolic link named \"www\" to file"
+    },
+    "nl2bash-009952": {
+      "group_id": "group-nl2bash-009952",
+      "suggested_intent": "archive_compression",
+      "suggestion_reason": "request-text rule matched: tar ball"
+    },
+    "nl2bash-009954": {
+      "group_id": "group-nl2bash-009954",
+      "suggested_intent": "archive_compression",
+      "suggestion_reason": "request-text rule matched: tar ball"
+    },
+    "nl2bash-009967": {
+      "group_id": "group-nl2bash-009967",
+      "suggested_intent": "archive_compression",
+      "suggestion_reason": "request-text rule matched: create an archive"
+    },
+    "nl2bash-009971": {
+      "group_id": "group-nl2bash-009971",
+      "suggested_intent": "archive_compression",
+      "suggestion_reason": "request-text rule matched: create an archive"
+    },
+    "nl2bash-009976": {
+      "group_id": "group-nl2bash-009976",
+      "suggested_intent": "file_directory_management",
+      "suggestion_reason": "request-text rule matched: create backup of all the text files"
+    },
+    "nl2bash-009985": {
+      "group_id": "group-nl2bash-005445",
+      "suggested_intent": "other_or_ambiguous",
+      "suggestion_reason": "request-text rule matched: cron"
+    },
+    "nl2bash-009986": {
+      "group_id": "group-nl2bash-005446",
+      "suggested_intent": "other_or_ambiguous",
+      "suggestion_reason": "request-text rule matched: cron"
+    },
+    "nl2bash-010087": {
+      "group_id": "group-nl2bash-010087",
+      "suggested_intent": "text_search_processing",
+      "suggestion_reason": "request-text rule matched: search for the file \"program.c\" in the entire file"
+    },
+    "nl2bash-010157": {
+      "group_id": "group-nl2bash-010157",
+      "suggested_intent": "file_discovery",
+      "suggestion_reason": "request-text rule matched: display all directories in the entire file"
+    },
+    "nl2bash-010259": {
+      "group_id": "group-nl2bash-010259",
+      "suggested_intent": "file_discovery",
+      "suggestion_reason": "request-text rule matched: display all regular/normal files"
+    },
+    "nl2bash-010266": {
+      "group_id": "group-nl2bash-010265",
+      "suggested_intent": "file_discovery",
+      "suggestion_reason": "request-text rule matched: display all scala files"
+    },
+    "nl2bash-010287": {
+      "group_id": "group-nl2bash-010287",
+      "suggested_intent": "file_discovery",
+      "suggestion_reason": "request-text rule matched: display all the \".c\" files"
+    },
+    "nl2bash-010338": {
+      "group_id": "group-nl2bash-010338",
+      "suggested_intent": "file_discovery",
+      "suggestion_reason": "request-text rule matched: display all the files"
+    },
+    "nl2bash-010474": {
+      "group_id": "group-nl2bash-010474",
+      "suggested_intent": "file_discovery",
+      "suggestion_reason": "request-text rule matched: display all the html files"
+    },
+    "nl2bash-010512": {
+      "group_id": "group-nl2bash-010512",
+      "suggested_intent": "file_discovery",
+      "suggestion_reason": "request-text rule matched: display all the regular/ normal files"
+    },
+    "nl2bash-010576": {
+      "group_id": "group-nl2bash-010576",
+      "suggested_intent": "file_discovery",
+      "suggestion_reason": "request-text rule matched: display list of all the hidden files"
+    },
+    "nl2bash-010607": {
+      "group_id": "group-nl2bash-010607",
+      "suggested_intent": "file_directory_management",
+      "suggestion_reason": "request-text rule matched: delete all jpg files"
+    },
+    "nl2bash-010641": {
+      "group_id": "group-nl2bash-006301",
+      "suggested_intent": "file_discovery",
+      "suggestion_reason": "request-text rule matched: display the file name and the file type of all the files"
+    },
+    "nl2bash-010687": {
+      "group_id": "group-nl2bash-010687",
+      "suggested_intent": "network_remote_operations",
+      "suggestion_reason": "request-text rule matched: download"
+    },
+    "nl2bash-010690": {
+      "group_id": "group-nl2bash-010690",
+      "suggested_intent": "network_remote_operations",
+      "suggestion_reason": "request-text rule matched: download"
+    },
+    "nl2bash-010707": {
+      "group_id": "group-nl2bash-010707",
+      "suggested_intent": "archive_compression",
+      "suggestion_reason": "request-text rule matched: .tar.gz"
+    },
+    "nl2bash-010752": {
+      "group_id": "group-nl2bash-010752",
+      "suggested_intent": "file_discovery",
+      "suggestion_reason": "request-text rule matched: find al the files"
+    },
+    "nl2bash-010814": {
+      "group_id": "group-nl2bash-010814",
+      "suggested_intent": "file_discovery",
+      "suggestion_reason": "request-text rule matched: find all files"
+    },
+    "nl2bash-010872": {
+      "group_id": "group-nl2bash-008837",
+      "suggested_intent": "file_discovery",
+      "suggestion_reason": "request-text rule matched: find all files"
+    },
+    "nl2bash-011032": {
+      "group_id": "group-nl2bash-011032",
+      "suggested_intent": "file_discovery",
+      "suggestion_reason": "request-text rule matched: find all the \".flac\" files"
+    },
+    "nl2bash-011046": {
+      "group_id": "group-nl2bash-011046",
+      "suggested_intent": "file_discovery",
+      "suggestion_reason": "request-text rule matched: find all the JSON files"
+    },
+    "nl2bash-011221": {
+      "group_id": "group-nl2bash-011221",
+      "suggested_intent": "permissions_ownership",
+      "suggestion_reason": "request-text rule matched: execute permission"
+    },
+    "nl2bash-011300": {
+      "group_id": "group-nl2bash-011300",
+      "suggested_intent": "file_discovery",
+      "suggestion_reason": "request-text rule matched: find all the files"
+    },
+    "nl2bash-011304": {
+      "group_id": "group-nl2bash-005145",
+      "suggested_intent": "file_discovery",
+      "suggestion_reason": "request-text rule matched: find all the files in the present directory which have the group staff and check if is a symbolic link"
+    },
+    "nl2bash-011316": {
+      "group_id": "group-nl2bash-011316",
+      "suggested_intent": "file_discovery",
+      "suggestion_reason": "request-text rule matched: find all the files"
+    },
+    "nl2bash-011324": {
+      "group_id": "group-nl2bash-011324",
+      "suggested_intent": "file_discovery",
+      "suggestion_reason": "request-text rule matched: find all the files"
+    },
+    "nl2bash-011436": {
+      "group_id": "group-nl2bash-011436",
+      "suggested_intent": "text_search_processing",
+      "suggestion_reason": "request-text rule matched: search for multiple patterns in these files"
+    },
+    "nl2bash-011443": {
+      "group_id": "group-nl2bash-011443",
+      "suggested_intent": "file_directory_management",
+      "suggestion_reason": "request-text rule matched: copy the result files"
+    },
+    "nl2bash-011487": {
+      "group_id": "group-nl2bash-003383",
+      "suggested_intent": "file_discovery",
+      "suggestion_reason": "request-text rule matched: find all the symbolic links in the current folder and follow to the pointing file"
+    },
+    "nl2bash-011515": {
+      "group_id": "group-nl2bash-011515",
+      "suggested_intent": "text_search_processing",
+      "suggestion_reason": "request-text rule matched: search for the word hello in all these files and display the matched files"
+    },
+    "nl2bash-011529": {
+      "group_id": "group-nl2bash-000180",
+      "suggested_intent": "archive_compression",
+      "suggestion_reason": "request-text rule matched: tarball"
+    },
+    "nl2bash-011532": {
+      "group_id": "group-nl2bash-011532",
+      "suggested_intent": "archive_compression",
+      "suggestion_reason": "request-text rule matched: tar ball"
+    },
+    "nl2bash-011642": {
+      "group_id": "group-nl2bash-011641",
+      "suggested_intent": "file_directory_management",
+      "suggestion_reason": "request-text rule matched: rename each file to not have a file"
+    },
+    "nl2bash-011693": {
+      "group_id": "group-nl2bash-011693",
+      "suggested_intent": "file_directory_management",
+      "suggestion_reason": "request-text rule matched: create hard link"
+    },
+    "nl2bash-011708": {
+      "group_id": "group-nl2bash-011708",
+      "suggested_intent": "file_directory_management",
+      "suggestion_reason": "request-text rule matched: create a symbolic link named \"target\" to file"
+    },
+    "nl2bash-011713": {
+      "group_id": "group-nl2bash-011713",
+      "suggested_intent": "process_job_management",
+      "suggestion_reason": "request-text rule matched: PID"
+    },
+    "nl2bash-011714": {
+      "group_id": "group-nl2bash-011714",
+      "suggested_intent": "process_job_management",
+      "suggestion_reason": "request-text rule matched: PID"
+    },
+    "nl2bash-011770": {
+      "group_id": "group-nl2bash-011768",
+      "suggested_intent": "file_discovery",
+      "suggestion_reason": "request-text rule matched: list all files"
+    },
+    "nl2bash-011850": {
+      "group_id": "group-nl2bash-005444",
+      "suggested_intent": "other_or_ambiguous",
+      "suggestion_reason": "request-text rule matched: cron"
+    },
+    "nl2bash-011876": {
+      "group_id": "group-nl2bash-011876",
+      "suggested_intent": "shell_environment_session",
+      "suggestion_reason": "request-text rule matched: alias"
+    },
+    "nl2bash-011910": {
+      "group_id": "group-nl2bash-007088",
+      "suggested_intent": "permissions_ownership",
+      "suggestion_reason": "request-text rule matched: change owner"
+    },
+    "nl2bash-011943": {
+      "group_id": "group-nl2bash-011943",
+      "suggested_intent": "file_directory_management",
+      "suggestion_reason": "request-text rule matched: remove all text files"
+    },
+    "nl2bash-011984": {
+      "group_id": "group-nl2bash-011984",
+      "suggested_intent": "text_search_processing",
+      "suggestion_reason": "request-text rule matched: replace the word"
+    },
+    "nl2bash-012021": {
+      "group_id": "group-nl2bash-012021",
+      "suggested_intent": "other_or_ambiguous",
+      "suggestion_reason": "request-text rule matched: dnf install"
+    },
+    "nl2bash-012022": {
+      "group_id": "group-nl2bash-012022",
+      "suggested_intent": "process_job_management",
+      "suggestion_reason": "request-text rule matched: PID"
+    },
+    "nl2bash-012105": {
+      "group_id": "group-nl2bash-012105",
+      "suggested_intent": "text_search_processing",
+      "suggestion_reason": "request-text rule matched: search for a word in all the .C files"
+    },
+    "nl2bash-012156": {
+      "group_id": "group-nl2bash-012156",
+      "suggested_intent": "archive_compression",
+      "suggestion_reason": "request-text rule matched: compress"
+    },
+    "nl2bash-012160": {
+      "group_id": "group-nl2bash-012160",
+      "suggested_intent": "file_discovery",
+      "suggestion_reason": "request-text rule matched: search for all the \".c\" files"
+    },
+    "nl2bash-012174": {
+      "group_id": "group-nl2bash-012174",
+      "suggested_intent": "shell_environment_session",
+      "suggestion_reason": "request-text rule matched: pwd"
+    },
+    "nl2bash-012180": {
+      "group_id": "group-nl2bash-012180",
+      "suggested_intent": "text_search_processing",
+      "suggestion_reason": "request-text rule matched: search for all the files excluding directories ending with old or sccs or core or orig in the project folder and save the output to the file"
+    },
+    "nl2bash-012213": {
+      "group_id": "group-nl2bash-012213",
+      "suggested_intent": "file_directory_management",
+      "suggestion_reason": "request-text rule matched: copy these files"
+    },
+    "nl2bash-012292": {
+      "group_id": "group-nl2bash-012292",
+      "suggested_intent": "other_or_ambiguous",
+      "suggestion_reason": "request-text rule matched: git pull"
+    },
+    "nl2bash-012297": {
+      "group_id": "group-nl2bash-012297",
+      "suggested_intent": "text_search_processing",
+      "suggestion_reason": "request-text rule matched: search for the directory \"mysql\" in the entire file"
+    },
+    "nl2bash-012300": {
+      "group_id": "group-nl2bash-012299",
+      "suggested_intent": "permissions_ownership",
+      "suggestion_reason": "request-text rule matched: change the permission"
+    },
+    "nl2bash-012315": {
+      "group_id": "group-nl2bash-012315",
+      "suggested_intent": "shell_environment_session",
+      "suggestion_reason": "request-text rule matched: history"
+    },
+    "nl2bash-012358": {
+      "group_id": "group-nl2bash-012358",
+      "suggested_intent": "text_search_processing",
+      "suggestion_reason": "request-text rule matched: search for the regular/normal files iceweasel or thunderbird in the entire file"
+    },
+    "nl2bash-012372": {
+      "group_id": "group-nl2bash-012372",
+      "suggested_intent": "text_search_processing",
+      "suggestion_reason": "request-text rule matched: search for the word \"redeem reward\" in all the regular/normal files"
+    },
+    "nl2bash-012374": {
+      "group_id": "group-nl2bash-012374",
+      "suggested_intent": "text_search_processing",
+      "suggestion_reason": "request-text rule matched: search for the word \"search-pattern\" in all the regular/normal files in the current folder and display the matched file"
+    },
+    "nl2bash-012382": {
+      "group_id": "group-nl2bash-012381",
+      "suggested_intent": "text_search_processing",
+      "suggestion_reason": "request-text rule matched: search for the word foo in all the js files"
+    },
+    "nl2bash-012419": {
+      "group_id": "group-nl2bash-012419",
+      "suggested_intent": "other_or_ambiguous",
+      "suggestion_reason": "request-text rule matched: crontab"
+    },
+    "nl2bash-012421": {
+      "group_id": "group-nl2bash-012421",
+      "suggested_intent": "shell_environment_session",
+      "suggestion_reason": "request-text rule matched: alias"
+    },
+    "nl2bash-012428": {
+      "group_id": "group-nl2bash-012428",
+      "suggested_intent": "shell_environment_session",
+      "suggestion_reason": "request-text rule matched: alias"
+    },
+    "nl2bash-012429": {
+      "group_id": "group-nl2bash-012429",
+      "suggested_intent": "shell_environment_session",
+      "suggestion_reason": "request-text rule matched: alias"
+    },
+    "nl2bash-012434": {
+      "group_id": "group-nl2bash-012434",
+      "suggested_intent": "shell_environment_session",
+      "suggestion_reason": "request-text rule matched: alias"
+    },
+    "nl2bash-012439": {
+      "group_id": "group-nl2bash-012439",
+      "suggested_intent": "shell_environment_session",
+      "suggestion_reason": "request-text rule matched: alias"
+    },
+    "nl2bash-012445": {
+      "group_id": "group-nl2bash-012445",
+      "suggested_intent": "shell_environment_session",
+      "suggestion_reason": "request-text rule matched: alias"
+    },
+    "nl2bash-012453": {
+      "group_id": "group-nl2bash-012453",
+      "suggested_intent": "shell_environment_session",
+      "suggestion_reason": "request-text rule matched: alias"
+    },
+    "nl2bash-012454": {
+      "group_id": "group-nl2bash-012454",
+      "suggested_intent": "shell_environment_session",
+      "suggestion_reason": "request-text rule matched: alias"
+    },
+    "nl2bash-012456": {
+      "group_id": "group-nl2bash-000332",
+      "suggested_intent": "process_job_management",
+      "suggestion_reason": "request-text rule matched: pid"
+    },
+    "nl2bash-012459": {
+      "group_id": "group-nl2bash-012459",
+      "suggested_intent": "shell_environment_session",
+      "suggestion_reason": "request-text rule matched: alias"
+    },
+    "nl2bash-012460": {
+      "group_id": "group-nl2bash-012460",
+      "suggested_intent": "shell_environment_session",
+      "suggestion_reason": "request-text rule matched: alias"
+    },
+    "nl2bash-012464": {
+      "group_id": "group-nl2bash-012464",
+      "suggested_intent": "shell_environment_session",
+      "suggestion_reason": "request-text rule matched: alias"
+    },
+    "nl2bash-012469": {
+      "group_id": "group-nl2bash-012469",
+      "suggested_intent": "shell_environment_session",
+      "suggestion_reason": "request-text rule matched: alias"
+    },
+    "nl2bash-012472": {
+      "group_id": "group-nl2bash-012472",
+      "suggested_intent": "process_job_management",
+      "suggestion_reason": "request-text rule matched: pid"
+    },
+    "nl2bash-012475": {
+      "group_id": "group-nl2bash-012475",
+      "suggested_intent": "shell_environment_session",
+      "suggestion_reason": "request-text rule matched: alias"
+    },
+    "nl2bash-012480": {
+      "group_id": "group-nl2bash-012480",
+      "suggested_intent": "shell_environment_session",
+      "suggestion_reason": "request-text rule matched: alias"
+    },
+    "nl2bash-012563": {
+      "group_id": "group-nl2bash-012563",
+      "suggested_intent": "network_remote_operations",
+      "suggestion_reason": "request-text rule matched: ssh"
+    },
+    "nl2bash-012566": {
+      "group_id": "group-nl2bash-012566",
+      "suggested_intent": "network_remote_operations",
+      "suggestion_reason": "request-text rule matched: ssh"
+    },
+    "nl2bash-012591": {
+      "group_id": "group-nl2bash-012591",
+      "suggested_intent": "archive_compression",
+      "suggestion_reason": "request-text rule matched: unzip"
+    }
+  },
+  "pilot_group_ids": [
+    "group-nl2bash-010338",
+    "group-nl2bash-003441",
+    "group-nl2bash-003884",
+    "group-nl2bash-003814",
+    "group-nl2bash-011032",
+    "group-nl2bash-011300",
+    "group-nl2bash-005174",
+    "group-nl2bash-003383",
+    "group-nl2bash-010157",
+    "group-nl2bash-001528",
+    "group-nl2bash-010814",
+    "group-nl2bash-003964",
+    "group-nl2bash-003800",
+    "group-nl2bash-010576",
+    "group-nl2bash-004305",
+    "group-nl2bash-002834",
+    "group-nl2bash-003199",
+    "group-nl2bash-003571",
+    "group-nl2bash-012160",
+    "group-nl2bash-002909",
+    "group-nl2bash-011768",
+    "group-nl2bash-010752",
+    "group-nl2bash-010287",
+    "group-nl2bash-003316",
+    "group-nl2bash-011316",
+    "group-nl2bash-010265",
+    "group-nl2bash-011046",
+    "group-nl2bash-001986",
+    "group-nl2bash-002530",
+    "group-nl2bash-010259",
+    "group-nl2bash-002932",
+    "group-nl2bash-002255",
+    "group-nl2bash-005232",
+    "group-nl2bash-003879",
+    "group-nl2bash-002715",
+    "group-nl2bash-004027",
+    "group-nl2bash-011324",
+    "group-nl2bash-001090",
+    "group-nl2bash-002157",
+    "group-nl2bash-003947",
+    "group-nl2bash-006301",
+    "group-nl2bash-008837",
+    "group-nl2bash-010512",
+    "group-nl2bash-002484",
+    "group-nl2bash-003289",
+    "group-nl2bash-010474",
+    "group-nl2bash-002144",
+    "group-nl2bash-005145",
+    "group-nl2bash-003034",
+    "group-nl2bash-003963",
+    "group-nl2bash-008001",
+    "group-nl2bash-008388",
+    "group-nl2bash-004815",
+    "group-nl2bash-012372",
+    "group-nl2bash-011515",
+    "group-nl2bash-012180",
+    "group-nl2bash-001256",
+    "group-nl2bash-001928",
+    "group-nl2bash-008366",
+    "group-nl2bash-005660",
+    "group-nl2bash-012358",
+    "group-nl2bash-009330",
+    "group-nl2bash-005659",
+    "group-nl2bash-009060",
+    "group-nl2bash-010087",
+    "group-nl2bash-000965",
+    "group-nl2bash-002767",
+    "group-nl2bash-011984",
+    "group-nl2bash-008443",
+    "group-nl2bash-004441",
+    "group-nl2bash-008386",
+    "group-nl2bash-008393",
+    "group-nl2bash-008452",
+    "group-nl2bash-008579",
+    "group-nl2bash-000662",
+    "group-nl2bash-004834",
+    "group-nl2bash-005657",
+    "group-nl2bash-008412",
+    "group-nl2bash-004829",
+    "group-nl2bash-012297",
+    "group-nl2bash-008437",
+    "group-nl2bash-005667",
+    "group-nl2bash-008588",
+    "group-nl2bash-001040",
+    "group-nl2bash-012105",
+    "group-nl2bash-001929",
+    "group-nl2bash-008587",
+    "group-nl2bash-009328",
+    "group-nl2bash-003661",
+    "group-nl2bash-005668",
+    "group-nl2bash-006677",
+    "group-nl2bash-007395",
+    "group-nl2bash-002703",
+    "group-nl2bash-011436",
+    "group-nl2bash-007504",
+    "group-nl2bash-000912",
+    "group-nl2bash-012374",
+    "group-nl2bash-009329",
+    "group-nl2bash-000917",
+    "group-nl2bash-012381",
+    "group-nl2bash-012213",
+    "group-nl2bash-001214",
+    "group-nl2bash-001078",
+    "group-nl2bash-005620",
+    "group-nl2bash-005609",
+    "group-nl2bash-000863",
+    "group-nl2bash-005603",
+    "group-nl2bash-000853",
+    "group-nl2bash-011641",
+    "group-nl2bash-001353",
+    "group-nl2bash-011443",
+    "group-nl2bash-004509",
+    "group-nl2bash-007353",
+    "group-nl2bash-000857",
+    "group-nl2bash-007392",
+    "group-nl2bash-007233",
+    "group-nl2bash-000835",
+    "group-nl2bash-005408",
+    "group-nl2bash-001093",
+    "group-nl2bash-000165",
+    "group-nl2bash-004503",
+    "group-nl2bash-009949",
+    "group-nl2bash-001443",
+    "group-nl2bash-001351",
+    "group-nl2bash-007622",
+    "group-nl2bash-009941",
+    "group-nl2bash-001341",
+    "group-nl2bash-001365",
+    "group-nl2bash-004502",
+    "group-nl2bash-002297",
+    "group-nl2bash-009976",
+    "group-nl2bash-005410",
+    "group-nl2bash-005593",
+    "group-nl2bash-011693",
+    "group-nl2bash-010607",
+    "group-nl2bash-005628",
+    "group-nl2bash-005405",
+    "group-nl2bash-007549",
+    "group-nl2bash-001198",
+    "group-nl2bash-007719",
+    "group-nl2bash-011708",
+    "group-nl2bash-009903",
+    "group-nl2bash-000766",
+    "group-nl2bash-000456",
+    "group-nl2bash-001422",
+    "group-nl2bash-007565",
+    "group-nl2bash-001394",
+    "group-nl2bash-009933",
+    "group-nl2bash-001411",
+    "group-nl2bash-011943",
+    "group-nl2bash-002988",
+    "group-nl2bash-002608",
+    "group-nl2bash-000396",
+    "group-nl2bash-000410",
+    "group-nl2bash-009103",
+    "group-nl2bash-009794",
+    "group-nl2bash-002643",
+    "group-nl2bash-000472",
+    "group-nl2bash-000415",
+    "group-nl2bash-007036",
+    "group-nl2bash-000470",
+    "group-nl2bash-000442",
+    "group-nl2bash-009855",
+    "group-nl2bash-002582",
+    "group-nl2bash-000349",
+    "group-nl2bash-002957",
+    "group-nl2bash-002658",
+    "group-nl2bash-007088",
+    "group-nl2bash-004141",
+    "group-nl2bash-011221",
+    "group-nl2bash-009750",
+    "group-nl2bash-002063",
+    "group-nl2bash-007049",
+    "group-nl2bash-003631",
+    "group-nl2bash-007077",
+    "group-nl2bash-009828",
+    "group-nl2bash-002714",
+    "group-nl2bash-001765",
+    "group-nl2bash-007035",
+    "group-nl2bash-002619",
+    "group-nl2bash-000443",
+    "group-nl2bash-000474",
+    "group-nl2bash-009847",
+    "group-nl2bash-009088",
+    "group-nl2bash-000467",
+    "group-nl2bash-000350",
+    "group-nl2bash-009854",
+    "group-nl2bash-002607",
+    "group-nl2bash-009853",
+    "group-nl2bash-003023",
+    "group-nl2bash-003110",
+    "group-nl2bash-009843",
+    "group-nl2bash-012299",
+    "group-nl2bash-000476",
+    "group-nl2bash-000392",
+    "group-nl2bash-000069",
+    "group-nl2bash-009109",
+    "group-nl2bash-009153",
+    "group-nl2bash-000479",
+    "group-nl2bash-000071",
+    "group-nl2bash-006772",
+    "group-nl2bash-006839",
+    "group-nl2bash-006840",
+    "group-nl2bash-009041",
+    "group-nl2bash-009032",
+    "group-nl2bash-003595",
+    "group-nl2bash-004775",
+    "group-nl2bash-006844",
+    "group-nl2bash-009626",
+    "group-nl2bash-000002",
+    "group-nl2bash-000557",
+    "group-nl2bash-006845",
+    "group-nl2bash-003701",
+    "group-nl2bash-004847",
+    "group-nl2bash-000017",
+    "group-nl2bash-000003",
+    "group-nl2bash-006850",
+    "group-nl2bash-000332",
+    "group-nl2bash-000371",
+    "group-nl2bash-003882",
+    "group-nl2bash-009131",
+    "group-nl2bash-006846",
+    "group-nl2bash-006869",
+    "group-nl2bash-000018",
+    "group-nl2bash-006727",
+    "group-nl2bash-006186",
+    "group-nl2bash-004362",
+    "group-nl2bash-004571",
+    "group-nl2bash-009038",
+    "group-nl2bash-000010",
+    "group-nl2bash-005858",
+    "group-nl2bash-006081",
+    "group-nl2bash-006848",
+    "group-nl2bash-005886",
+    "group-nl2bash-006857",
+    "group-nl2bash-004619",
+    "group-nl2bash-000036",
+    "group-nl2bash-011713",
+    "group-nl2bash-006048",
+    "group-nl2bash-000043",
+    "group-nl2bash-012472",
+    "group-nl2bash-012022",
+    "group-nl2bash-000616",
+    "group-nl2bash-009052",
+    "group-nl2bash-006847",
+    "group-nl2bash-007942",
+    "group-nl2bash-001911",
+    "group-nl2bash-006779",
+    "group-nl2bash-011714",
+    "group-nl2bash-006851",
+    "group-nl2bash-005382",
+    "group-nl2bash-007333",
+    "group-nl2bash-001545",
+    "group-nl2bash-009210",
+    "group-nl2bash-001609",
+    "group-nl2bash-000333",
+    "group-nl2bash-006142",
+    "group-nl2bash-006141",
+    "group-nl2bash-008195",
+    "group-nl2bash-007962",
+    "group-nl2bash-001585",
+    "group-nl2bash-004630",
+    "group-nl2bash-006472",
+    "group-nl2bash-006189",
+    "group-nl2bash-001786",
+    "group-nl2bash-000534",
+    "group-nl2bash-001603",
+    "group-nl2bash-000037",
+    "group-nl2bash-008181",
+    "group-nl2bash-006457",
+    "group-nl2bash-006522",
+    "group-nl2bash-001874",
+    "group-nl2bash-008111",
+    "group-nl2bash-008107",
+    "group-nl2bash-005039",
+    "group-nl2bash-008143",
+    "group-nl2bash-009140",
+    "group-nl2bash-000032",
+    "group-nl2bash-000039",
+    "group-nl2bash-001254",
+    "group-nl2bash-009197",
+    "group-nl2bash-008066",
+    "group-nl2bash-009196",
+    "group-nl2bash-008056",
+    "group-nl2bash-008191",
+    "group-nl2bash-006145",
+    "group-nl2bash-008194",
+    "group-nl2bash-008129",
+    "group-nl2bash-006144",
+    "group-nl2bash-004627",
+    "group-nl2bash-000035",
+    "group-nl2bash-009139",
+    "group-nl2bash-000354",
+    "group-nl2bash-008190",
+    "group-nl2bash-008093",
+    "group-nl2bash-000031",
+    "group-nl2bash-001595",
+    "group-nl2bash-009126",
+    "group-nl2bash-006595",
+    "group-nl2bash-001574",
+    "group-nl2bash-001095",
+    "group-nl2bash-001800",
+    "group-nl2bash-005759",
+    "group-nl2bash-001700",
+    "group-nl2bash-005756",
+    "group-nl2bash-007900",
+    "group-nl2bash-012563",
+    "group-nl2bash-001087",
+    "group-nl2bash-010687",
+    "group-nl2bash-006864",
+    "group-nl2bash-001713",
+    "group-nl2bash-004613",
+    "group-nl2bash-000367",
+    "group-nl2bash-004653",
+    "group-nl2bash-007898",
+    "group-nl2bash-001184",
+    "group-nl2bash-005674",
+    "group-nl2bash-012566",
+    "group-nl2bash-004420",
+    "group-nl2bash-007140",
+    "group-nl2bash-009076",
+    "group-nl2bash-005861",
+    "group-nl2bash-001210",
+    "group-nl2bash-007998",
+    "group-nl2bash-000239",
+    "group-nl2bash-000678",
+    "group-nl2bash-000536",
+    "group-nl2bash-007907",
+    "group-nl2bash-008047",
+    "group-nl2bash-007599",
+    "group-nl2bash-004780",
+    "group-nl2bash-001689",
+    "group-nl2bash-005802",
+    "group-nl2bash-004002",
+    "group-nl2bash-004398",
+    "group-nl2bash-001688",
+    "group-nl2bash-004607",
+    "group-nl2bash-004657",
+    "group-nl2bash-006025",
+    "group-nl2bash-002891",
+    "group-nl2bash-000208",
+    "group-nl2bash-005781",
+    "group-nl2bash-000675",
+    "group-nl2bash-000168",
+    "group-nl2bash-004564",
+    "group-nl2bash-008950",
+    "group-nl2bash-010690",
+    "group-nl2bash-000671",
+    "group-nl2bash-009071",
+    "group-nl2bash-009054",
+    "group-nl2bash-001267",
+    "group-nl2bash-002107",
+    "group-nl2bash-009576",
+    "group-nl2bash-009567",
+    "group-nl2bash-001271",
+    "group-nl2bash-001882",
+    "group-nl2bash-001263",
+    "group-nl2bash-000205",
+    "group-nl2bash-009971",
+    "group-nl2bash-000177",
+    "group-nl2bash-009536",
+    "group-nl2bash-001071",
+    "group-nl2bash-001260",
+    "group-nl2bash-000623",
+    "group-nl2bash-010707",
+    "group-nl2bash-009566",
+    "group-nl2bash-000635",
+    "group-nl2bash-000629",
+    "group-nl2bash-009501",
+    "group-nl2bash-009954",
+    "group-nl2bash-009967",
+    "group-nl2bash-001204",
+    "group-nl2bash-012156",
+    "group-nl2bash-003275",
+    "group-nl2bash-004253",
+    "group-nl2bash-000137",
+    "group-nl2bash-009381",
+    "group-nl2bash-009952",
+    "group-nl2bash-003820",
+    "group-nl2bash-012591",
+    "group-nl2bash-009471",
+    "group-nl2bash-000219",
+    "group-nl2bash-009553",
+    "group-nl2bash-002742",
+    "group-nl2bash-002106",
+    "group-nl2bash-000217",
+    "group-nl2bash-008373",
+    "group-nl2bash-009924",
+    "group-nl2bash-001147",
+    "group-nl2bash-009554",
+    "group-nl2bash-008539",
+    "group-nl2bash-000625",
+    "group-nl2bash-008902",
+    "group-nl2bash-000114",
+    "group-nl2bash-007290",
+    "group-nl2bash-001265",
+    "group-nl2bash-011532",
+    "group-nl2bash-009565",
+    "group-nl2bash-009927",
+    "group-nl2bash-000180",
+    "group-nl2bash-001491",
+    "group-nl2bash-001734",
+    "group-nl2bash-009291",
+    "group-nl2bash-001727",
+    "group-nl2bash-009132",
+    "group-nl2bash-012480",
+    "group-nl2bash-009293",
+    "group-nl2bash-009128",
+    "group-nl2bash-012174",
+    "group-nl2bash-012421",
+    "group-nl2bash-009533",
+    "group-nl2bash-000092",
+    "group-nl2bash-011876",
+    "group-nl2bash-012428",
+    "group-nl2bash-000355",
+    "group-nl2bash-006443",
+    "group-nl2bash-012445",
+    "group-nl2bash-007837",
+    "group-nl2bash-008053",
+    "group-nl2bash-012434",
+    "group-nl2bash-004725",
+    "group-nl2bash-009762",
+    "group-nl2bash-009515",
+    "group-nl2bash-008255",
+    "group-nl2bash-012453",
+    "group-nl2bash-007946",
+    "group-nl2bash-012469",
+    "group-nl2bash-008885",
+    "group-nl2bash-012460",
+    "group-nl2bash-006714",
+    "group-nl2bash-012315",
+    "group-nl2bash-001867",
+    "group-nl2bash-012429",
+    "group-nl2bash-008380",
+    "group-nl2bash-006179",
+    "group-nl2bash-001731",
+    "group-nl2bash-012439",
+    "group-nl2bash-000365",
+    "group-nl2bash-009525",
+    "group-nl2bash-001936",
+    "group-nl2bash-001868",
+    "group-nl2bash-006860",
+    "group-nl2bash-007681",
+    "group-nl2bash-012459",
+    "group-nl2bash-001460",
+    "group-nl2bash-012464",
+    "group-nl2bash-012454",
+    "group-nl2bash-009642",
+    "group-nl2bash-012475",
+    "group-nl2bash-000582",
+    "group-nl2bash-012021",
+    "group-nl2bash-005566",
+    "group-nl2bash-004479",
+    "group-nl2bash-004018",
+    "group-nl2bash-000343",
+    "group-nl2bash-005446",
+    "group-nl2bash-007955",
+    "group-nl2bash-004771",
+    "group-nl2bash-001918",
+    "group-nl2bash-006077",
+    "group-nl2bash-000881",
+    "group-nl2bash-004905",
+    "group-nl2bash-004494",
+    "group-nl2bash-001985",
+    "group-nl2bash-001927",
+    "group-nl2bash-006842",
+    "group-nl2bash-002151",
+    "group-nl2bash-005445",
+    "group-nl2bash-007958",
+    "group-nl2bash-001984",
+    "group-nl2bash-002135",
+    "group-nl2bash-001187",
+    "group-nl2bash-005226",
+    "group-nl2bash-005444",
+    "group-nl2bash-006535",
+    "group-nl2bash-012419",
+    "group-nl2bash-003983",
+    "group-nl2bash-007956",
+    "group-nl2bash-000223",
+    "group-nl2bash-004916",
+    "group-nl2bash-002112",
+    "group-nl2bash-006773",
+    "group-nl2bash-001186",
+    "group-nl2bash-000058",
+    "group-nl2bash-001925",
+    "group-nl2bash-004309",
+    "group-nl2bash-006902",
+    "group-nl2bash-004019",
+    "group-nl2bash-006899",
+    "group-nl2bash-001697",
+    "group-nl2bash-012292",
+    "group-nl2bash-006513",
+    "group-nl2bash-004917",
+    "group-nl2bash-004801",
+    "group-nl2bash-009497",
+    "group-nl2bash-001710",
+    "group-nl2bash-006863",
+    "group-nl2bash-000064",
+    "group-nl2bash-000065",
+    "group-nl2bash-000244"
+  ],
+  "review_file": "data/annotations/intent_pilot.csv",
+  "schema_version": 1,
+  "selection": {
+    "candidate_unique_groups": {
+      "archive_compression": 219,
+      "file_directory_management": 763,
+      "file_discovery": 2930,
+      "network_remote_operations": 249,
+      "other_or_ambiguous": 57,
+      "permissions_ownership": 317,
+      "process_job_management": 89,
+      "shell_environment_session": 193,
+      "system_information": 93,
+      "text_search_processing": 606
+    },
+    "method": "request_text_heuristics_then_seeded_unique_group_sampling",
+    "requested_per_label": 50,
+    "ruleset": "request-keywords-v1",
+    "seed": 42,
+    "selected_per_label": {
+      "archive_compression": 50,
+      "file_directory_management": 50,
+      "file_discovery": 50,
+      "network_remote_operations": 50,
+      "other_or_ambiguous": 50,
+      "permissions_ownership": 50,
+      "process_job_management": 50,
+      "shell_environment_session": 50,
+      "system_information": 50,
+      "text_search_processing": 50
+    },
+    "shortages": {}
+  },
+  "source": {
+    "dataset_manifest": "data/processed/nl2bash/manifest.json",
+    "dataset_revision": "d6b9f5bdff45621d190134e31ab63b7bf7002190",
+    "training_file": "data/processed/nl2bash/train.jsonl",
+    "training_sha256": "15fbee9ac5b8341a14a31285288c5119702b8dbb5ac367903c3a6cb2ea879451"
+  },
+  "summary": {
+    "all_review_statuses_pending": true,
+    "pilot_records": 500,
+    "training_records_available": 10085,
+    "unique_duplicate_groups": 500
+  }
+}

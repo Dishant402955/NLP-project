@@ -78,4 +78,4 @@ How effectively can a hybrid NLP and language-model-based system translate natur
 
 Implementation will proceed incrementally according to the [Implementation Roadmap](IMPLEMENTATION_ROADMAP.md). Each step has explicit acceptance criteria and is reviewed before a small commit is created.
 
-The project is tested, but test source and fixtures are kept outside the Git repository by project requirement. No test directory or test files will be committed. The dataset, model, and runtime environment will be checked before committing to implementation details that depend on them.
+The project is verified, but test source code and temporary fixtures are kept outside the Git repository by project requirement. No test source directory, test script, or temporary test fixture will be committed. The dataset, model, and runtime environment will be checked before committing to implementation details that depend on them.

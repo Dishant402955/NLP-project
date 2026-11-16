@@ -56,7 +56,7 @@ These are command-record incidences reported by the upstream Bash parser, not co
 
 The upstream repository's root code is marked GPL-3.0. The dataset directory `data/bash` has its own MIT license, and the upstream README explicitly identifies it as separately licensed.
 
-This project will use the separately licensed dataset files and cite the NL2Bash paper. It will not copy the upstream parser, model, or training implementation into this repository. Raw and processed dataset files will remain outside Git. Any future redistribution of dataset material must retain the dataset's MIT notice.
+This project uses the separately licensed dataset files and cites the NL2Bash paper. It does not copy the upstream parser, model, or training implementation into this repository. The raw dataset files and their MIT license notice are included under `data/raw/nl2bash/`; the project-generated partitions and checksum manifest are included under `data/processed/nl2bash/`. Any redistribution of dataset material must retain the dataset's MIT notice.
 
 ## 4. Filtering and split reproducibility findings
 
@@ -76,7 +76,7 @@ These exclusions limit what the dataset can demonstrate. The project will report
 
 The planned preparation process is:
 
-1. Download or clone the upstream dataset into `data/raw/`, which is excluded from Git.
+1. Download or clone the upstream dataset into `data/raw/`; preserve the source files and MIT license notice in version control.
 2. Preserve the raw source files unchanged and record their upstream revision and checksums.
 3. Check line alignment, blank records, malformed records, and parser compatibility.
 4. Apply project-specific scope filters and record every filtering decision.
@@ -131,9 +131,9 @@ The current audited run produced:
 | Test | 1,261 | 375 |
 | **Total** | **12,607** | **9,451** |
 
-The manifest records the upstream revision, SHA-256 checksums of the raw files, split algorithm, seed, target ratios, record and group counts, output-file checksums, and zero cross-partition request/command overlap checks.
+The tracked manifest records the upstream revision, SHA-256 checksums of the raw files, split algorithm, seed, target ratios, record and group counts, output-file checksums, and zero cross-partition request/command overlap checks.
 
-Generated JSONL files and the manifest are stored under data/processed/nl2bash/. Both raw and processed data directories are ignored by Git. The generated files are local artifacts and are not part of the repository history. Re-running the command with the same source files, revision, and settings produces byte-identical partition files and manifest.
+Generated JSONL files and the manifest are stored under `data/processed/nl2bash/` and are committed alongside the raw source files. This lets a clean clone reproduce the model-training and evaluation inputs without downloading the corpus again. Re-running the command with the same source files, revision, and settings produces byte-identical partition files and manifest.
 
 ## 8. Intent labels and annotation
 
@@ -143,7 +143,7 @@ Begin with a manually reviewed pilot of approximately 50 examples per label. Rev
 
 The labelled data must use the same duplicate-aware partitions described above. The classifier is trained only on confirmed training examples, its confidence threshold is selected using separately confirmed and blind-reviewed development examples, and it is evaluated once on blind-reviewed test examples after the threshold is frozen. The default threshold-selection rule maximizes macro-F1 subject to at least 80% coverage; see Intent Classifier for the full protocol.
 
-Raw data, annotations, and generated split files are local project artifacts and will not be committed to Git.
+Raw data, annotations, and generated split files are project research artifacts and are committed to Git with their license, source revision, and checksums.
 
 ## 9. Intent annotation pilot
 
@@ -151,9 +151,9 @@ The first pilot is generated from the training partition only. It contains 50 ca
 
 The pilot generator uses request-text rules only to suggest labels. It does not use the paired Bash command to assign a suggestion. Every row starts with a blank confirmed label and a pending review status. The suggestions are deliberately not treated as ground truth.
 
-The local worklist and its manifest are stored under data/annotations/ and are excluded from Git. Generate it with .venv/bin/nl2bash-annotations create and validate reviewer decisions with .venv/bin/nl2bash-annotations validate. See the [Annotation Guide](ANNOTATION_GUIDE.md) for the full review procedure and CSV field definitions. The initial AI-assisted annotation pass has labelled all 500 training rows and all 375 development rows. These are provisional labels, not independent human annotations; see [Annotation Review Status](ANNOTATION_REVIEW_STATUS.md). Only independently reviewed labels should support final academic performance claims.
+The local worklist, its manifest, and the confirmed-only export are stored under `data/annotations/` and are versioned in Git. Generate it with .venv/bin/nl2bash-annotations create and validate reviewer decisions with .venv/bin/nl2bash-annotations validate. See the [Annotation Guide](ANNOTATION_GUIDE.md) for the full review procedure and CSV field definitions. The initial AI-assisted annotation pass has labelled all 500 training rows and all 375 development rows. These are provisional labels, not independent human annotations; see [Annotation Review Status](ANNOTATION_REVIEW_STATUS.md). Only independently reviewed labels should support final academic performance claims.
 
-Separate blind worklists are generated for development and test using one source record per duplicate group. These worklists contain no heuristic label suggestions. Their confirmed exports are tagged with the matching partition name and checksum. The classifier training loader rejects either held-out export. The development worklist has a provisional AI-assisted request-only annotation; the test worklist remains untouched and empty.
+Separate blind worklists are generated for development and test using one source record per duplicate group. These worklists contain no heuristic label suggestions. Their confirmed exports are tagged with the matching partition name and checksum. The classifier training loader rejects either held-out export. The development worklist has a provisional AI-assisted request-only annotation; the test worklist remains untouched and its confirmed export is empty. The test partition and pending worklist are tracked as data, but no test labels have been created.
 
 ## 10. Evaluation metrics
 
