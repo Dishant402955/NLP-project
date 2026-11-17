@@ -151,7 +151,7 @@ The training pilot contains 50 candidate examples per taxonomy label, for 500 ro
 
 Development and test use separate partition-specific worklists, one source record per duplicate group. The canonical test worklist contains no in-file heuristic suggestions. Its separate 375-row suggestion artifact was generated from request text only. The project owner accepted all 375 suggested labels without corrections. The confirmed test JSONL export and checksum/provenance manifest are committed under `data/annotations/`.
 
-The test review is not an independent annotation study. The reviewer saw the AI-proposed labels; there is no second annotator, adjudication panel, or inter-annotator agreement score. The final classifier report must state this limitation. The test labels have not yet been used to compute the final classifier metrics. See [Annotation Review Status](ANNOTATION_REVIEW_STATUS.md) and [Final Test Annotation Review](TEST_PRELIMINARY_ANNOTATION_PROTOCOL.md).
+The test review is not an independent annotation study. The reviewer saw the AI-proposed labels; there is no second annotator, adjudication panel, or inter-annotator agreement score. The final classifier report states this limitation. The one-time classifier test evaluation has completed: accuracy 0.6853, macro-F1 0.6400, weighted-F1 0.6793, and prediction coverage 0.9947 (373/375) at the frozen development-selected threshold of 0.1361115729921777. These are agreement metrics against AI-assisted, owner-approved labels, not independent gold-standard accuracy. The classifier test evaluation must not be rerun. See [Annotation Review Status](ANNOTATION_REVIEW_STATUS.md) and [Final Test Annotation Review](TEST_PRELIMINARY_ANNOTATION_PROTOCOL.md).
 
 ## 10. Evaluation metrics
 
