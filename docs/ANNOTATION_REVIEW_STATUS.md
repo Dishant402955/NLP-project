@@ -8,13 +8,35 @@
 |---|---:|---:|---:|---|
 | Training | 500 | 500 | 0 | Model fitting |
 | Development | 375 | 375 | 0 | Model and threshold development |
-| Test | 375 | 0 | 375 | Sealed; final independent review is pending |
+| Test | 375 | 375 | 0 | One-time held-out classifier evaluation pending |
 
-The training and development annotations were initially created through an AI-assisted review of the natural-language requests against the project taxonomy. A second-pass AI audit changed 30 labels (10 training, 20 development); see [Intent Audit Log](INTENT_AUDIT_LOG.md). On 2026-11-17, the project owner independently reviewed all 875 rows and reported zero further changes. The final human-review attestation is recorded in [Human Review Attestation](HUMAN_REVIEW_ATTESTATION.md). Original row notes retain the AI-assisted origin of the initial labels; the attestation records the later human review and agreement.
+The training and development annotations were initially AI-assisted. A second-pass AI audit changed 30 labels (10 training, 20 development); see [Intent Audit Log](INTENT_AUDIT_LOG.md). The project owner subsequently reviewed all 875 rows and reported zero further changes. See [Human Review Attestation](HUMAN_REVIEW_ATTESTATION.md).
 
-Both reviewed annotation files pass their source, partition, label, status, and checksum validators. The training export has 500 confirmed rows; the development export has 375 confirmed rows. The test CSV remains 375 pending rows and its confirmed export is empty. No test labels or test metrics have been used.
+The test annotation suggestions were created from the 375 natural-language requests only. The suggestion pass did not use paired reference commands or classifier predictions. The project owner reviewed all 375 suggestions and accepted every suggestion without correction. The canonical test worklist and confirmed JSONL export now contain 375 confirmed labels. The annotation export manifest records this provenance and explicitly does not claim independent adjudication.
 
-## Label distribution
+**Interpretation caveat:** the test labels are AI-assisted and owner-approved, not independently annotated ground truth. The classifier test metrics will measure agreement with these labels. This is weaker evidence than a separately annotated or independently adjudicated test set and must be disclosed in the report.
+
+The test worklist and export were checked against the test partition: all 375 IDs and duplicate-group IDs match, request and reference-command source pairs match, all labels belong to the ten-label taxonomy, all rows are confirmed, all 22 `other_or_ambiguous` rows have reviewer notes, and the reviewed-CSV/export SHA-256 values match their manifests. The project CLI validator and model evaluation have not yet been executed in the target Python environment.
+
+## Test label distribution
+
+| Intent | Test |
+|---|---:|
+| `archive_compression` | 14 |
+| `file_directory_management` | 58 |
+| `file_discovery` | 125 |
+| `network_remote_operations` | 11 |
+| `other_or_ambiguous` | 22 |
+| `permissions_ownership` | 48 |
+| `process_job_management` | 6 |
+| `shell_environment_session` | 15 |
+| `system_information` | 16 |
+| `text_search_processing` | 60 |
+| **Total** | **375** |
+
+The test partition is imbalanced. `file_discovery` has 125 examples while `process_job_management` has six. Per-class support and metrics must be shown alongside macro averages.
+
+## Training and development label provenance
 
 | Intent | Training | Development |
 |---|---:|---:|
@@ -29,8 +51,6 @@ Both reviewed annotation files pass their source, partition, label, status, and 
 | `system_information` | 22 | 14 |
 | `text_search_processing` | 60 | 64 |
 
-The development set is imbalanced. For example, `file_discovery` has 125 examples while `process_job_management` has six. Per-class support and metrics must be shown alongside macro averages.
-
 ## Development classifier diagnostics
 
 The classifier was fitted on the 500 confirmed training rows. Its confidence threshold was selected on the 375 confirmed development rows by maximizing macro-F1 subject to at least 80% prediction coverage. A fresh retraining in a temporary location reproduced every development prediction and every class probability exactly; reselecting the threshold returned the same value.
@@ -44,10 +64,18 @@ The classifier was fitted on the 500 confirmed training rows. Its confidence thr
 | Low-confidence requests | 4 / 375 |
 | Frozen confidence threshold | 0.1361115729921777 |
 
-These are development-set results, not final test results. The model scores are uncalibrated probability estimates. The test set remains sealed and has not been used for model or prompt selection.
+These are development-set results, not final test results. The model scores are uncalibrated probability estimates.
 
-## Final test protocol
+## Frozen configuration and remaining evaluation
 
-The taxonomy, classifier artifact, confidence threshold, local command-generation model, prompt version, and validation configuration are now frozen. A blind human review worksheet is prepared at `data/annotations/test_human_review.csv`. It contains only the 375 natural-language requests, stable IDs, and blank human-decision fields; it contains no reference commands or AI suggestions. The canonical test worklist remains sealed with 375 pending rows. Only the project owner's final human decisions can be merged into the canonical worklist. See [Test Review Protocol](TEST_PRELIMINARY_ANNOTATION_PROTOCOL.md). The one-time test evaluation will run only after the test export validates.
+The classifier artifact, development-selected confidence threshold, local command-generation model, prompt, runtime settings, and validation configuration are frozen. Test annotations must not be used to change them.
 
-No test examples may be used to revise intent labels, prompt text, model parameters, thresholds, or safety rules. Any future implementation change motivated by test errors must be reported as post-test exploratory work, not as part of the evaluated system.
+The next steps are:
+
+1. Run `uv run nl2bash-annotations validate --partition test` in a clean project environment.
+2. Run `uv run nl2bash-classifier evaluate-test` once and preserve the report and evaluation guard.
+3. Build a separate manually adjudicated entity benchmark and report exact-span metrics. Do not tune extraction rules against its held-out portion.
+4. Run a larger command-generation experiment and obtain human semantic-correctness ratings. The existing ten-request development comparison is an engineering sample only.
+5. Complete the final clean-install, integration, and adversarial engineering audit.
+
+No test result may be used to revise intent labels, prompt text, model parameters, thresholds, or safety rules. Any change motivated by test errors must be reported as post-test exploratory work, not as part of the evaluated system.
