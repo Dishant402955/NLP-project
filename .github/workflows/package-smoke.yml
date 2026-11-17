@@ -1,0 +1,118 @@
+name: Python package and entity benchmark smoke checks
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/package-smoke.yml"
+      - "pyproject.toml"
+      - "uv.lock"
+      - "src/nl2bash/**"
+      - "data/annotations/entity_test_ai_suggestions.jsonl"
+      - "data/annotations/entity_test_human_review.csv"
+      - "data/annotations/entity_test_review_manifest.json"
+      - "data/annotations/test_review.csv"
+      - "data/processed/nl2bash/test.jsonl"
+      - "data/processed/nl2bash/manifest.json"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out project
+        uses: actions/checkout@v4
+
+      - name: Set up Python and uv
+        uses: astral-sh/setup-uv@v6
+        with:
+          python-version: "3.10"
+          enable-cache: true
+
+      - name: Install locked project dependencies
+        run: uv sync --locked
+
+      - name: Verify installed command entry points
+        run: |
+          uv run nl2bash --help >/dev/null
+          uv run nl2bash generate --help >/dev/null
+          uv run nl2bash validate --help >/dev/null
+          uv run nl2bash-prepare-dataset --help >/dev/null
+          uv run nl2bash-annotations --help >/dev/null
+          uv run nl2bash-classifier --help >/dev/null
+          uv run nl2bash-entity-eval --help >/dev/null
+          python -m compileall -q src/nl2bash
+          echo "All package entry points import and expose help successfully."
+
+      - name: Verify entity sample provenance and exact candidate spans
+        run: |
+          python - <<'PY'
+          import csv
+          import hashlib
+          import json
+          from collections import Counter
+          from pathlib import Path
+
+          root = Path(".")
+          read_json = lambda path: json.loads((root / path).read_text(encoding="utf-8"))
+          sha256 = lambda path: hashlib.sha256((root / path).read_bytes()).hexdigest()
+
+          manifest = read_json("data/annotations/entity_test_review_manifest.json")
+          dataset_manifest = read_json("data/processed/nl2bash/manifest.json")
+          suggestion_path = root / "data/annotations/entity_test_ai_suggestions.jsonl"
+          suggestions = [
+              json.loads(line)
+              for line in suggestion_path.read_text(encoding="utf-8").splitlines()
+              if line.strip()
+          ]
+          partition_path = "data/processed/nl2bash/test.jsonl"
+          partition = [
+              json.loads(line)
+              for line in (root / partition_path).read_text(encoding="utf-8").splitlines()
+              if line.strip()
+          ]
+          review_path = root / "data/annotations/entity_test_human_review.csv"
+
+          assert manifest["sample_size"] == 66
+          assert len(suggestions) == 66
+          assert len(manifest["sample_example_ids"]) == 66
+          assert len(manifest["sample_group_ids"]) == 66
+          assert manifest["source_worklist"] == "data/annotations/test_review.csv"
+          assert sha256("data/annotations/test_review.csv") == manifest["source_worklist_sha256"]
+          assert sha256(partition_path) == manifest["source_partition_sha256"]
+
+          source_by_id = {row["example_id"]: row for row in partition}
+          counts = Counter()
+          entity_types = set(manifest["entity_types"])
+          for index, row in enumerate(suggestions):
+              assert row["example_id"] == manifest["sample_example_ids"][index]
+              assert row["group_id"] == manifest["sample_group_ids"][index]
+              source = source_by_id[row["example_id"]]
+              assert row["group_id"] == source["group_id"]
+              assert row["request"] == source["request"]
+              assert row["annotation_method"].startswith("AI-assisted request-only")
+              assert row["needs_review"] is True
+              for entity in row["suggested_entities"]:
+                  assert entity["entity_type"] in entity_types
+                  start, end = entity["start"], entity["end"]
+                  assert isinstance(start, int) and isinstance(end, int) and 0 <= start < end <= len(row["request"])
+                  assert row["request"][start:end] == entity["value"]
+                  counts[entity["entity_type"]] += 1
+
+          assert len({row["example_id"] for row in suggestions}) == 66
+          assert len({row["group_id"] for row in suggestions}) == 66
+          assert dict(counts) == manifest["candidate_entity_counts"]
+
+          with review_path.open(encoding="utf-8-sig", newline="") as stream:
+              review_rows = list(csv.DictReader(stream))
+          assert len(review_rows) == 66
+          assert all(row["review_status"] == "pending" for row in review_rows)
+          assert all(row["confirmed_entities_json"] == "" for row in review_rows)
+
+          print("Entity sample provenance, source identities, suggestion offsets, candidate counts, and pending review state all verified.")
+          print(f"Rows: {len(suggestions)}; candidate spans: {sum(counts.values())}; types observed: {len(counts)}")
+          PY
