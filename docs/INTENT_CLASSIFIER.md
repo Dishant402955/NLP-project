@@ -48,7 +48,7 @@ These are baseline settings, not claimed optimal hyperparameters. Changes must b
 
 Training fits one Scikit-learn pipeline so that inference always uses the exact same fitted TF-IDF vocabulary and Logistic Regression parameters.
 
-The generated model and its JSON manifest live under the versioned `models/` directory. The manifest records the source dataset revision, training-partition checksum, confirmed-annotation checksum, label counts, feature settings, classifier settings, and Scikit-learn version. The current model is committed for reproducibility but remains provisional because its training annotations are AI-assisted; see [Annotation Review Status](ANNOTATION_REVIEW_STATUS.md).
+The generated model and its JSON manifest live under the versioned `models/` directory. The manifest records the source dataset revision, training-partition checksum, confirmed-annotation checksum, label counts, feature settings, classifier settings, and Scikit-learn version. The current model is committed for reproducibility. The training annotations were AI-assisted initially and then reviewed by the project owner; see [Annotation Review Status](ANNOTATION_REVIEW_STATUS.md) and [Human Review Attestation](HUMAN_REVIEW_ATTESTATION.md).
 
 The serialized joblib file must be treated as a trusted project artifact; do not load model files from untrusted sources because joblib uses Python object serialization.
 
@@ -63,7 +63,7 @@ Prediction accepts one non-empty natural-language request. It returns:
 - A low-confidence indicator.
 - The configured confidence threshold.
 
-The probability is a model score, not a calibrated probability that the answer is correct. The current default threshold is 0.45, a provisional placeholder only; it must be selected using confirmed development data before final evaluation.
+The probability is a model score, not a calibrated probability that the answer is correct. The model manifest retains 0.45 as a provisional fallback. The end-to-end CLI uses the separate, checksum-bound threshold selected and frozen from development data (currently 0.1361115729921777).
 
 When the score is below the threshold, the prediction is marked low confidence and the public intent result is other_or_ambiguous. The underlying top-scoring label remains available for diagnostics. If the request contains no terms in the fitted TF-IDF vocabulary, the predictor returns other_or_ambiguous with a score of 0.0 and no raw top label.
 
@@ -71,7 +71,7 @@ The classifier never executes a command. Model loading checks the model checksum
 
 ## 6. Evaluation protocol
 
-The classifier must not use development or test examples during fitting. The implementation validates each held-out export against its own partition checksum and requires the export manifest to identify blind manual review.
+The classifier must not use development or test examples during fitting. The implementation validates each held-out export against its own partition checksum and requires the held-out export to originate from a worklist with no heuristic label suggestions. The project owner has additionally reviewed the training and development labels; the attestation records the human review provenance. The test export remains empty until the final test review is complete.
 
 - Training partition: fit TF-IDF and Logistic Regression using confirmed training annotations.
 - Development partition: select the confidence threshold using confirmed development labels only.
@@ -99,7 +99,7 @@ Train the model after the confirmed training export meets the per-label minimum:
 
 The command validates the confirmed export against the training partition and writes the model and manifest under the versioned `models/` directory. Commit the updated model and manifest together after training.
 
-Select and freeze a confidence threshold using the confirmed, blind-reviewed development partition:
+Select and freeze a confidence threshold using the confirmed development partition:
 
     .venv/bin/nl2bash-classifier select-threshold
 
@@ -119,10 +119,12 @@ The report is written to artifacts/evaluation/test_report.json. A separate test_
 
 The classifier CLI also provides --help for each command and options for alternate input and artifact paths. It never generates or executes a Bash command.
 
-## 8. Current limitation and provisional run
+## 8. Current model and annotation status
 
-The current annotation state is: 500 AI-assisted training labels, 375 AI-assisted blind development labels, and zero test labels. The full worklists received a second-pass audit that changed 30 labels; see [Intent Audit Log](INTENT_AUDIT_LOG.md). The training and development labels were assigned from natural-language requests without using paired commands or classifier predictions. Both partitions were reviewed by the same AI annotator, so they are not independent human ground truth and may share systematic annotation bias.
+The project owner reports completing a final review of all 500 training and 375 development intent annotations with zero further label changes. The original AI-assisted label provenance remains recorded in the CSV row notes; the final human review is attested in [Human Review Attestation](HUMAN_REVIEW_ATTESTATION.md). This is one human review pass after AI-assisted initial annotation, not an inter-annotator agreement study.
 
-The baseline was retrained and its development threshold reselected after the second-pass audit. The latest provisional development diagnostics are 0.6880 accuracy, 0.6709 macro-F1, 0.6801 weighted-F1, and 0.9893 coverage at threshold 0.13611. These metrics are engineering diagnostics only, not final academic results; see [Annotation Review Status](ANNOTATION_REVIEW_STATUS.md). A human reviewer should independently adjudicate the training and development annotations, with particular attention to category boundaries and the `other_or_ambiguous` class, before finalizing claims. The test partition must remain untouched until the taxonomy, model, and threshold are frozen.
+A fresh model training run in a temporary directory reproduced all 375 development class predictions and probability values exactly compared with the committed model. Threshold reselection reproduced the committed threshold exactly. The existing model and threshold artifacts therefore remain valid for the current reviewed CSV and export checksums. The model's `evaluation_status` remains `not_evaluated` because no final test evaluation has been performed.
 
-Implementation and offline verification may use temporary synthetic fixtures outside the repository. Such fixtures must never be committed, must never be added to the project's annotation data, and must never be presented as model results.
+The current development diagnostics are 0.6880 accuracy, 0.6709 macro-F1, 0.6801 weighted-F1, and 0.9893 prediction coverage at threshold 0.1361115729921777. These are development metrics only. The class imbalance and AI-assisted annotation history must be disclosed; do not present these numbers as final test performance.
+
+The end-to-end command-generation component and a development-only request-versus-NLP-context experiment are documented separately. The 375 test examples remain sealed. Only after the model, taxonomy, generation prompt, and validation configuration are frozen should the project owner review the test requests, without model predictions or paired Bash commands, followed by the one-time final test evaluation.

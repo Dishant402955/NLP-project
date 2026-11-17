@@ -17,7 +17,7 @@ The finished application will accept a natural-language Linux request and return
 
 Generated commands are displayed only. The application will not execute them.
 
-The initial interface is a Python command-line application. The initial generation model is planned to run locally through Ollama. Model choice and quantization may be adjusted only after checking actual machine resources and testing model availability.
+The interface is a Python command-line application. Local generation uses Qwen2.5-1.5B-Instruct Q4_K_M GGUF through llama-cpp-python CPU inference. The model revision, runtime version, checksum, prompt, and settings are recorded in the frozen generation configuration.
 
 ## 3. Planned architecture
 
@@ -233,7 +233,7 @@ This stage is divided into three small implementation commits.
 
 **Verified current state:** The local pilot contains 500 rows, 50 suggested examples per taxonomy label, 500 unique duplicate groups, 500 pending statuses, and zero confirmed labels. The confirmed export is therefore empty until a reviewer completes and validates the worklist.
 
-**Completion note:** The annotation tooling is implemented. Human review of the pilot is still outstanding, and classifier training must wait until confirmed labels exist.
+**Completion note:** The annotation tooling is implemented. The project owner has reviewed all 500 training and 375 development annotations and reported zero further label corrections. The test review remains pending until the full application configuration is frozen.
 
 #### Step 3.3: TF-IDF and Logistic Regression baseline
 
@@ -354,7 +354,7 @@ The implementation is divided into small commits. See [Intent Classifier](INTENT
 - A completed test report cannot be silently overwritten or re-run for the same project evaluation.
 
 
-**Current state (2026-11-17):** The training worklist has 500 AI-assisted request-only labels and the blind development worklist has 375 AI-assisted request-only labels. A second-pass AI audit changed 30 labels across those partitions; both exports pass the partition and checksum validators. The test worklist remains 375 pending rows with an empty confirmed export. The classifier was retrained and its development threshold reselected for engineering diagnostics only. Because the same AI annotator labelled both partitions, these metrics are provisional and are not independent human-annotated results. Human adjudication remains required before final academic claims or test evaluation. See [Annotation Review Status](ANNOTATION_REVIEW_STATUS.md) and [Intent Audit Log](INTENT_AUDIT_LOG.md).
+**Current state (2026-11-17):** The training and development worklists contain 500 and 375 confirmed labels. An AI-assisted second-pass audit changed 30 labels; the project owner subsequently reviewed all 875 rows and reported zero further corrections. Both exports pass partition and checksum validation. The test worklist remains 375 pending rows with an empty confirmed export. The classifier and development threshold are frozen. The generation prompt/model/runtime and validator configuration are also frozen after a development-only comparison. The original AI-assisted annotation history must still be disclosed; no inter-annotator agreement study was performed. See [Annotation Review Status](ANNOTATION_REVIEW_STATUS.md), [Human Review Attestation](HUMAN_REVIEW_ATTESTATION.md), and [Intent Audit Log](INTENT_AUDIT_LOG.md).
 
 ### Step 4: Entity and parameter extraction
 
@@ -363,7 +363,7 @@ The implementation is divided into small commits. See [Intent Classifier](INTENT
 **Status:** Initial implementation completed; reviewed entity benchmark remains outstanding.
 
 **Delivered:**
-- Rule-based extraction for eight entity types: file extensions, paths, file names, sizes, ports, process names, date/time phrases, and comparison conditions.
+- Rule-based extraction for eleven entity types, including programming-language mentions, process metrics, and explicit case-sensitivity requirements.
 - Exact request values and source spans, optional normalized values, and structured issues for missing, invalid, or conflicting parameters.
 - Exact-span micro and per-entity-type precision/recall/F1 evaluation API.
 - API documentation and known extraction limitations in [Entity Extraction](ENTITY_EXTRACTION.md).
@@ -386,78 +386,75 @@ The implementation is divided into small commits. See [Intent Classifier](INTENT
 
 ### Step 5: LLM command-generation adapter
 
-**Work:**
-- Implement a small adapter for the local Ollama HTTP API.
-- Keep the model name, endpoint, timeout, and generation settings configurable.
-- Pass the original request, intent, and extracted entities to the model.
-- Require structured output containing a command, explanation, and assumptions.
-- Parse and validate the response structure; handle malformed, empty, timed-out, and unavailable responses.
-- Do not invoke a shell or execute model output.
+**Status:** Implemented and exercised on the target agent host.
 
-**Acceptance criteria:**
-- The adapter fails clearly when Ollama is unavailable.
-- Model output is treated as untrusted text.
-- Malformed model responses are rejected or reported, never executed.
-- Timeouts and response errors are surfaced cleanly.
-- Model choice is based on a successful smoke test on the available hardware.
+**Delivered:**
+- Local Qwen2.5-1.5B-Instruct Q4_K_M GGUF model through llama-cpp-python CPU inference.
+- Strict JSON output contract for command, explanation, and assumptions.
+- Prompt carries the original request and, in the context-aware mode, intent prediction and exact extracted entities/issues.
+- Request-only mode retained as a comparison baseline.
+- Validation for missing model files, unavailable runtime, malformed JSON, empty commands, extra fields, and oversized output.
+- Local model setup, license, revision, checksum, and resource guidance in [Local Model Setup](LOCAL_MODEL_SETUP.md).
+
+**Environment evidence:** The target agent host has 4 logical CPU cores and approximately 7.5 GiB RAM, with no NVIDIA GPU detected. The model runtime compiled successfully; the Q4_K_M model was downloaded outside the repository and its SHA-256 is recorded in the generation evaluation report.
+
+**Verification:** A real local inference generated a command for the representative request “Find all Python files larger than 10 MB in the current directory.” After refining explicit entity guidance, it generated `find . -type f -name '*.py' -size +10000000c`. No reference command was supplied to the model. The adapter returned valid structured JSON. No command was executed.
 
 ### Step 6: Bash syntax and safety validation
 
-**Work:**
-- Parse command text using bashlex or another justified parser.
-- Report syntax validity separately from safety findings.
-- Add conservative checks for selected destructive or high-impact command patterns.
-- Handle parser errors and unsupported syntax without crashing.
+**Status:** Implemented and exercised.
 
-**Acceptance criteria:**
-- Valid and invalid syntax examples are distinguished.
-- Safety warnings include reasons and do not claim to prove safety.
-- Validation never executes the command.
-- Parser limitations are documented.
+**Delivered:**
+- Bash syntax-only validation using `bash -n` and supplementary AST inspection using bashlex.
+- Heuristic findings for elevated privileges, recursive deletion, broad delete targets, device formatting/writes, `find -delete`, nested shell execution, downloaded-script execution, critical-path writes, and selected destructive Git/container operations.
+- Explicit distinction between syntax validity and risk findings.
+- Entity-grounding checks for selected explicit file types, extensions, sizes, paths, filenames, ports, and process names.
+- Conservative GNU `find -size` byte-unit validation: normalized byte counts require the `c` suffix.
+
+**Verification:** A safe `find` command passes syntax and heuristics. `sudo rm -rf /` produces high-risk warnings. Invalid Bash syntax is rejected. Downloaded model output is checked, never executed. Findings are heuristics and do not prove command safety or semantic correctness.
 
 ### Step 7: End-to-end CLI
 
-**Work:**
-- Add the command-line entry point.
-- Connect preprocessing, classifier, entity extraction, generation, validation, and output formatting.
-- Support one-shot input and an interactive mode if the implementation remains simple.
-- Provide useful errors for missing model services, unknown intent, ambiguous input, and validation failures.
+**Status:** Implemented.
 
-**Acceptance criteria:**
-- The end-to-end flow works with the configured local model.
-- Every stage can be inspected in diagnostic output without exposing secrets.
-- The CLI exits with appropriate status codes on input and service failures.
-- No command execution path exists.
+**Delivered:**
+- `nl2bash generate`: verified classifier, frozen development threshold, entity extraction, local LLM generation, syntax/risk checks, explicit-constraint grounding, and structured or human-readable output.
+- `nl2bash validate`: standalone parse-only Bash syntax and safety review.
+- `nl2bash evaluate-generation-dev`: reproducible development-only comparison of request-only and NLP-context generation.
+- Explicit `executed: false` reporting; no generated-command execution code path.
+- Appropriate non-zero status for unavailable model, malformed output, syntax failure, or missing explicit constraints.
+
+**Acceptance evidence:** The representative end-to-end request generated a Bash command with the requested `.py` extension and exact 10,000,000-byte threshold, passed Bash syntax validation, and passed explicit-constraint grounding. The command was displayed only.
 
 ### Step 8: Evaluation and experiments
 
-**Work:**
-- Build a repeatable evaluation procedure using the agreed data splits.
-- Measure intent classification and entity extraction independently.
-- Compare generation with the original request alone against generation with NLP-derived context.
-- Measure command exact match, syntax validity, semantic correctness on a reviewed sample, and latency.
-- Record limitations and representative failures.
+**Status:** Development experiments and generation-configuration freeze complete; final test review and one-time test evaluation intentionally pending.
 
-**Acceptance criteria:**
-- Evaluation results are reproducible from recorded configuration.
-- Test examples are not used for training or prompt tuning.
-- Exact match is not presented as the only measure of correctness.
-- Semantic checks use reviewed examples in an isolated environment, never the user's normal shell.
+**Completed:**
+- Training/dev annotation checksums and source provenance revalidated.
+- A temporary retraining reproduced all 375 development predictions and probability arrays exactly.
+- Threshold reselection reproduced the frozen threshold exactly (0.1361115729921777).
+- The classifier report contains accuracy, macro/weighted F1, per-class metrics, coverage, and confusion matrix.
+- A seeded development-only generation comparison has been implemented. It compares request-only generation with NLP-context generation and records exact match, syntax validity, selected constraint preservation, high-risk warnings, and latency. Reference commands are scoring-only.
+
+**Limitations:**
+- The generation sample is small and intended for engineering comparison, not a final test estimate.
+- Exact match does not establish semantic equivalence.
+- No human semantic-accuracy rating is claimed.
+- The entity extractor has no independently adjudicated gold benchmark yet; its exact-span metric implementation exists, but no entity precision/recall/F1 result will be fabricated.
+- The test partition and annotations are not read or used in these experiments.
+
+**Completed:** The ten-request v6 development experiment is recorded in `artifacts/evaluation/generation_dev_v6_report.json`. The context-aware condition achieved 10/10 selected explicit-constraint checks and 9/10 syntax-valid outputs; request-only achieved 8/10 constraint checks and 9/10 syntax-valid outputs. Neither condition exactly matched the reference command on this small sample. The prompt/model/runtime/validator setup is frozen in `artifacts/evaluation/frozen_generation_config.json`.
+
+**Remaining:** Complete final code audit and GitHub publication. The blind 375-row human review worksheet is prepared at `data/annotations/test_human_review.csv`. The project owner must complete every row, merge only human decisions into `test_review.csv`, validate the export, and then run the one-time test evaluation. Test examples must not be used to tune the frozen system.
 
 ### Step 9: Final integration review and documentation
 
-**Work:**
-- Review the full application against the scope and architecture.
-- Update README and technical documentation to match actual behavior.
-- Document installation, model setup, usage, limitations, and reproducibility.
-- Remove generated caches and local artifacts from the working tree.
-- Verify a clean clone can be installed and run using the documented procedure.
+**Status:** Documentation updated; final code audit and GitHub publication pending.
 
-**Acceptance criteria:**
-- Documentation matches the implementation.
-- A clean environment can follow the setup instructions.
-- No secrets, test source, temporary fixtures, caches, or virtual environments are tracked. Licensed datasets, processed splits, annotation artifacts, model weights, and final evaluation reports are tracked with their provenance.
-- The final Git history contains small, meaningful commits.
+**Delivered:** README quick start, local model setup, human-review attestation, annotation status, generation experiment protocol, updated architecture/technical design, and Bash/constraint-validation limitations.
+
+**Remaining:** Run the final external temporary verification and adversarial checks, inspect every changed file and staged diff, verify both base and optional installs, ensure no test source/fixtures/caches enter Git, and publish the reviewed changes to `origin/main` through the GitHub connector because the agent machine's GitHub network route is unreliable.
 
 ## 5. Per-step engineering and review protocol
 
@@ -515,13 +512,13 @@ Commit subjects may be adjusted to accurately describe the changes actually made
 
 ## 8. Current environment observations
 
-The initial remote workspace inspection found:
+The inspected agent host on 2026-11-17:
 - Linux x86_64.
 - Python 3.10.12.
 - 4 logical CPU cores.
 - Approximately 7.5 GiB RAM.
-- Ollama not installed.
-- Scikit-learn, NLTK, bashlex, and pytest not installed.
-- The repository was clean at the start of implementation.
+- No NVIDIA GPU tooling or device detected.
+- The base package uses Scikit-learn and bashlex; llama-cpp-python is an optional local inference dependency.
+- The Qwen2.5-1.5B-Instruct Q4_K_M GGUF file is stored outside Git under the user cache.
 
-These are environment observations, not permanent assumptions. Recheck before installing dependencies or downloading model weights. The first implementation step is intentionally independent of an LLM runtime.
+These are host observations, not universal deployment requirements. See [Local Model Setup](LOCAL_MODEL_SETUP.md) for the chosen CPU runtime and resource notes.

@@ -1,0 +1,57 @@
+{
+  "artifact_type": "frozen_nl2bash_generation_configuration",
+  "classifier": {
+    "file": "models/intent_classifier.joblib",
+    "manifest_file": "models/intent_classifier_manifest.json",
+    "manifest_sha256": "1b52a8263ed3215634670dfc9c105aef7ed4f8554093df0fda702daade5f01ab",
+    "sha256": "b2c4c64fc4723b5279bb198dff04dd58921f969406b91739ff6524fa97e12d2e"
+  },
+  "development_evidence": {
+    "report_file": "artifacts/evaluation/generation_dev_v6_report.json",
+    "report_sha256": "eb3ab3692e5ec794b576ebdf1294103fdb3c6a4129236766cebb6050b3be4f34",
+    "sample_size": 10,
+    "test_data_used": false
+  },
+  "frozen": true,
+  "frozen_intent_threshold": {
+    "file": "artifacts/evaluation/frozen_dev_threshold.json",
+    "sha256": "a0ac257309d234e0266d8fd1ca3ad6a0cbf2160d4c4786e87c126a356975a647",
+    "value": 0.1361115729921777
+  },
+  "model": {
+    "default_path": "~/.cache/nl2bash/models/qwen2.5-1.5b-instruct-q4_k_m.gguf",
+    "format": "GGUF",
+    "license": "Apache-2.0",
+    "name": "Qwen2.5-1.5B-Instruct-Q4_K_M",
+    "sha256": "6a1a2eb6d15622bf3c96857206351ba97e1af16c30d7a74ee38970e434e9407e",
+    "source_revision": "91cad51170dc346986eccefdc2dd33a9da36ead9"
+  },
+  "prompt": {
+    "sha256": "5ae2bd5b90cfa279bb7130fc2b7456b2c361f61c4dbaf77d37c24a5417aba25c",
+    "source_file": "src/nl2bash/command_generation.py",
+    "version": "qwen-bash-json-v6"
+  },
+  "runtime": {
+    "context_size": 4096,
+    "device": "CPU",
+    "max_tokens": 512,
+    "name": "llama-cpp-python",
+    "seed": 42,
+    "temperature": 0,
+    "threads": 4,
+    "top_p": 0.9,
+    "version": "0.3.37"
+  },
+  "schema_version": 1,
+  "validation_and_pipeline_components": {
+    "pyproject.toml": "9b1a6d5eaecedd95cbbb190350f6dcffa040b5b6be55cdc4dce1347728989b49",
+    "src/nl2bash/bash_validation.py": "940f22a4e8948aa88dbc52381c36e3ed147dcedc87626d24af2ac150906be563",
+    "src/nl2bash/cli.py": "a1c53c613cdef42ea5e576be6d1d19c5176a1a7c4a858d52387869cf4a023e83",
+    "src/nl2bash/command_generation.py": "5ae2bd5b90cfa279bb7130fc2b7456b2c361f61c4dbaf77d37c24a5417aba25c",
+    "src/nl2bash/entity_extraction.py": "f803d527abd41eee5cc6d324f3db018e7830e69d0555599544bc3253561ec4a5",
+    "src/nl2bash/entity_validation.py": "d95dddefb548555252be503b470019f81a895cfd202e43e87aee8db43a12cb86",
+    "src/nl2bash/generation_configuration.py": "614292f7e6f93728977c2fa594119b39853d3d0126951166f18b2cf38f59d1f8",
+    "src/nl2bash/generation_evaluation.py": "2cd7a2376f88572ce065a8ffa43ada4cc4859451fe6a9b1ffda4b5a9c1b8311f",
+    "uv.lock": "c1f8aece40aa86d8e872c1cfcee7d7ef3b55f6c26df99f373602e34c726e513c"
+  }
+}

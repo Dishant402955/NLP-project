@@ -2,15 +2,15 @@
 
 A hybrid NLP system that translates natural-language instructions into Bash commands. It combines traditional NLP techniques for understanding requests with a lightweight instruction-tuned language model for command generation.
 
-The system displays the generated command, explains what it does, and checks its syntax and basic safety properties. It does not execute commands automatically.
+The system displays the generated command, explains what it does, and checks its syntax and basic safety properties. It does not execute commands automatically. Safety checks are heuristic warnings, not proof of safety.
 
 ## Project status
 
-The Python package foundation, reproducible NL2Bash dataset preparation, intent annotation workflow, TF-IDF plus Logistic Regression classifier, prediction/evaluation CLI, deterministic entity extractor, and exact-span entity metrics are implemented. The current training and development intent labels are AI-assisted provisional annotations, not independent human ground truth. The 375-example test worklist remains sealed and pending. A project-specific classifier has been fitted and a development threshold selected for engineering diagnostics only; see [Annotation Review Status](docs/ANNOTATION_REVIEW_STATUS.md). The entity extractor still needs an independently adjudicated benchmark. LLM command generation, Bash validation, and the end-to-end command-generation CLI remain to be built.
+The Python package foundation, reproducible dataset preparation, human-reviewed AI-assisted training/development intent annotations, TF-IDF plus Logistic Regression classifier, deterministic entity extractor, local Qwen command-generation adapter, Bash syntax/safety validation, and end-to-end CLI are implemented. The project owner reviewed all 875 training and development intent rows after the initial AI-assisted annotation and reported zero further corrections; the review attestation is recorded in [Human Review Attestation](docs/HUMAN_REVIEW_ATTESTATION.md). The intent classifier, confidence threshold, local generator, prompt, and validation configuration are frozen using development data. A blind, 375-row human test-review worksheet is prepared separately from the canonical test annotations. The development-only generation experiment and its prompt-version comparison are recorded under `artifacts/evaluation/`; neither uses the test partition. The entity extractor still lacks an independently adjudicated gold benchmark; its current evidence is functional verification, not a research performance claim.
 
 ## Versioned research artifacts
 
-The repository includes the licensed NL2Bash raw source files, reproducibly generated train/development/test partitions, intent annotation worklists and confirmed exports, the current provisional classifier, and its frozen development-threshold artifact. Their source revision, checksums, and annotation provenance are recorded in manifests, the [Annotation Review Status](docs/ANNOTATION_REVIEW_STATUS.md), and the [Intent Audit Log](docs/INTENT_AUDIT_LOG.md). The test partition is included, but its labels remain sealed and pending until the model and threshold are frozen. Test scripts, temporary fixtures, caches, virtual environments, and secrets are not committed.
+The repository includes the licensed NL2Bash raw source files, reproducibly generated train/development/test partitions, intent annotation worklists and confirmed exports, the reviewed-data classifier, and its frozen development-threshold artifact. Their source revision, checksums, and annotation provenance are recorded in manifests, the [Annotation Review Status](docs/ANNOTATION_REVIEW_STATUS.md), and the [Intent Audit Log](docs/INTENT_AUDIT_LOG.md). The test partition is included, but its labels remain unconfirmed until the project owner completes the blind human review worksheet. The worksheet contains no reference commands or AI suggestions. Test scripts, temporary fixtures, caches, virtual environments, and secrets are not committed.
 
 ## Project objectives
 
@@ -37,23 +37,23 @@ For example, the request:
 Could produce:
 
 ```bash
-find . -type f -name "*.py" -size +10M
+find . -type f -name "*.py" -size +10000000c
 ```
 
-## Planned technology stack
+## Implemented technology stack
 
-| Area | Planned technology |
+| Area | Technology |
 |---|---|
 | Programming language | Python |
 | Text preprocessing | Python standard library and custom utilities |
 | Intent classification | Scikit-learn, TF-IDF, Logistic Regression |
 | Entity and parameter extraction | Rule-based extraction |
-| Command generation | Qwen2.5 1.5B Instruct through Ollama |
-| Bash syntax parsing | bashlex |
+| Command generation | Qwen2.5-1.5B-Instruct Q4_K_M GGUF through llama-cpp-python (local CPU inference) |
+| Bash syntax parsing | `bash -n` parse-only mode plus bashlex AST analysis |
 | Verification | Temporary scripts outside the repository; no test source is committed |
 | Initial interface | Command-line interface |
 
-The stack is a project plan and may be adjusted after environment checks and initial experiments.
+The generation runtime and quantization were selected after inspecting the agent host (4 logical CPU cores, approximately 7.5 GiB RAM, no detected NVIDIA GPU). Model weights are downloaded separately and are not committed to Git. See [Local Model Setup](docs/LOCAL_MODEL_SETUP.md).
 
 ## Documentation
 
@@ -61,14 +61,38 @@ Detailed project documentation is maintained in the [docs](docs/) directory.
 
 - [Project Plan](docs/PROJECT_PLAN.md): scope, objectives, requirements, deliverables, and exclusions.
 - [System Architecture](docs/ARCHITECTURE.md): component responsibilities and the end-to-end data flow.
-- [Technical Design](docs/TECHNICAL_DESIGN.md): planned modules, technology choices, and implementation boundaries.
+- [Technical Design](docs/TECHNICAL_DESIGN.md): implemented modules, technology choices, and validation boundaries.
 - [Dataset and Evaluation](docs/DATASET_AND_EVALUATION.md): dataset audit, licensing, split strategy, metrics, and experiments.
 - [Intent Taxonomy](docs/INTENT_TAXONOMY.md): intent labels, definitions, boundary examples, and taxonomy rules.
 - [Annotation Guide](docs/ANNOTATION_GUIDE.md): commands and instructions for reviewing, confirming, and validating the training and held-out annotation worklists.
 - [Intent Classifier](docs/INTENT_CLASSIFIER.md): TF-IDF and Logistic Regression training, prediction, threshold selection, and one-time test evaluation commands.
-- [Annotation Review Status](docs/ANNOTATION_REVIEW_STATUS.md): provisional AI-assisted labels, partition counts, diagnostic classifier metrics, and remaining human-review requirements.
+- [Annotation Review Status](docs/ANNOTATION_REVIEW_STATUS.md): human-review provenance, partition counts, development classifier metrics, and the sealed test-review status.
 - [Entity Extraction](docs/ENTITY_EXTRACTION.md): supported entity types, extraction rules, structured output, uncertainty findings, and exact-span evaluation.
 - [Implementation Roadmap](docs/IMPLEMENTATION_ROADMAP.md): ordered development steps, acceptance criteria, verification protocol, and commit strategy.
+- [Local Model Setup](docs/LOCAL_MODEL_SETUP.md): local GGUF model installation, runtime setup, and CLI usage.
+- [Command-Generation Evaluation](docs/GENERATION_EVALUATION.md): development-only comparison of request-only and NLP-context generation, with limitations and frozen configuration.
+- [Final Test Review](docs/ANNOTATION_GUIDE.md#10-final-test-review-handoff): blind human worksheet and safe decision-import procedure.
+- [Test Review Protocol](docs/TEST_PRELIMINARY_ANNOTATION_PROTOCOL.md): blind human worksheet and test-label review procedure.
+- [Human Review Attestation](docs/HUMAN_REVIEW_ATTESTATION.md): final human review of the AI-assisted training and development intent labels.
+
+## Quick start
+
+Install the base package and run the syntax/risk validator:
+
+```bash
+uv sync
+uv run nl2bash validate --command 'find . -type f -name "*.py" -size +10000000c'
+```
+
+To enable local generation, install the optional local inference runtime separately and download the model as described in [Local Model Setup](docs/LOCAL_MODEL_SETUP.md), then run:
+
+```bash
+uv sync --locked
+uv pip install --python .venv/bin/python llama-cpp-python==0.3.37
+uv run nl2bash generate --request 'Find all Python files larger than 10 MB in the current directory.'
+```
+
+The CLI prints the proposed command, explanation, assumptions, syntax result, and risk warnings. It never executes the command.
 
 ## Project evaluation
 

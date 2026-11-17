@@ -42,11 +42,11 @@ Validates the input and removes only surrounding whitespace. Later NLP component
 
 Predicts the operation category represented by the request. The initial intent labels cover file discovery, text search and processing, file and directory management, permissions and ownership, process and job management, system information, network and remote operations, archive and compression, shell and session operations, and an other/ambiguous fallback.
 
-The initial classifier will use TF-IDF features and a Scikit-learn Logistic Regression model. The project-defined categories and annotation rules are documented in the [Intent Taxonomy](INTENT_TAXONOMY.md).
+The implemented classifier uses TF-IDF features and a Scikit-learn Logistic Regression model. The project-defined categories and annotation rules are documented in the [Intent Taxonomy](INTENT_TAXONOMY.md).
 
 ### 3.4 Entity and parameter extraction
 
-Extracts values that constrain the requested operation. The first deterministic implementation supports file extensions, paths, file names, sizes, ports, process names, date/time phrases, and comparison conditions. It preserves each exact source value and character span, with optional normalized values for sizes, ports, extensions, and comparison operators.
+Extracts values that constrain the requested operation. The deterministic extractor supports file extensions, paths, file names, sizes, ports, process names, process metrics, date/time phrases, comparison conditions, programming-language mentions, and explicit case-sensitivity requirements. It preserves each exact source value and character span, with optional normalized values for sizes, ports, extensions, and comparison operators.
 
 Incomplete or contradictory cues are represented as structured extraction issues rather than guessed values. The implementation and current limitations are documented in [Entity Extraction](ENTITY_EXTRACTION.md). Rule-based extraction is intentionally separate from intent classification and language-model generation.
 
@@ -57,13 +57,13 @@ Receives the original request, predicted intent, and extracted parameters. It ge
 - A short explanation of the command.
 - Any assumptions or missing details that affect the result.
 
-The planned local model is Qwen2.5 1.5B Instruct served through Ollama. Model suitability and hardware requirements will be checked before finalizing this choice.
+The implemented local model is Qwen2.5-1.5B-Instruct Q4_K_M in GGUF format, loaded through llama-cpp-python for CPU inference. The model file is downloaded separately to the user cache and is not committed to Git. The exact model revision and setup process are documented in [Local Model Setup](LOCAL_MODEL_SETUP.md).
 
 ### 3.6 Validation
 
-Checks the generated command using a Bash parser such as bashlex and applies additional rules to identify known dangerous patterns. Validation results should distinguish syntax errors from safety warnings.
+Checks syntax in parse-only mode with `bash -n`, uses bashlex for supplementary AST analysis, and applies conservative rules for known high-impact patterns. A separate entity-grounding check flags selected explicit constraints that are missing from the generated text. Syntax errors, safety warnings, and dropped constraints are reported separately.
 
-A parser can identify syntax problems, but neither parsing nor a basic rule set can prove that a command is safe or produces the intended result.
+Neither parsing, entity grounding, nor a basic rule set can prove that a command is safe or semantically correct. The checks are warning mechanisms, not a sandbox or formal guarantee.
 
 ### 3.7 Output
 
@@ -93,16 +93,17 @@ Illustrative NLP output:
 Illustrative generated command:
 
 ```bash
-find . -type f -name "*.py" -size +10M
+find . -type f -name "*.py" -size +10000000c
 ```
 
-The validator checks the command syntax and applies the configured safety rules. The application then displays the result without executing it.
+The validator checks the command syntax and applies configured safety and explicit-constraint rules. For GNU `find -size`, normalized byte thresholds must use the `c` suffix and the comparison direction must agree with the request. The application then displays the result without executing it.
 
 ## 5. Design principles
 
 - Keep intent classification, parameter extraction, generation, and validation as separate components.
 - Keep the original natural-language request available throughout the pipeline.
 - Make intermediate NLP results inspectable for debugging and evaluation.
+- Treat explicit entities as constraints to preserve, and flag a generated command when selected constraints disappear.
 - Do not treat model output as trusted shell input.
 - Do not execute generated commands automatically.
 - Report uncertainty and missing information instead of silently inventing parameters.

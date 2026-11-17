@@ -10,12 +10,16 @@ readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
     "scikit-learn>=1.7,<1.8",
+    "numpy>=1.24",
+    "joblib>=1.2",
+    "bashlex>=0.18,<0.19",
 ]
 
 [project.scripts]
 nl2bash-prepare-dataset = "nl2bash.dataset_cli:main"
 nl2bash-annotations = "nl2bash.annotation_cli:main"
 nl2bash-classifier = "nl2bash.classifier_cli:main"
+nl2bash = "nl2bash.cli:main"
 
 [tool.setuptools]
 package-dir = {"" = "src"}

@@ -2,19 +2,19 @@
 
 **Status date:** 2026-11-17
 
-## Current versioned annotation state
+## Current annotation state
 
-| Partition | Worklist size | Confirmed export | Pending | Use
+| Partition | Worklist rows | Confirmed export | Pending | Current use |
 |---|---:|---:|---:|---|
-| Training | 500 | 500 | 0 | Provisional model fitting
-| Development | 375 | 375 | 0 | Provisional threshold selection
-| Test | 375 | 0 | 375 | Sealed; do not inspect or label until configuration is frozen
+| Training | 500 | 500 | 0 | Model fitting |
+| Development | 375 | 375 | 0 | Model and threshold development |
+| Test | 375 | 0 | 375 | Sealed; final independent review is pending |
 
-The training and development annotations were initially generated through an AI-assisted review of each natural-language request against the project intent taxonomy. A second-pass AI audit reviewed all 875 annotated rows and changed 30 labels (10 training, 20 development); the detailed record is in [Intent Audit Log](INTENT_AUDIT_LOG.md). The development review did not use heuristic suggestions, classifier predictions, or paired Bash commands. The training review also assigned labels from the request text rather than promoting the generated suggestions.
+The training and development annotations were initially created through an AI-assisted review of the natural-language requests against the project taxonomy. A second-pass AI audit changed 30 labels (10 training, 20 development); see [Intent Audit Log](INTENT_AUDIT_LOG.md). On 2026-11-17, the project owner independently reviewed all 875 rows and reported zero further changes. The final human-review attestation is recorded in [Human Review Attestation](HUMAN_REVIEW_ATTESTATION.md). Original row notes retain the AI-assisted origin of the initial labels; the attestation records the later human review and agreement.
 
-Every annotation note records that the decision is AI-assisted, including the second-pass corrections. The validator confirms source identity, partition provenance, allowed labels, review status, and output checksums. It does not establish that an annotation was made by a human or that multiple annotators agree.
+Both reviewed annotation files pass their source, partition, label, status, and checksum validators. The training export has 500 confirmed rows; the development export has 375 confirmed rows. The test CSV remains 375 pending rows and its confirmed export is empty. No test labels or test metrics have been used.
 
-## Observed label distribution
+## Label distribution
 
 | Intent | Training | Development |
 |---|---:|---:|
@@ -29,28 +29,25 @@ Every annotation note records that the decision is AI-assisted, including the se
 | `system_information` | 22 | 14 |
 | `text_search_processing` | 60 | 64 |
 
-The development sample is notably imbalanced, especially for file discovery and process management. Macro-F1 therefore averages over classes with very different support; per-class results and support must be considered alongside the aggregate score.
+The development set is imbalanced. For example, `file_discovery` has 125 examples while `process_job_management` has six. Per-class support and metrics must be shown alongside macro averages.
 
-## Provisional classifier run
+## Development classifier diagnostics
 
-The corrected training export contains all ten taxonomy labels and passes the per-label training minimum. The TF-IDF/Logistic Regression baseline was retrained from 500 training examples. The development threshold was reselected using 375 development examples, maximizing macro-F1 subject to at least 80% coverage. The threshold artifact is bound to the current model and development-export checksums.
+The classifier was fitted on the 500 confirmed training rows. Its confidence threshold was selected on the 375 confirmed development rows by maximizing macro-F1 subject to at least 80% prediction coverage. A fresh retraining in a temporary location reproduced every development prediction and every class probability exactly; reselecting the threshold returned the same value.
 
-| Metric | Provisional result |
+| Metric | Development result |
 |---|---:|
-| Development accuracy | 0.6880 |
-| Development macro-F1 | 0.6709 |
-| Development weighted-F1 | 0.6801 |
+| Accuracy | 0.6880 |
+| Macro-F1 | 0.6709 |
+| Weighted-F1 | 0.6801 |
 | Prediction coverage | 0.9893 |
-| Low-confidence requests | 4 of 375 |
-| Selected confidence threshold | 0.13611 |
+| Low-confidence requests | 4 / 375 |
+| Frozen confidence threshold | 0.1361115729921777 |
 
-These values are engineering diagnostics only. Since the same AI annotator labelled training and development, shared annotation bias can inflate or distort the apparent performance. Do not present these numbers as final research results or compare them as if they came from independent human ground truth.
+These are development-set results, not final test results. The model scores are uncalibrated probability estimates. The test set remains sealed and has not been used for model or prompt selection.
 
-## Required before final evaluation
+## Final test protocol
 
-1. Have a human reviewer independently audit the training and development decisions, especially borderline requests and the `other_or_ambiguous` category. Record corrections in the existing CSVs and rerun the validators.
-2. After human corrections, retrain the classifier and reselect the development threshold again.
-3. Freeze the final taxonomy and model configuration.
-4. Only then review the 375 test requests without predictions or paired commands, validate the test export, and run the one-time test evaluation.
+The taxonomy, classifier artifact, confidence threshold, local command-generation model, prompt version, and validation configuration are now frozen. A blind human review worksheet is prepared at `data/annotations/test_human_review.csv`. It contains only the 375 natural-language requests, stable IDs, and blank human-decision fields; it contains no reference commands or AI suggestions. The canonical test worklist remains sealed with 375 pending rows. Only the project owner's final human decisions can be merged into the canonical worklist. See [Test Review Protocol](TEST_PRELIMINARY_ANNOTATION_PROTOCOL.md). The one-time test evaluation will run only after the test export validates.
 
-The raw dataset and MIT notice, processed train/dev/test splits, annotation worklists and confirmed exports, classifier model and manifest, and frozen development-threshold artifact are versioned in Git. The test worklist and test partition have not been opened or modified during this second-pass audit. Their checksums and source revision are recorded in the accompanying manifests. Test labels remain pending and are not included in the confirmed export.
+No test examples may be used to revise intent labels, prompt text, model parameters, thresholds, or safety rules. Any future implementation change motivated by test errors must be reported as post-test exploratory work, not as part of the evaluated system.

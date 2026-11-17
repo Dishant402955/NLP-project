@@ -9,7 +9,7 @@ from nl2bash.preprocessing import normalize_request
 
 ENTITY_TYPES = (
     "file_extension", "path", "file_name", "size", "port",
-    "process_name", "date_time", "comparison_condition",
+    "process_name", "process_metric", "date_time", "comparison_condition", "programming_language", "case_sensitivity",
 )
 
 
@@ -124,7 +124,7 @@ _PROCESS_BEFORE_RE = re.compile(r"\b(?P<v>[\w.-]+)\s+process(?:es)?\b", re.I)
 _PROCESS_STOP = {
     "a", "an", "the", "all", "any", "newest", "current", "running", "listening",
     "using", "with", "whose", "belonging", "owned", "under", "on", "at", "for",
-    "by", "from", "to", "and", "or", "named", "called", "name", "find", "show",
+    "by", "from", "to", "of", "it", "this", "that", "and", "or", "named", "called", "name", "find", "show",
     "list", "get", "monitor", "identify", "terminate", "kill", "stop", "start",
     "inspect", "search", "check", "display", "print", "is",
 }
@@ -152,6 +152,31 @@ _COMPARISON_MAP["over"] = "greater_than"
 _COMPARISON_MAP["below"] = "less_than"
 _COMPARISON_MAP["under"] = "less_than"
 _COMPOUND_EXT = (".tar.bz2", ".tar.gz", ".tar.xz", ".tar.zst", ".sql.gz", ".tar.lz")
+_LANGUAGE_EXTENSIONS = {
+    "python": ".py", "javascript": ".js", "typescript": ".ts",
+    "java": ".java", "rust": ".rs", "go": ".go", "golang": ".go",
+    "ruby": ".rb", "php": ".php", "perl": ".pl", "bash": ".sh",
+    "shell": ".sh", "sql": ".sql", "yaml": ".yaml", "yml": ".yml",
+    "golang": ".go",
+}
+_LANGUAGE_FILE_RE = re.compile(
+    r"\b(?P<language>Python|JavaScript|TypeScript|Java|Rust|Golang|Go|Ruby|PHP|Perl|Bash|Shell|SQL|YAML|YML)"
+    r"\s+(?:source\s+)?(?:files?|scripts?|programs?|code)\b",
+    re.I,
+)
+_PROCESS_METRICS = (
+    ("virtual_memory", r"virtual(?:\s+private)?\s+memory|virtual\s+size|\bVSZ\b|\bVPRVT\b"),
+    ("resident_memory", r"resident(?:\s+set)?\s+memory|\bRSS\b|\bRES\b"),
+    ("cpu_usage", r"CPU\s+(?:usage|use|utili[sz]ation)|\b%CPU\b"),
+)
+_PROCESS_METRIC_RES = tuple(
+    (name, re.compile(pattern, re.I), normalized)
+    for name, pattern, normalized in (
+        ("virtual_memory", _PROCESS_METRICS[0][1], "vsz"),
+        ("resident_memory", _PROCESS_METRICS[1][1], "rss"),
+        ("cpu_usage", _PROCESS_METRICS[2][1], "%cpu"),
+    )
+)
 
 
 def _add(entities: list[ExtractedEntity], request: str, entity_type: str, start: int, end: int, normalized: str | None = None) -> None:
@@ -161,8 +186,20 @@ def _add(entities: list[ExtractedEntity], request: str, entity_type: str, start:
             entities.append(item)
 
 
+_SLASH_PHRASES = {
+    "files/directories", "file/directory", "and/or", "or/and", "input/output",
+    "output/input", "read/write", "write/read", "yes/no", "no/yes", "true/false",
+    "on/off", "off/on", "up/down", "down/up", "client/server", "server/client",
+}
+
+
 def _looks_like_path(value: str) -> bool:
-    return "/" in value and not value.lower().startswith(("http://", "https://", "ftp://"))
+    lowered = value.strip().lower()
+    return (
+        "/" in value
+        and lowered not in _SLASH_PHRASES
+        and not lowered.startswith(("http://", "https://", "ftp://"))
+    )
 
 
 def _trim_end(request: str, start: int, end: int) -> tuple[int, int]:
@@ -177,15 +214,31 @@ def _extract_paths(request: str, entities: list[ExtractedEntity]) -> None:
         quoted.append(match.span())
         if _looks_like_path(match.group("v")):
             _add(entities, request, "path", *match.span("v"))
-    patterns = (
-        re.compile(r"(?<![A-Za-z0-9_:/])(?P<v>(?:/(?!/)|~/|\.\.?/|\$\{[A-Za-z_]\w*\}/|\$[A-Za-z_]\w*/)[\w.@%+~*?\[\]-]+(?:/[\w.@%+~*?\[\]-]+)*/?)"),
-        re.compile(r"(?<![A-Za-z0-9_$/.:])(?P<v>[\w.-]+/[\w.-]+(?:/[\w.-]+)*/?)"),
+    absolute_or_rooted = re.compile(
+        r"(?<![A-Za-z0-9_:/])(?P<v>(?:/(?!/)|~/|\.\.?/|\$\{[A-Za-z_]\w*\}/|\$[A-Za-z_]\w*/)[\w.@%+~*?\[\]-]+(?:/[\w.@%+~*?\[\]-]+)*/?)"
     )
-    for pattern in patterns:
-        for match in pattern.finditer(request):
-            start, end = _trim_end(request, *match.span("v"))
-            if any(start < q_end and end > q_start for q_start, q_end in quoted):
-                continue
+    relative = re.compile(r"(?<![A-Za-z0-9_$/.:])(?P<v>[\w.-]+/[\w.-]+(?:/[\w.-]+)*/?)")
+    for match in absolute_or_rooted.finditer(request):
+        start, end = _trim_end(request, *match.span("v"))
+        if not any(start < q_end and end > q_start for q_start, q_end in quoted):
+            _add(entities, request, "path", start, end)
+
+    # A single slash between ordinary words is often prose (files/directories,
+    # input/output), not a path. Keep it only with path context or a filename
+    # suffix; multi-component relative paths are sufficiently distinctive.
+    path_cue = re.compile(r"\b(?:in|under|from|into|at|path|directory|folder|location)\s*$", re.I)
+    for match in relative.finditer(request):
+        start, end = _trim_end(request, *match.span("v"))
+        value = request[start:end]
+        if any(start < q_end and end > q_start for q_start, q_end in quoted):
+            continue
+        if not _looks_like_path(value):
+            continue
+        before = request[max(0, start - 40):start]
+        has_context = bool(path_cue.search(before))
+        has_suffix = bool(re.search(r"\.[A-Za-z0-9_-]+/?$", value))
+        has_multiple_components = value.count("/") >= 2
+        if has_context or has_suffix or has_multiple_components:
             _add(entities, request, "path", start, end)
     variable_root = re.compile(r"(?<![A-Za-z0-9_])(?P<v>\$\{[A-Za-z_]\w*\}|\$[A-Za-z_]\w*|~|\.{1,2})(?![A-Za-z0-9_/])")
     for match in variable_root.finditer(request):
@@ -337,6 +390,37 @@ def _extract_process_names(
             ))
 
 
+_CASE_INSENSITIVE_RE = re.compile(
+    r"\b(?:case[- ]insensitive|ignore\s+(?:the\s+)?case|any[- ]cased|regardless\s+of\s+case|case[- ]agnostic)\b",
+    re.I,
+)
+_CASE_SENSITIVE_RE = re.compile(r"\bcase[- ]sensitive\b|\bmatch\s+case\b", re.I)
+
+
+def _extract_case_sensitivity(request: str, entities: list[ExtractedEntity]) -> None:
+    """Capture explicit case-matching requirements; absence means default semantics."""
+    matches = [(m, "insensitive") for m in _CASE_INSENSITIVE_RE.finditer(request)]
+    matches.extend((m, "sensitive") for m in _CASE_SENSITIVE_RE.finditer(request))
+    for match, normalized in matches:
+        _add(entities, request, "case_sensitivity", *match.span(), normalized)
+
+
+def _extract_process_metrics(request: str, entities: list[ExtractedEntity]) -> None:
+    """Extract explicit process resource metrics without guessing a process."""
+    for _name, pattern, normalized in _PROCESS_METRIC_RES:
+        for match in pattern.finditer(request):
+            _add(entities, request, "process_metric", *match.span(), normalized)
+
+
+def _extract_programming_languages(request: str, entities: list[ExtractedEntity]) -> None:
+    """Recognize common language/file types and their conventional suffixes."""
+    for match in _LANGUAGE_FILE_RE.finditer(request):
+        name = match.group("language")
+        extension = _LANGUAGE_EXTENSIONS.get(name.lower())
+        if extension:
+            _add(entities, request, "programming_language", *match.span("language"), extension)
+
+
 def _extract_dates(request: str, entities: list[ExtractedEntity]) -> None:
     for pattern in _DATE_PATTERNS:
         for match in pattern.finditer(request):
@@ -439,6 +523,9 @@ def extract_entities(request: str) -> EntityExtractionResult:
     _extract_process_names(normalized, entities, issues)
     _extract_dates(normalized, entities)
     _extract_comparisons(normalized, entities)
+    _extract_programming_languages(normalized, entities)
+    _extract_process_metrics(normalized, entities)
+    _extract_case_sensitivity(normalized, entities)
     _detect_size_conflicts(entities, issues)
     _detect_incomplete_size(normalized, entities, issues)
     entities.sort(key=lambda e: (e.start, e.end, e.entity_type))

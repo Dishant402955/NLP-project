@@ -10,6 +10,7 @@ from typing import Sequence
 
 from nl2bash.annotation_validation import validate_reviewed_annotations
 from nl2bash.annotations import AnnotationError, create_annotation_worklist
+from nl2bash.review_import import apply_human_test_review
 
 
 DEFAULT_TRAINING_FILE = Path("data/processed/nl2bash/train.jsonl")
@@ -79,6 +80,14 @@ def build_parser() -> argparse.ArgumentParser:
     validate_parser.add_argument("--pilot-manifest", type=Path)
     validate_parser.add_argument("--output-jsonl", type=Path)
     validate_parser.add_argument("--output-manifest", type=Path)
+
+    import_parser = subparsers.add_parser(
+        "apply-test-review",
+        help="merge explicit human decisions from the request-only review sheet into test_review.csv",
+    )
+    import_parser.add_argument("--review-csv", type=Path, required=True, help="blind human decision sheet; contains no reference commands or AI suggestions")
+    import_parser.add_argument("--worklist-csv", type=Path, default=DEFAULT_ANNOTATION_DIR / "test_review.csv")
+    import_parser.add_argument("--review-manifest", type=Path, default=DEFAULT_ANNOTATION_DIR / "test_human_review_manifest.json")
 
     return parser
 
@@ -196,6 +205,18 @@ def main(argv: Sequence[str] | None = None) -> int:
             return _run_create(args)
         if args.operation == "validate":
             return _run_validate(args)
+        if args.operation == "apply-test-review":
+            _validate_distinct_paths(
+                output_paths=(args.worklist_csv,),
+                input_paths=(args.review_csv, args.review_manifest),
+            )
+            result = apply_human_test_review(
+                args.review_csv,
+                worklist_csv=args.worklist_csv,
+                review_manifest=args.review_manifest,
+            )
+            print(json.dumps(result, ensure_ascii=False, sort_keys=True, indent=2))
+            return 0
         parser.error(f"unsupported operation: {args.operation}")
     except (AnnotationError, OSError, TypeError, ValueError) as exc:
         print(f"error: {exc}", file=sys.stderr)

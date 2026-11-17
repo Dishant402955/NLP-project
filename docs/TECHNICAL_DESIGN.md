@@ -1,6 +1,6 @@
 # Technical Design
 
-## 1. Planned technology stack
+## 1. Implemented technology stack
 
 | Component | Technology | Purpose |
 |---|---|---|
@@ -9,15 +9,16 @@
 | Feature extraction | Scikit-learn TF-IDF | Convert text into features for classification |
 | Intent classifier | Scikit-learn Logistic Regression | Predict the requested operation category |
 | Parameter extraction | Python rules and regular expressions | Extract paths, extensions, file names, sizes, ports, process names, dates, and comparison conditions |
-| Language model | Qwen2.5 1.5B Instruct | Generate Bash commands and explanations |
-| Model serving | Ollama | Run the selected model locally |
-| Bash parsing | bashlex | Parse generated Bash syntax |
+| Language model | Qwen2.5-1.5B-Instruct Q4_K_M GGUF | Local command generation |
+| Model runtime | llama-cpp-python | CPU inference from the local GGUF file |
+| Bash syntax | `bash -n` plus bashlex | Parse-only syntax check and supplementary AST analysis |
+| Constraint check | Deterministic entity grounding | Flag selected explicit request constraints missing from generated command text |
 
-These are planned choices, not claims that the environment has already been configured or that the model has been benchmarked.
+The base package installs without the optional inference binding. The local runtime and model were installed and exercised on the agent host; the small development experiment and its limitations are recorded in [Command-Generation Evaluation](GENERATION_EVALUATION.md).
 
 ## 2. Application modules
 
-The implementation is expected to be organized around the following responsibilities. The exact file layout may evolve as the code is developed.
+The implementation is organized around the following responsibilities:
 
 - Input and CLI: collect requests and display results.
 - Preprocessing: validate string input and remove surrounding whitespace while preserving all internal content.
@@ -32,9 +33,9 @@ The implementation is expected to be organized around the following responsibili
 
 ## 3. Model interaction
 
-The generation component will send the original request and structured NLP results to the locally served model. The prompt will specify that the model must return a Bash command and a concise explanation, and must not execute anything.
+The generation component sends the original request and, in the context-aware condition, the predicted intent and structured entity metadata to a local Qwen GGUF model through llama-cpp-python. A second request-only condition is retained for development experiments. The model must return a JSON object containing a Bash command, explanation, and assumptions. The adapter validates the schema and never invokes a shell.
 
-The application should handle unavailable model services, malformed model responses, empty output, and generation timeouts.
+The application handles unavailable local models, malformed structured responses, empty output, and invalid generation settings. Local inference runs synchronously; a hard per-request wall-clock timeout is not currently enforced.
 
 The rule-based entity extractor preserves exact values and source spans and reports incomplete or contradictory parameters; see [Entity Extraction](ENTITY_EXTRACTION.md).
 
@@ -42,16 +43,16 @@ The model is a generation component, not the sole source of intent understanding
 
 ## 4. Validation boundaries
 
-Validation will include:
+Validation includes:
 - Parsing the generated command to identify syntax errors.
 - Applying explicit rules to flag selected risky command patterns.
 - Reporting syntax status and safety warnings separately.
 
-The validator is not a sandbox and does not establish that a command is harmless. The application will not execute generated commands as part of normal operation.
+The validator is not a sandbox and does not establish that a command is harmless. It runs only `bash -n` (syntax-only mode) plus bashlex parsing and deterministic text/AST heuristics; it never runs the generated command itself. The application has no generated-command execution path.
 
 ## 5. Runtime and configuration
 
-The initial target is a local Linux environment with Python. Ollama and the selected model will be required for local LLM generation. Model configuration should be kept separate from application logic so that the model can be changed without rewriting the NLP pipeline.
+The target is a local Linux environment with Python. The base package does not require a model runtime; install the optional `local-llm` dependency to enable generation. The GGUF model is stored outside the repository under `~/.cache/nl2bash/models/` by default. Context length, CPU thread count, and model path are configurable. See [Local Model Setup](LOCAL_MODEL_SETUP.md).
 
 ## 6. Implementation constraints
 
@@ -72,4 +73,4 @@ The NL2Bash source contains paired natural-language requests and Bash commands, 
 
 ## 9. Annotation data boundary
 
-Intent suggestions are generated from request-text rules only and remain separate from confirmed labels. Reviewers edit the versioned training CSV worklist; the importer validates source identity, group identity, suggestion metadata, review status, and taxonomy labels. Only explicitly confirmed rows are exported for classifier training. Development and test use separate blind worklists with no suggested labels and partition-specific confirmed exports. Raw data, worklists, confirmed annotations, and manifests are versioned in Git; the test worklist remains unlabelled until the final evaluation is ready.
+Intent suggestions are generated from request-text rules only and remain separate from confirmed labels. Reviewers edit the versioned training CSV worklist; the importer validates source identity, group identity, suggestion metadata, review status, and taxonomy labels. Only explicitly confirmed rows are exported for classifier training. Development and test use separate blind worklists with no suggested labels and partition-specific confirmed exports. The project owner has reviewed training and development labels; the test worklist remains pending until the complete generation configuration is frozen. Test review must be request-only and must not use model predictions or paired commands.

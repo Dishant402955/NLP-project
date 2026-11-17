@@ -4,9 +4,9 @@
 
 This guide explains how to review the versioned intent-annotation worklists for the Natural Language to Bash Command Generator.
 
-The pilot is a project annotation artifact. The suggested labels are weak hints generated from request-text patterns. They are not ground truth and must not be used for model training until a reviewer confirms them.
+The worklists are project annotation artifacts. The training suggestions are weak hints generated from request-text patterns. They are not ground truth. Only explicitly confirmed labels are exported for model training.
 
-**Current annotation provenance:** the local training and development worklists have an initial AI-assisted request-only annotation pass. Those labels are provisional and must not be described as independently human-reviewed. Before final academic evaluation, a human reviewer should audit or replace them using this guide. The test worklist remains pending and must stay sealed until the model and threshold are frozen. See [Annotation Review Status](ANNOTATION_REVIEW_STATUS.md).
+**Current annotation provenance:** training and development labels were initially AI-assisted. The project owner subsequently reviewed all 875 rows and reported zero corrections; see [Human Review Attestation](HUMAN_REVIEW_ATTESTATION.md). Original per-row notes retain their AI-assisted provenance. The test worklist remains pending and sealed until the final model, taxonomy, prompt, and configuration are frozen. Its reviewer must decide labels from the natural-language requests without model predictions or paired Bash commands.
 
 ## 2. Files
 
@@ -48,7 +48,7 @@ Use the --help option on either subcommand to see options for alternate paths, p
 
 ## 4. Blind development and test review
 
-Development and test annotations are separate from the training pilot. They must be reviewed without heuristic suggestions so the evaluation labels are not influenced by the same rules used to create the training suggestions.
+Development and test annotations are separate from the training pilot. Their worklists contain no heuristic suggestions. The project owner has completed a subsequent human review of the development labels. The test worklist must remain untouched until the system configuration is frozen.
 
 Create both held-out review files:
 
@@ -57,7 +57,7 @@ Create both held-out review files:
 
 Each command selects one original record from every duplicate group in that partition. The current partitions produce 375 review rows each. The suggestion columns are intentionally blank, and all rows begin pending.
 
-Review each request using the intent taxonomy. Do not use model predictions or the paired command to infer the label. The paired command is shown only as context when the request is genuinely underspecified. Mark a row ambiguous or rejected when one primary label cannot be established.
+For development review, decide from the natural-language request; the paired command may be used only as supporting context when the request is genuinely underspecified. For the final test review, do not inspect or use the paired Bash command at all, and do not use classifier predictions. The test worklist remains blind until the full generation configuration is frozen. Mark a row ambiguous or rejected when one primary label cannot be established.
 
 Validate the reviewed files separately:
 
@@ -69,7 +69,7 @@ The resulting exports are:
 - data/annotations/dev_confirmed_intents.jsonl
 - data/annotations/test_confirmed_intents.jsonl
 
-Each export records its own partition name and checksum. The classifier training loader rejects development and test exports. Use development labels only for threshold/configuration selection. Keep test labels untouched until the classifier configuration is frozen, then evaluate on the test partition once.
+Each export records its own partition name and checksum. The classifier training loader rejects development and test exports. Use development labels only for threshold/configuration selection and development-only engineering experiments. Keep test labels untouched until the taxonomy, classifier, confidence threshold, generator model, prompt, and validation configuration are frozen. Then review the 375 test requests, validate the test export, and run the final test evaluation once.
 
 ## 5. CSV columns
 
@@ -137,3 +137,19 @@ The annotation validator checks that:
 - The CSV path and source training checksum match the pilot manifest.
 
 Only rows explicitly marked confirmed are exported to the confirmed annotation JSONL file. Pending, ambiguous, and rejected rows are excluded. The confirmed-output manifest includes a checksum of the reviewed CSV and of the exported JSONL file. No heuristic suggestion is ever promoted automatically.
+
+## 10. Final test review handoff
+
+The final test review worksheet is `data/annotations/test_human_review.csv`. It contains exactly 375 rows with the stable example ID, the natural-language request, and three blank human-decision fields. It contains no paired reference Bash command, model prediction, or AI-suggested label. The canonical `data/annotations/test_review.csv` remains unchanged and all 375 rows remain pending until the human review is merged.
+
+For each request, choose one primary taxonomy label in `confirmed_intent` and set `review_status` to `confirmed`. A confirmed `other_or_ambiguous` label requires a short reason in `reviewer_note`. When the request cannot be assigned reliably, use `ambiguous` or `rejected`, leave `confirmed_intent` blank, and explain the reason. Complete all 375 rows; the importer refuses to merge a sheet that still has pending rows. Keep every `example_id` and `request` unchanged.
+
+After reviewing all rows, merge only the human decision fields into the canonical worklist and run its validator:
+
+```bash
+uv run nl2bash-annotations apply-test-review \
+  --review-csv data/annotations/test_human_review.csv
+uv run nl2bash-annotations validate --partition test
+```
+
+The importer checks the canonical source checksum, all IDs, request text, labels, statuses, and required notes. It copies only `confirmed_intent`, `review_status`, and `reviewer_note` from the human worksheet. It never uses or promotes an AI suggestion. The test confirmed export remains empty until this human merge and validation succeed. Do not inspect reference commands or classifier predictions during the test review.

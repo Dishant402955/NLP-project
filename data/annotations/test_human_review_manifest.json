@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "artifact_type": "blind_test_human_review_worklist",
+  "date": "2026-11-17",
+  "row_count": 375,
+  "review_file": "data/annotations/test_human_review.csv",
+  "source_worklist": "data/annotations/test_review.csv",
+  "source_worklist_sha256": "839c97131aa9778657d397bebbd72e009626a10153bcc0040e9e3ee8e557ce42",
+  "test_partition": "data/processed/nl2bash/test.jsonl",
+  "test_partition_sha256": "0af4b99c3d49cbf32a4d75a30cebe0412a93d3305c66263cb702aff9900dec66",
+  "initial_review_csv_sha256": "9d4ef82713ba6c4954c573a694c132936b2b7c242ea034719a8cb0c7c6fe38e4",
+  "review_columns": [
+    "example_id",
+    "request",
+    "confirmed_intent",
+    "review_status",
+    "reviewer_note"
+  ],
+  "includes_reference_commands": false,
+  "includes_ai_suggestions": false,
+  "review_status": "pending",
+  "instructions": "Complete every row in confirmed_intent, review_status, reviewer_note. Keep example_id and request unchanged. Only human decisions are merged into the canonical test worklist."
+}

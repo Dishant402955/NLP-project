@@ -151,9 +151,9 @@ The first pilot is generated from the training partition only. It contains 50 ca
 
 The pilot generator uses request-text rules only to suggest labels. It does not use the paired Bash command to assign a suggestion. Every row starts with a blank confirmed label and a pending review status. The suggestions are deliberately not treated as ground truth.
 
-The local worklist, its manifest, and the confirmed-only export are stored under `data/annotations/` and are versioned in Git. Generate it with .venv/bin/nl2bash-annotations create and validate reviewer decisions with .venv/bin/nl2bash-annotations validate. See the [Annotation Guide](ANNOTATION_GUIDE.md) for the full review procedure and CSV field definitions. The initial AI-assisted annotation pass has labelled all 500 training rows and all 375 development rows. These are provisional labels, not independent human annotations; see [Annotation Review Status](ANNOTATION_REVIEW_STATUS.md). Only independently reviewed labels should support final academic performance claims.
+The local worklist, its manifest, and the confirmed-only export are stored under `data/annotations/` and are versioned in Git. Generate it with .venv/bin/nl2bash-annotations create and validate reviewer decisions with .venv/bin/nl2bash-annotations validate. See the [Annotation Guide](ANNOTATION_GUIDE.md) for the full review procedure and CSV field definitions. The initial AI-assisted annotation pass labelled all 500 training rows and all 375 development rows. The project owner subsequently reviewed all 875 rows and reported zero further corrections; see [Human Review Attestation](HUMAN_REVIEW_ATTESTATION.md). Retain and disclose the AI-assisted annotation provenance; this is not an inter-annotator agreement study.
 
-Separate blind worklists are generated for development and test using one source record per duplicate group. These worklists contain no heuristic label suggestions. Their confirmed exports are tagged with the matching partition name and checksum. The classifier training loader rejects either held-out export. The development worklist has a provisional AI-assisted request-only annotation; the test worklist remains untouched and its confirmed export is empty. The test partition and pending worklist are tracked as data, but no test labels have been created.
+Separate blind worklists are generated for development and test using one source record per duplicate group. These worklists contain no heuristic label suggestions. Their confirmed exports are tagged with the matching partition name and checksum. The classifier training loader rejects either held-out export. The development labels have been reviewed by the project owner. The test worklist remains untouched and its confirmed export is empty. The test partition and pending worklist are tracked as data, but no test labels have been created.
 
 ## 10. Evaluation metrics
 
@@ -183,7 +183,7 @@ Exact string matching alone is not a complete measure of correctness.
 
 Measure generation latency under a recorded hardware, model, and configuration setup. Report the number of examples and the measurement method.
 
-## 11. Planned experiments
+## 11. Experiments
 
 1. Train an intent-classification baseline using TF-IDF and Logistic Regression.
 2. Evaluate entity extraction on annotated examples.
@@ -193,6 +193,12 @@ Measure generation latency under a recorded hardware, model, and configuration s
 6. Review representative failures and record limitations.
 
 Any functional or semantic command checks must run only in a controlled, isolated environment with reviewed examples. The normal application must never execute generated commands.
+
+### Command-generation development experiment
+
+The end-to-end CLI provides `nl2bash evaluate-generation-dev`, which performs a seeded, label-stratified sample from the confirmed development partition. It compares two conditions on the same requests: the original request alone, and the original request plus the intent prediction and deterministic entity context. Paired Bash reference commands are used only as evaluation targets and are never included in generation prompts. The report records exact string match, Bash syntax validity, selected explicit-constraint preservation, high-risk warnings, and latency. This is a small engineering experiment, not a final test estimate. It does not claim human-rated semantic correctness. The report and its model/data checksums are stored under `artifacts/evaluation/`.
+
+The test partition is excluded from this experiment. The evaluated prompt/model/runtime configuration is frozen in `artifacts/evaluation/frozen_generation_config.json` before the test worklist review. The recorded ten-request results and their limitations are documented in [Command-Generation Evaluation](GENERATION_EVALUATION.md).
 
 ## 12. Reporting
 
