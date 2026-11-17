@@ -137,23 +137,21 @@ Generated JSONL files and the manifest are stored under `data/processed/nl2bash/
 
 ## 8. Intent labels and annotation
 
-NL2Bash does not provide the intent labels needed to train our classifier. The project will use the [Intent Taxonomy](INTENT_TAXONOMY.md), which defines nine primary operation categories and an `other_or_ambiguous` fallback.
+NL2Bash does not provide the intent labels needed to train the classifier. This project uses the ten-label taxonomy documented in [Intent Taxonomy](INTENT_TAXONOMY.md). The labels are project annotations, not labels supplied by the source dataset.
 
-Begin with a manually reviewed pilot of approximately 50 examples per label. Review the pilot for unclear category boundaries before expanding it. The natural-language request is the classifier input; the paired command is supporting context for annotators, not a replacement for the request.
+The training set contains 500 confirmed annotations, the development set contains 375, and the test set contains 375. Training and development labels were initially AI-assisted and then reviewed by the project owner, who reported no further changes. The test labels were proposed from the natural-language requests only; reference commands and classifier predictions were not used to produce the suggestions. The project owner accepted all 375 suggestions without corrections.
 
-The labelled data must use the same duplicate-aware partitions described above. The classifier is trained only on confirmed training examples, its confidence threshold is selected using separately confirmed and blind-reviewed development examples, and it is evaluated once on blind-reviewed test examples after the threshold is frozen. The default threshold-selection rule maximizes macro-F1 subject to at least 80% coverage; see Intent Classifier for the full protocol.
+The test labels are therefore AI-assisted and owner-approved, not independently adjudicated ground truth. Any reported test metrics measure agreement with these labels and must disclose that provenance. The test label set has been exported with partition and checksum metadata. Run the project's annotation validator before the one-time classifier evaluation.
 
-Raw data, annotations, and generated split files are project research artifacts and are committed to Git with their license, source revision, and checksums.
+The labelled data follows the duplicate-aware partitions described above. The classifier is trained only on confirmed training examples, its confidence threshold is selected using development labels, and the test evaluation is run once after the threshold is frozen. The default threshold-selection rule maximizes development macro-F1 subject to at least 80% coverage; see [Intent Classifier](INTENT_CLASSIFIER.md).
 
-## 9. Intent annotation pilot
+## 9. Intent annotation pilot and held-out annotation provenance
 
-The first pilot is generated from the training partition only. It contains 50 candidate examples per taxonomy label, for 500 rows total. Each row comes from a distinct duplicate group, so the pilot does not contain multiple near-duplicate records from the same group.
+The training pilot contains 50 candidate examples per taxonomy label, for 500 rows total. Each row comes from a distinct duplicate group. Request-text rules generate weak suggestions; they are not ground truth. The project owner reviewed all 500 training annotations and all 375 development annotations after the initial AI-assisted annotation and reported zero further corrections. See [Human Review Attestation](HUMAN_REVIEW_ATTESTATION.md).
 
-The pilot generator uses request-text rules only to suggest labels. It does not use the paired Bash command to assign a suggestion. Every row starts with a blank confirmed label and a pending review status. The suggestions are deliberately not treated as ground truth.
+Development and test use separate partition-specific worklists, one source record per duplicate group. The canonical test worklist contains no in-file heuristic suggestions. Its separate 375-row suggestion artifact was generated from request text only. The project owner accepted all 375 suggested labels without corrections. The confirmed test JSONL export and checksum/provenance manifest are committed under `data/annotations/`.
 
-The local worklist, its manifest, and the confirmed-only export are stored under `data/annotations/` and are versioned in Git. Generate it with .venv/bin/nl2bash-annotations create and validate reviewer decisions with .venv/bin/nl2bash-annotations validate. See the [Annotation Guide](ANNOTATION_GUIDE.md) for the full review procedure and CSV field definitions. The initial AI-assisted annotation pass labelled all 500 training rows and all 375 development rows. The project owner subsequently reviewed all 875 rows and reported zero further corrections; see [Human Review Attestation](HUMAN_REVIEW_ATTESTATION.md). Retain and disclose the AI-assisted annotation provenance; this is not an inter-annotator agreement study.
-
-Separate blind worklists are generated for development and test using one source record per duplicate group. These worklists contain no heuristic label suggestions. Their confirmed exports are tagged with the matching partition name and checksum. The classifier training loader rejects either held-out export. The development labels have been reviewed by the project owner. The test worklist remains untouched and its confirmed export is empty. The test partition and pending worklist are tracked as data, but no test labels have been created.
+The test review is not an independent annotation study. The reviewer saw the AI-proposed labels; there is no second annotator, adjudication panel, or inter-annotator agreement score. The final classifier report must state this limitation. The test labels have not yet been used to compute the final classifier metrics. See [Annotation Review Status](ANNOTATION_REVIEW_STATUS.md) and [Final Test Annotation Review](TEST_PRELIMINARY_ANNOTATION_PROTOCOL.md).
 
 ## 10. Evaluation metrics
 
@@ -198,7 +196,7 @@ Any functional or semantic command checks must run only in a controlled, isolate
 
 The end-to-end CLI provides `nl2bash evaluate-generation-dev`, which performs a seeded, label-stratified sample from the confirmed development partition. It compares two conditions on the same requests: the original request alone, and the original request plus the intent prediction and deterministic entity context. Paired Bash reference commands are used only as evaluation targets and are never included in generation prompts. The report records exact string match, Bash syntax validity, selected explicit-constraint preservation, high-risk warnings, and latency. This is a small engineering experiment, not a final test estimate. It does not claim human-rated semantic correctness. The report and its model/data checksums are stored under `artifacts/evaluation/`.
 
-The test partition is excluded from this experiment. The evaluated prompt/model/runtime configuration is frozen in `artifacts/evaluation/frozen_generation_config.json` before the test worklist review. The recorded ten-request results and their limitations are documented in [Command-Generation Evaluation](GENERATION_EVALUATION.md).
+The test partition is excluded from this development experiment. The evaluated prompt/model/runtime configuration is frozen in `artifacts/evaluation/frozen_generation_config.json`. The recorded ten-request results and their limitations are documented in [Command-Generation Evaluation](GENERATION_EVALUATION.md). A larger generation evaluation and human semantic-correctness ratings remain outstanding; test requests must not be used to tune the frozen configuration.
 
 ## 12. Reporting
 
