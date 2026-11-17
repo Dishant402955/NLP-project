@@ -6,7 +6,7 @@ The system displays the generated command, explains what it does, and checks its
 
 ## Project status
 
-The Python package foundation, reproducible dataset preparation, intent classifier, deterministic entity extractor, local Qwen command-generation adapter, Bash syntax/safety validation, and end-to-end CLI are implemented. The project owner reviewed the 500 training and 375 development annotations after AI-assisted labelling and reported zero further corrections. The 375 test labels have also been approved without corrections from request-only AI proposals and are now present in the confirmed test export. This test annotation is AI-assisted and owner-approved, not independent ground truth; see [Annotation Review Status](docs/ANNOTATION_REVIEW_STATUS.md). The classifier, threshold, generator, prompt, and validation configuration are frozen from development work. The development generation comparison is recorded under `artifacts/evaluation/`. Final test classifier metrics, a reviewed entity benchmark, a larger generation evaluation with semantic ratings, and the final engineering audit remain outstanding.
+The Python package foundation, reproducible dataset preparation, intent classifier, deterministic entity extractor, local Qwen command-generation adapter, Bash syntax/safety validation, and end-to-end CLI are implemented. The project owner reviewed the 500 training and 375 development annotations after AI-assisted labelling and reported zero further corrections. The 375 test labels have also been approved without corrections from request-only AI proposals and are now present in the confirmed test export. This test annotation is AI-assisted and owner-approved, not independent ground truth; see [Annotation Review Status](docs/ANNOTATION_REVIEW_STATUS.md). The classifier, threshold, generator, prompt, and validation configuration are frozen from development work. The development generation comparison is recorded under `artifacts/evaluation/`. The one-time classifier test evaluation is complete: 68.53% accuracy, 0.6400 macro-F1, 0.6793 weighted-F1, and 99.47% coverage on 375 examples at the frozen development threshold. Test labels are AI-assisted and owner-approved, not independent ground truth. The entity gold benchmark, larger generation evaluation with semantic ratings, and final engineering audit remain outstanding.
 
 ## Versioned research artifacts
 
@@ -97,7 +97,7 @@ The CLI prints the proposed command, explanation, assumptions, syntax result, an
 
 ## Project evaluation
 
-The project has a development-only classifier and generation evaluation. The final test classifier evaluation, entity gold benchmark, and larger generation evaluation remain to be completed.
+The project has development and one-time test classifier evaluations, plus a ten-request development-only command-generation comparison. The entity gold benchmark and larger command-generation evaluation with semantic ratings remain outstanding.
 
 - Intent classification: accuracy, precision, recall, and F1-score.
 - Entity extraction: precision, recall, and F1-score.
