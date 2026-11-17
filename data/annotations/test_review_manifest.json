@@ -2650,11 +2650,31 @@
     "partition_sha256": "0af4b99c3d49cbf32a4d75a30cebe0412a93d3305c66263cb702aff9900dec66"
   },
   "summary": {
-    "all_review_statuses_pending": true,
+    "all_review_statuses_pending": false,
     "blind_manual_review": true,
     "partition_groups_available": 375,
     "partition_records_available": 1261,
     "pilot_records": 375,
-    "unique_duplicate_groups": 375
+    "unique_duplicate_groups": 375,
+    "all_rows_reviewed": true,
+    "confirmed_records": 375,
+    "pending_records": 0,
+    "status_counts": {
+      "pending": 0,
+      "confirmed": 375,
+      "ambiguous": 0,
+      "rejected": 0
+    }
+  },
+  "annotation_provenance": {
+    "method": "request-only AI-proposed intents reviewed and explicitly approved by project owner",
+    "suggestion_file": "data/annotations/test_ai_suggestions.csv",
+    "suggestion_manifest": "data/annotations/test_ai_suggestions_manifest.json",
+    "owner_approved_rows": 375,
+    "owner_corrections": 0,
+    "reference_commands_exposed_during_suggestion": false,
+    "classifier_predictions_exposed_during_review": false,
+    "independent_annotation_claimed": false,
+    "limitation": "These labels are AI-assisted and owner-approved, not independently adjudicated ground truth. Report this provenance when interpreting test metrics."
   }
 }
