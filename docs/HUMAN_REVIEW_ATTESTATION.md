@@ -12,6 +12,6 @@ The project owner reports completing a final independent review of all 875 train
 
 The review found no labels requiring correction. The committed CSV contents therefore remain unchanged by this final pass. The existing row notes continue to describe the origin of the original AI-assisted annotation decisions; this attestation records the later human review and agreement, not a claim that the initial labels were human-authored.
 
-The test worklist remains sealed and pending. It was not reviewed in this phase and must not be used for prompt design, threshold tuning, model selection, or error-driven implementation changes. A final test-label review is scheduled only after the application and development configuration are frozen.
+Scope note: this attestation covers only the 500 training and 375 development rows. At the time it was written, the test worklist had not yet been reviewed. The later test process is documented separately in [Final Test Annotation Review](TEST_PRELIMINARY_ANNOTATION_PROTOCOL.md): 375 request-only AI-proposed labels were accepted by the project owner without corrections. Those test labels are AI-assisted and owner-approved, not independent ground truth.
 
 This is a project-owner attestation recorded from their report. It is not an inter-annotator agreement study and does not imply a second independent annotator.
