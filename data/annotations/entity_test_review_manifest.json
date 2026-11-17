@@ -187,5 +187,13 @@
     "group-nl2bash-000942",
     "group-nl2bash-001068",
     "group-nl2bash-001206"
-  ]
+  ],
+  "annotation_provenance": {
+    "method": "request-only AI-assisted entity candidates reviewed and approved by project owner",
+    "reviewer": "project_owner",
+    "reviewed_at": "2026-11-17",
+    "owner_approved_rows": 66,
+    "independent_annotation_claimed": false,
+    "review_summary": "Project owner reviewed all 66 assistant-reviewed proposal rows and requested no corrections. The reviewed rows preserve the proposal sheet exact spans and include 8 approved empty-entity rows."
+  }
 }

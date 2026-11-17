@@ -82,9 +82,7 @@ An issue is not a generated clarification question. It is structured evidence fo
 
 ## 6. Evaluation
 
-`nl2bash.entity_evaluation.evaluate_entity_extraction` computes micro and macro precision, recall, and F1, plus per-entity-type metrics. Macro averages exclude entity types with zero gold support in the evaluated sample. A match requires exact entity type, value, and character span. Partial overlaps do not receive credit. Gold annotations use `ExtractedEntity` values whose offsets refer to the normalized request.
-
-The metric implementation is separate from annotation creation. The repository contains a targeted 66-request entity test sample, request-only AI-assisted candidate spans, a separate pending owner-review CSV, and an exact-span review/evaluation CLI. The assistant-reviewed proposal sheet is available in [Entity Annotation Review](ENTITY_ANNOTATION_REVIEW.md). These proposals are not gold labels. No entity precision, recall, or F1 result is claimed until the project owner reviews every row, the separate CSV is marked confirmed with reviewer notes, and the guarded evaluator runs once. The sample is targeted, not prevalence-representative; it has zero observed candidates for `process_name` and `process_metric` and only one explicit port candidate.
+The metric implementation is separate from annotation creation. The project owner reviewed all 66 request-only AI-assisted proposal rows and requested no corrections. The confirmed CSV contains 113 spans across 58 requests and eight approved empty rows. The guarded exact-span evaluator ran once and its results are documented in [Entity Evaluation](ENTITY_EVALUATION.md). The sample is targeted, not prevalence-representative; it has no gold support for process_name or process_metric and only one explicit port example. Labels are owner-approved AI suggestions, not independently adjudicated gold labels.
 
 ## 7. Known limitations
 
@@ -98,8 +96,8 @@ The end-to-end CLI performs a separate, deliberately limited check after generat
 It also flags generated `-size` or time-range filters when the request contains no corresponding size or date entity, and checks that explicit case-sensitivity instructions are not contradicted by `find` ignore-case flags. This is not a semantic-equivalence checker. It may flag equivalent commands that express constraints differently, and it does not cover every entity or utility syntax. The result supplements, but does not replace, Bash syntax and safety checks.
 
 
-## 9. Benchmark status and next step
+## 9. Benchmark status
 
-The extractor and exact-span metric implementation are available. The repository now contains a targeted 66-row entity review sample with request-only AI candidate annotations and a separate human-review CSV. The assistant-reviewed proposal sheet is [Entity Annotation Review](ENTITY_ANNOTATION_REVIEW.md); it is a review aid, not gold data. The project owner must approve or correct all 66 rows before any entity metrics are produced. The review manifest records partition/worklist checksums, sample IDs/groups, exact-span offsets, and the targeted-sample limitation. The one-time evaluator is available as `uv run python -m nl2bash.entity_benchmark_cli`; its provenance contract requires the owner-approved rows and it must be run only after review.
+The targeted 66-row owner review and one-time exact-span test evaluation are complete. The canonical reviewed CSV, provenance manifest, report, and one-time guard are committed in the project. Full results, exact support counts, and limitations are documented in [Entity Evaluation](ENTITY_EVALUATION.md).
 
-After approval, confirm the exact entity type, source value, optional normalized value, and half-open offsets into the normalized request. Preserve valid overlapping spans. Run the evaluator once and report micro and per-type precision, recall, F1, and support. Keep rule-development examples separate and never tune extraction rules from this held-out entity scoring sample.
+The evaluator is available as uv run python -m nl2bash.entity_benchmark_cli. Do not rerun it, remove its guard, or tune extraction rules using the held-out entity sample. Future extractor improvements must use separate development or challenge examples and be described as post-test exploratory work.

@@ -11,6 +11,11 @@ on:
       - "data/annotations/entity_test_ai_suggestions.jsonl"
       - "data/annotations/entity_test_human_review.csv"
       - "data/annotations/entity_test_review_manifest.json"
+      - "artifacts/evaluation/entity_test_report.json"
+      - "artifacts/evaluation/entity_test_evaluation.lock"
+      - "artifacts/evaluation/generation_dev_v7_report.json"
+      - "data/annotations/generation_dev_v7_semantic_review.csv"
+      - "data/annotations/generation_dev_v7_assistant_semantic_review.csv"
       - "data/annotations/test_review.csv"
       - "data/processed/nl2bash/test.jsonl"
       - "data/processed/nl2bash/manifest.json"
@@ -111,6 +116,8 @@ jobs:
               if line.strip()
           ]
           review_path = root / "data/annotations/entity_test_human_review.csv"
+          report_path = root / "artifacts/evaluation/entity_test_report.json"
+          guard_path = root / "artifacts/evaluation/entity_test_evaluation.lock"
 
           assert manifest["sample_size"] == 66
           assert len(suggestions) == 66
@@ -119,6 +126,11 @@ jobs:
           assert manifest["source_worklist"] == "data/annotations/test_review.csv"
           assert sha256("data/annotations/test_review.csv") == manifest["source_worklist_sha256"]
           assert sha256(partition_path) == manifest["source_partition_sha256"]
+          provenance = manifest.get("annotation_provenance")
+          assert isinstance(provenance, dict)
+          assert provenance.get("method") == "request-only AI-assisted entity candidates reviewed and approved by project owner"
+          assert provenance.get("owner_approved_rows") == 66
+          assert provenance.get("independent_annotation_claimed") is False
 
           source_by_id = {row["example_id"]: row for row in partition}
           counts = Counter()
@@ -145,9 +157,84 @@ jobs:
           with review_path.open(encoding="utf-8-sig", newline="") as stream:
               review_rows = list(csv.DictReader(stream))
           assert len(review_rows) == 66
-          assert all(row["review_status"] == "pending" for row in review_rows)
-          assert all(row["confirmed_entities_json"] == "" for row in review_rows)
+          assert [row["example_id"] for row in review_rows] == manifest["sample_example_ids"]
+          confirmed_count = 0
+          for review_row in review_rows:
+              assert review_row["review_status"] == "confirmed"
+              assert review_row["reviewer_note"].strip()
+              source = source_by_id[review_row["example_id"]]
+              assert review_row["group_id"] == source["group_id"]
+              assert review_row["request"] == source["request"]
+              entities = json.loads(review_row["confirmed_entities_json"])
+              assert isinstance(entities, list)
+              seen = set()
+              for entity in entities:
+                  assert entity["entity_type"] in entity_types
+                  start, end = entity["start"], entity["end"]
+                  assert isinstance(start, int) and isinstance(end, int) and 0 <= start < end <= len(source["request"])
+                  assert source["request"][start:end] == entity["value"]
+                  key = (entity["entity_type"], entity["value"], start, end)
+                  assert key not in seen
+                  seen.add(key)
+                  confirmed_count += 1
+          assert confirmed_count == 113
 
-          print("Entity sample provenance, source identities, suggestion offsets, candidate counts, and pending review state all verified.")
-          print(f"Rows: {len(suggestions)}; candidate spans: {sum(counts.values())}; types observed: {len(counts)}")
+          report = read_json("artifacts/evaluation/entity_test_report.json")
+          guard = read_json("artifacts/evaluation/entity_test_evaluation.lock")
+          report_bytes = (json.dumps(report, ensure_ascii=False, sort_keys=True, indent=2) + "\n").encode("utf-8")
+          assert report["artifact_type"] == "entity_extraction_test_evaluation"
+          assert report["evaluated_once"] is True
+          assert report["sample_size"] == 66
+          assert report["metrics"]["total_gold"] == 113
+          assert report["metrics"]["total_correct"] == 73
+          assert guard["status"] == "completed" and guard["sample_size"] == 66
+          assert guard["review_csv_sha256"] == sha256(review_path)
+          assert guard["report_sha256"] == hashlib.sha256(report_bytes).hexdigest()
+
+          print("Entity sample provenance, owner-confirmed spans, one-time report, and guard integrity verified.")
+          print(f"Rows: {len(suggestions)}; original candidate spans: {sum(counts.values())}; confirmed spans: {confirmed_count}; entity types proposed: {len(counts)}")
+          PY
+
+      - name: Verify v7 development report and blinded semantic review artifacts
+        run: |
+          python - <<'PY'
+          import csv
+          import json
+          from pathlib import Path
+
+          def read_rows(path):
+              with Path(path).open(encoding="utf-8-sig", newline="") as stream:
+                  return list(csv.DictReader(stream))
+
+          report = json.loads(Path("artifacts/evaluation/generation_dev_v7_report.json").read_text(encoding="utf-8"))
+          official = read_rows("data/annotations/generation_dev_v7_semantic_review.csv")
+          assistant = read_rows("data/annotations/generation_dev_v7_assistant_semantic_review.csv")
+
+          assert report["evaluation_type"] == "development_generation_comparison"
+          assert report["sample_size"] == 40
+          assert report["test_data_used"] is False
+          assert report["reference_commands_in_generation_prompts"] is False
+          assert set(report["metrics"]) == {"request_only", "nlp_context"}
+
+          assert len(official) == 80
+          official_by_id = {row["review_item_id"]: row for row in official}
+          assert len(official_by_id) == 80
+          assert all(not row["semantic_rating"] and not row["reviewer_note"] for row in official)
+          assert all(row["review_item_id"].endswith(("-A", "-B")) for row in official)
+
+          assert len(assistant) == 80
+          assistant_by_id = {row["review_item_id"]: row for row in assistant}
+          assert set(assistant_by_id) == set(official_by_id)
+          allowed = {"correct_as_written", "partially_correct_needs_edits", "incorrect_or_unsafe"}
+          for review_id, row in assistant_by_id.items():
+              source = official_by_id[review_id]
+              assert row["reviewer_type"] == "assistant_preliminary_not_human_gold"
+              assert row["reviewer_id"].strip()
+              assert row["semantic_rating"] in allowed
+              assert row["reviewer_note"].strip()
+              for field in ("example_id", "request", "candidate_command", "generation_succeeded"):
+                  assert row[field] == source[field]
+              assert "condition" not in row and "variant" not in row
+
+          print("v7 report is development-only; all 80 assistant assessments are separate, and all 80 owner-facing ratings remain blank.")
           PY

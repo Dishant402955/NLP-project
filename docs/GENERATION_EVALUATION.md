@@ -78,3 +78,19 @@ The committed ten-request development comparison is not a final command-generati
 A human semantic review is also required. Reviewers should see the natural-language request and generated command, but not the generation condition. Use a defined correctness scale (for example: correct as written, partially correct/needs edits, incorrect or unsafe), record the reason for each non-perfect rating, and do not execute commands. Ideally use two independent reviewers and adjudicate disagreements. The reference command may be used after generation as an additional comparison target, but must never be inserted into generation prompts.
 
 No larger held-out generation run or human semantic rating has been completed. Keep the frozen configuration unchanged and disclose that the current evidence consists of a ten-request development engineering comparison only.
+
+## Frozen v7 development comparison
+
+The 40-request paired development comparison completed successfully on 2026-11-17. It verified the frozen classifier, prompt, model, threshold, generation pipeline, runtime and package hashes before inference. The experiment used the development partition only; test_data_used is false, and reference commands were not included in generation prompts.
+
+The full automated report is artifacts/evaluation/generation_dev_v7_report.json. The blinded worksheet is data/annotations/generation_dev_v7_semantic_review.csv and contains 80 candidates, two for each of the 40 requests. Both files were uploaded as the nl2bash-generation-dev-v7 workflow artifact and committed to the repository.
+
+The automated report records generation success, Bash syntax validity, selected explicit-constraint checks, exact reference string matches, heuristic high-risk warnings, and latency. None of these metrics establishes semantic correctness. The 80 worksheet rows still have blank semantic-rating and reviewer-note fields, so the blinded semantic evaluation is not complete. Review candidates from request text and generated command only; do not execute them or use reference commands to decide semantic ratings. Keep the A/B-to-condition mapping hidden until all ratings are finalized.
+
+This is a development experiment, not held-out test evaluation. Do not tune the frozen model, prompt, classifier, threshold, runtime, or safety rules using test data.
+
+## Assistant semantic review (A/B labels retained)
+
+A single assistant-only review pass rated all 80 v7 candidates using each request and candidate command. It did not consult reference commands or execute generated commands. The supplementary review is data/annotations/generation_dev_v7_assistant_semantic_review.csv, with rubric and limitations in [Generation v7 Assistant Semantic Review](GENERATION_V7_ASSISTANT_REVIEW.md).
+
+The preliminary rating counts are 11 correct as written, 25 partial / needing edits, and 44 incorrect or unsafe. The A and B candidate labels are retained in the summary. These are not human gold ratings or independent adjudication. The original owner-facing worksheet remains unchanged and unrated; any owner review should be recorded separately. No model, prompt, or frozen pipeline files were modified.

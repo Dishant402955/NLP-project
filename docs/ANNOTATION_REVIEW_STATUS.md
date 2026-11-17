@@ -106,11 +106,14 @@ Per-class test F1:
 
 The classifier artifact, development-selected confidence threshold, local command-generation model, prompt, runtime settings, and validation configuration are frozen. Test annotations must not be used to change them.
 
-Remaining work:
+## Entity benchmark result
 
-1. Review the 66 request-only AI-assisted entity proposals in [Entity Annotation Review](ENTITY_ANNOTATION_REVIEW.md), correct/approve them, and run the guarded exact-span entity test evaluation once. The sample is targeted, not prevalence-representative, and has sparse/zero support for some types.
-2. Complete the 40-request generation v7 development comparison and obtain owner-reviewed blind semantic ratings for its 80 condition-masked candidates. Do not reveal the A/B-to-condition mapping until ratings are complete.
-3. Complete the final clean-install, integration, and adversarial engineering audit. The entity evaluator module CLI and manifest sample-ID provenance have been added; the clean Python 3.10 smoke workflow verifies its `--help` entry point and sample metadata.
-4. Prepare the final report, presentation, and demonstration after the remaining benchmark results are available.
+The project owner reviewed all 66 request-only AI-assisted entity proposals and requested no corrections. The canonical CSV records 66 confirmed rows, 113 exact spans, and eight approved empty rows, with per-row notes. The manifest records owner-review provenance and explicitly does not claim independent annotation.
 
-The one-time classifier test evaluation is complete and must not be rerun. No test result may be used to revise intent labels, prompt text, model parameters, thresholds, or safety rules. Any change motivated by held-out test errors must be reported as post-test exploratory work, not as part of the evaluated system.
+The guarded exact-span entity test evaluation ran once. It produced 0.8588 micro precision, 0.6460 micro recall, 0.7374 micro F1, and 0.7517 macro-F1 over nine entity types with gold support. Per-type results and support appear in [Entity Evaluation](ENTITY_EVALUATION.md). The sample is targeted rather than prevalence-representative; it has zero gold support for process_name and process_metric and only one port example. Do not rerun the evaluation or tune extraction rules on this held-out sample.
+
+## Remaining work
+
+1. The 40-request generation v7 development comparison is complete. A separate assistant-only pass rated all 80 A/B candidates (11 correct, 25 partial, 44 incorrect/unsafe); see [Generation v7 Assistant Semantic Review](GENERATION_V7_ASSISTANT_REVIEW.md). The original owner-facing worksheet remains blank, so owner semantic sign-off is still pending. Do not execute candidates or use reference commands to determine ratings. Keep the A/B-to-condition mapping hidden until owner ratings are finalized.
+2. The final engineering audit completed its selected clean-install, malformed-output, missing-model/runtime, grounding, frozen-checksum, and parse-only safety checks. Known gaps are recorded in [Engineering Audit](ENGINEERING_AUDIT.md); do not patch the frozen pipeline without a new development evaluation.
+3. Prepare the final report, presentation, and demonstration. Include classifier and entity results, generation metrics plus semantic-review status, dataset/license provenance, AI-assisted annotation limitations, error analysis, safety boundaries, and reproducibility details. Do not invent missing semantic ratings.

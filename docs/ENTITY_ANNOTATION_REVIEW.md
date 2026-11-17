@@ -1,5 +1,7 @@
 # Entity annotation review: assistant-reviewed proposals
 
+**Owner review status (2026-11-17):** The project owner reviewed all 66 rows and requested no corrections. The canonical owner-confirmed rows are recorded in data/annotations/entity_test_human_review.csv; they contain 113 exact spans across 58 requests, with 8 approved empty-entity rows. Labels remain AI-assisted and owner-approved, not independently adjudicated.
+
 **Purpose:** Human-review aid for the 66-row targeted entity benchmark. This document contains assistant-reviewed proposals, not gold labels. Do not use it as confirmed annotation until the project owner approves or corrects every row.
 
 **Annotation contract:** Exact source text; zero-based Python character offsets; exclusive end; offsets into the original request after outer whitespace trimming. `request[start:end]` must equal the recorded value. Overlaps are allowed, including a filename/path with its extension. Empty lists mean no supported entity is proposed.

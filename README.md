@@ -6,7 +6,7 @@ The system displays the generated command, explains what it does, and checks its
 
 ## Project status
 
-The Python package foundation, reproducible dataset preparation, intent classifier, deterministic entity extractor, local Qwen command-generation adapter, Bash syntax/safety validation, and end-to-end CLI are implemented. The project owner reviewed the 500 training and 375 development annotations after AI-assisted labelling and reported zero further corrections. The 375 test intent labels were approved without corrections from request-only AI proposals and are present in the confirmed test export. This test annotation is AI-assisted and owner-approved, not independent ground truth; see [Annotation Review Status](docs/ANNOTATION_REVIEW_STATUS.md). The classifier, threshold, generator, prompt, and validation configuration are frozen from development work. The one-time classifier test evaluation is complete: 68.53% accuracy, 0.6400 macro-F1, 0.6793 weighted-F1, and 99.47% coverage on 375 examples at the frozen development threshold. Test labels are AI-assisted and owner-approved, not independent ground truth. A targeted 66-request entity review sheet is available in [Entity Annotation Review](docs/ENTITY_ANNOTATION_REVIEW.md); owner approval is pending. A 40-request frozen generation v7 development comparison is running/being verified, after which its 80-row blind semantic review will require owner ratings. The final engineering audit and academic deliverables remain outstanding.
+The Python package foundation, reproducible dataset preparation, intent classifier, deterministic entity extractor, local Qwen command-generation adapter, Bash syntax/safety validation, and end-to-end CLI are implemented. The project owner reviewed the 500 training and 375 development annotations after AI-assisted labelling and reported zero further corrections. The 375 test intent labels were approved without corrections from request-only AI proposals and are present in the confirmed test export. These test annotations are AI-assisted and owner-approved, not independent ground truth; see the Annotation Review Status. The classifier, threshold, generator, prompt, and validation configuration are frozen from development work. The one-time classifier test evaluation is complete: 68.53% accuracy, 0.6400 macro-F1, 0.6793 weighted-F1, and 99.47% coverage on 375 examples at the frozen development threshold. The targeted 66-request entity review was approved without corrections and its one-time exact-span test evaluation is complete: 0.8588 micro precision, 0.6460 micro recall, 0.7374 micro F1, and 0.7517 macro-F1 across nine supported types; see Entity Evaluation. These entity labels are AI-assisted and owner-approved, and the sample is not prevalence-representative. The 40-request generation v7 development comparison completed. A preliminary assistant-only semantic review rated 11 of 80 candidates correct as written; the original owner-facing worksheet remains unrated. The final engineering audit passed its selected checks and documented validator limitations; see Engineering Audit.
 
 ## Versioned research artifacts
 
@@ -67,7 +67,10 @@ Detailed project documentation is maintained in the [docs](docs/) directory.
 - [Annotation Guide](docs/ANNOTATION_GUIDE.md): commands and instructions for reviewing, confirming, and validating the training and held-out annotation worklists.
 - [Intent Classifier](docs/INTENT_CLASSIFIER.md): TF-IDF and Logistic Regression training, prediction, threshold selection, and one-time test evaluation commands.
 - [Annotation Review Status](docs/ANNOTATION_REVIEW_STATUS.md): annotation provenance, partition counts, development metrics, approved test-label distribution, and remaining evaluation steps.
-- [Entity Extraction](docs/ENTITY_EXTRACTION.md): supported entity types, extraction rules, structured output, uncertainty findings, and exact-span evaluation.
+- [Entity Extraction](docs/ENTITY_EXTRACTION.md): supported entity types, extraction rules, structured output, and generation-time grounding checks.
+- [Entity Evaluation](docs/ENTITY_EVALUATION.md): owner-reviewed targeted test sample, exact-span metrics, per-type support, and limitations.
+- [Generation v7 Assistant Semantic Review](docs/GENERATION_V7_ASSISTANT_REVIEW.md): preliminary request-only assistant ratings for the 80 blinded candidates.
+- [Engineering Audit](docs/ENGINEERING_AUDIT.md): local clean-install, adversarial, grounding, checksum, and safety checks with known limitations.
 - [Implementation Roadmap](docs/IMPLEMENTATION_ROADMAP.md): ordered development steps, acceptance criteria, verification protocol, and commit strategy.
 - [Local Model Setup](docs/LOCAL_MODEL_SETUP.md): local GGUF model installation, runtime setup, and CLI usage.
 - [Command-Generation Evaluation](docs/GENERATION_EVALUATION.md): development-only comparison of request-only and NLP-context generation, with limitations and frozen configuration.
@@ -97,7 +100,7 @@ The CLI prints the proposed command, explanation, assumptions, syntax result, an
 
 ## Project evaluation
 
-The project has development and one-time test classifier evaluations, plus a ten-request development-only command-generation comparison. The entity gold benchmark and larger command-generation evaluation with semantic ratings remain outstanding.
+The project has development and one-time test classifier evaluations, a one-time targeted entity exact-span test evaluation, and a 40-request paired development-only generation comparison. A preliminary assistant review of its 80 candidates is documented separately; owner semantic sign-off remains pending.
 
 - Intent classification: accuracy, precision, recall, and F1-score.
 - Entity extraction: precision, recall, and F1-score.

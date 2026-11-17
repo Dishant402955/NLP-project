@@ -428,7 +428,7 @@ The implementation is divided into small commits. See [Intent Classifier](INTENT
 
 ### Step 8: Evaluation and experiments
 
-**Status:** Classifier test evaluation complete; the 40-request generation v7 workflow is running; blinded semantic ratings remain pending.
+**Status:** Classifier and entity one-time test evaluations complete; generation v7 development comparison complete; preliminary assistant ratings recorded; owner-facing semantic sign-off remains open.
 
 **Completed:**
 - Training/dev annotation checksums and source provenance revalidated.
@@ -440,17 +440,17 @@ The implementation is divided into small commits. See [Intent Classifier](INTENT
 **Limitations:**
 - The generation sample is small and intended for engineering comparison, not a final test estimate.
 - Exact match does not establish semantic equivalence.
-- No human semantic-accuracy rating is claimed.
-- The entity extractor has no independently adjudicated gold benchmark yet; its exact-span metric implementation exists, but no entity precision/recall/F1 result will be fabricated.
+- The preliminary assistant semantic review is not human gold and does not establish independent semantic accuracy.
+- The entity test sample is AI-assisted and owner-approved, targeted rather than prevalence-representative, and has sparse/zero support for some types.
 - The test partition and annotations are not read or used in these experiments.
 
 **Completed:** The ten-request v6 development experiment is recorded in `artifacts/evaluation/generation_dev_v6_report.json`. The context-aware condition achieved 10/10 selected explicit-constraint checks and 9/10 syntax-valid outputs; request-only achieved 8/10 constraint checks and 9/10 syntax-valid outputs. Neither condition exactly matched the reference command on this small sample. The prompt/model/runtime/validator setup is frozen in `artifacts/evaluation/frozen_generation_config.json`.
 
-**Remaining:** Do not rerun the guarded classifier test evaluation. Verify that the 40-request v7 development workflow commits its report and 80-row condition-masked worksheet. Obtain owner-reviewed semantic ratings before unmasking A/B conditions. Complete the separate entity benchmark only after owner review of the 66-row entity worksheet. Do not use held-out test labels or results to tune the frozen system.
+**Completed:** The 40-request v7 development workflow committed its report and 80-row condition-masked worksheet. The 66-row entity review was approved without corrections and its guarded exact-span evaluation ran once. A separate assistant-only semantic review is recorded; owner-facing semantic sign-off remains open. Do not rerun either one-time test evaluation or use held-out test labels/results to tune the frozen system.
 
 ### Step 9: Final integration review and documentation
 
-**Status:** Documentation updated and published; clean-environment runtime audit pending.
+**Status:** Documentation updated; local clean-install and selected adversarial audit checks passed. Known validator limitations are recorded in docs/ENGINEERING_AUDIT.md.
 
 **Delivered:** README quick start, local model setup, human-review attestation, annotation status, generation experiment protocol, updated architecture/technical design, and Bash/constraint-validation limitations.
 
