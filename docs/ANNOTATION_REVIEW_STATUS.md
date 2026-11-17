@@ -108,9 +108,9 @@ The classifier artifact, development-selected confidence threshold, local comman
 
 Remaining work:
 
-1. Build a separate entity benchmark and report exact-span metrics. Do not tune extraction rules against its held-out portion.
-2. Run a larger command-generation experiment and obtain human semantic-correctness ratings. The existing ten-request development comparison is an engineering sample only.
-3. Complete the final clean-install, integration, and adversarial engineering audit.
-4. Prepare the final report, presentation, and demonstration.
+1. Review the 66 request-only AI-assisted entity proposals in [Entity Annotation Review](ENTITY_ANNOTATION_REVIEW.md), correct/approve them, and run the guarded exact-span entity test evaluation once. The sample is targeted, not prevalence-representative, and has sparse/zero support for some types.
+2. Complete the 40-request generation v7 development comparison and obtain owner-reviewed blind semantic ratings for its 80 condition-masked candidates. Do not reveal the A/B-to-condition mapping until ratings are complete.
+3. Complete the final clean-install, integration, and adversarial engineering audit. The new entity evaluator console entry point and manifest sample-ID provenance have been added; runtime verification of that command remains outstanding.
+4. Prepare the final report, presentation, and demonstration after the remaining benchmark results are available.
 
-No test result may be used to revise intent labels, prompt text, model parameters, thresholds, or safety rules. Any change motivated by test errors must be reported as post-test exploratory work, not as part of the evaluated system.
+The one-time classifier test evaluation is complete and must not be rerun. No test result may be used to revise intent labels, prompt text, model parameters, thresholds, or safety rules. Any change motivated by held-out test errors must be reported as post-test exploratory work, not as part of the evaluated system.
