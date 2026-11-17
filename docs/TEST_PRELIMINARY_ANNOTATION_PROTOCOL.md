@@ -1,39 +1,51 @@
-# Final Test Annotation Review Protocol
+# Final Test Annotation Review and Provenance
 
-**Date:** 2026-11-17
+**Date:** 2026-11-17  
+**Status:** Completed; evaluation remains pending.
 
-## Purpose
+## Test annotation outcome
 
-The 375-row test worklist is the final held-out partition. The classifier, confidence threshold, local generator, prompt, and validation configuration have been frozen using training and development data. This protocol describes the final human intent review before the one-time test evaluation.
+All 375 test requests have a confirmed intent label in:
 
-## Blind review worksheet
+- `data/annotations/test_review.csv`
+- `data/annotations/test_confirmed_intents.jsonl`
 
-Open `data/annotations/test_human_review.csv`. It contains only:
+The owner-reviewed worksheet is `data/annotations/test_human_review.csv`. The request-only AI suggestions and their provenance are recorded in:
 
-- The stable `example_id`.
-- The natural-language `request`.
-- Blank `confirmed_intent`, `review_status`, and `reviewer_note` fields.
+- `data/annotations/test_ai_suggestions.csv`
+- `data/annotations/test_ai_suggestions_manifest.json`
 
-It contains no paired reference Bash commands, model predictions, or AI-suggested labels. The canonical `data/annotations/test_review.csv` remains untouched until the completed human decisions are imported.
+The project owner reviewed all 375 proposed labels and accepted them without corrections. The distribution is recorded in [Annotation Review Status](ANNOTATION_REVIEW_STATUS.md).
 
-## Decision rules
+## Provenance and limitations
 
-Read each request and choose one primary label from the [Intent Taxonomy](INTENT_TAXONOMY.md). Record the decision in `confirmed_intent` and set `review_status=confirmed`.
+The suggestions were based only on the natural-language requests. The suggestion pass did not use reference Bash commands or predictions from the project's intent classifier. The project owner was shown the suggested labels and accepted all of them.
 
-For a request that is too unclear to assign reliably, choose `ambiguous`, leave `confirmed_intent` blank, and provide a concise rationale in `reviewer_note`. Use `other_or_ambiguous` for a clearly out-of-scope request; that confirmed label requires a reviewer note. Do not use `rejected` during this blind review because it requires checking a request-command mismatch and the paired command is intentionally hidden.
+Therefore this is **request-only AI-assisted annotation with owner approval**, not independent human annotation and not an inter-annotator agreement study. The final report must disclose this limitation. Test classifier metrics measure agreement with these owner-approved AI-assisted labels; they must not be described as performance against independently adjudicated ground truth.
 
-Review all 375 rows. Keep the example IDs and request text unchanged. Do not inspect paired reference commands or classifier predictions. Do not use test errors to revise the taxonomy, classifier, prompt, model, confidence threshold, or validation rules.
+The reviewed worksheet itself contains no reference commands or classifier predictions. The canonical test worklist preserves the original source pair and records only the final owner-approved decisions. The test annotations must not be used to tune the classifier, threshold, generator, prompt, entity rules, or safety checks.
 
-## Import and validate
+## Integrity checks
 
-From the repository root:
+The published annotation export contains 375 records, all marked confirmed, with 375 unique example IDs and all ten taxonomy labels represented. The request, reference command, and duplicate-group identity of each record were checked against the source test partition. The 22 `other_or_ambiguous` labels have reviewer notes. The reviewed CSV and JSONL SHA-256 values match the checksums in `test_confirmed_intents_manifest.json`.
+
+The files have been prepared to the schema enforced by the project validator. Run the CLI validator in the project environment before evaluating:
 
 ```bash
-uv run nl2bash-annotations apply-test-review \
-  --review-csv data/annotations/test_human_review.csv
+uv sync --locked
 uv run nl2bash-annotations validate --partition test
 ```
 
-The importer verifies the source worklist checksum, IDs, and request text. It copies only the three human-decision fields into the canonical test worklist. It refuses incomplete reviews and validates taxonomy labels and required notes. The standard annotation validator then exports confirmed labels to `test_confirmed_intents.jsonl`.
+The repository-side construction and checksum checks do not substitute for that runtime validator invocation.
 
-The final test evaluation is performed once, after the human-reviewed export validates. No test labels or results may be used for tuning.
+## One-time classifier test evaluation
+
+After the annotation validator passes, run exactly once:
+
+```bash
+uv run nl2bash-classifier evaluate-test
+```
+
+The command uses the frozen development threshold and writes `artifacts/evaluation/test_report.json`. It also creates `artifacts/evaluation/test_evaluation.lock` to prevent an accidental second evaluation. Do not delete or reset that guard unless the evaluation process was inspected and confirmed to have failed before producing a report.
+
+Report accuracy, macro/weighted and per-class precision/recall/F1, per-class support, confusion matrix, coverage, low-confidence count, model checksum, test partition checksum, annotation checksum, and the frozen threshold. Disclose the AI-assisted annotation provenance whenever reporting the test metrics.
