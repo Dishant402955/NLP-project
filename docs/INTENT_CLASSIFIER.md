@@ -111,11 +111,11 @@ Use the frozen threshold for ordinary prediction:
 
 The prediction command prints JSON with the public intent label, diagnostic top label, uncalibrated score, threshold, and low-confidence flag. The frozen threshold must belong to the loaded model.
 
-Run the final test evaluation only after the development threshold has been frozen:
+## Final test evaluation (completed)
 
-    .venv/bin/nl2bash-classifier evaluate-test
+The one-time final evaluation ran successfully in the clean Python 3.10 GitHub Actions environment after the development threshold was frozen. It produced `artifacts/evaluation/test_report.json` and the completed one-time guard `artifacts/evaluation/test_evaluation.lock`. Results: accuracy 0.6853, macro-F1 0.6400, weighted-F1 0.6793, macro precision 0.7854, macro recall 0.6186, and prediction coverage 0.9947 (373/375) at threshold 0.1361115729921777. Test labels are AI-assisted and owner-approved, not independent ground truth.
 
-The report is written to artifacts/evaluation/test_report.json. A separate test_evaluation.lock guard prevents another test evaluation in the same project workspace, including attempts that use a different output filename. A guard left in in_progress state after an interrupted process requires manual inspection before any reset.
+**Do not run `nl2bash-classifier evaluate-test` again, delete/reset the guard, or overwrite the report.**
 
 The classifier CLI also provides --help for each command and options for alternate input and artifact paths. It never generates or executes a Bash command.
 
