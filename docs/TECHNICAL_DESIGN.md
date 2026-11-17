@@ -29,7 +29,7 @@ The implementation is organized around the following responsibilities:
 - Entity evaluation: compute exact-span micro and per-type precision, recall, and F1 against an adjudicated entity sample.
 - Command generator: construct the model prompt and obtain generated output.
 - Validator: parse commands and apply safety rules.
-- Evaluation: select a confidence threshold using confirmed development labels, then evaluate once on the blind-reviewed test partition with provenance and a one-time run guard.
+- Evaluation: select a confidence threshold using confirmed development labels, then evaluate once on the owner-approved test partition with explicit AI-assisted annotation provenance and a one-time run guard.
 
 ## 3. Model interaction
 
