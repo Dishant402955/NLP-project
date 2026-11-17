@@ -71,13 +71,13 @@ The classifier never executes a command. Model loading checks the model checksum
 
 ## 6. Evaluation protocol
 
-The classifier must not use development or test examples during fitting. The implementation validates each held-out export against its own partition checksum and requires the held-out export to originate from a worklist with no heuristic label suggestions. The project owner has additionally reviewed the training and development labels; the attestation records the human review provenance. The test export remains empty until the final test review is complete.
+The classifier must not use development or test examples during fitting. The implementation validates each held-out export against its own partition checksum and requires the canonical held-out worklist to contain no heuristic suggestion labels. The training and development labels were AI-assisted and then reviewed by the project owner. The 375 test labels were proposed by an AI assistant from request text only; the paired reference commands and classifier predictions were not used to produce the proposals. The project owner accepted all 375 suggestions without corrections. This is AI-assisted, owner-approved annotation, not independent ground truth, and test metrics must be interpreted accordingly.
 
 - Training partition: fit TF-IDF and Logistic Regression using confirmed training annotations.
 - Development partition: select the confidence threshold using confirmed development labels only.
 - Test partition: perform one final evaluation after the threshold is frozen. A project-level guard prevents a second run, even when a different report filename is supplied.
 
-Held-out evaluation labels must be explicitly confirmed by a reviewer and must be validated against the corresponding source partition. They must never be inferred from request-text heuristics or reference commands.
+Held-out evaluation labels must be explicitly confirmed and validated against the corresponding source partition. Record whether any AI-proposed labels were shown to the reviewer. The test label proposals in this project were request-only and did not use reference commands or classifier predictions, but the owner did see and approve the proposals. Do not describe them as independently adjudicated labels.
 
 The threshold-selection rule maximizes development macro-F1 subject to at least 80% prediction coverage. Ties are resolved by higher coverage, then by the lower threshold. Coverage is the fraction of examples not marked low-confidence. The selected threshold, development metrics, source checksums, and model checksum are written to a frozen JSON artifact.
 
@@ -85,7 +85,7 @@ Report accuracy, macro and weighted precision/recall/F1, per-class precision/rec
 
 Low-confidence and zero-known-feature requests are mapped to other_or_ambiguous for the public classifier result. The separate coverage and low-confidence fields make abstention visible in the report.
 
-No test result is valid until the test annotations are confirmed and the final configuration is frozen.
+The test annotations are now confirmed and the evaluated configuration is frozen. The remaining gates are to run the project annotation validator, then run the one-time test evaluation. The report must disclose the AI-assisted, owner-approved label provenance.
 
 ## 7. CLI usage
 
@@ -127,4 +127,4 @@ A fresh model training run in a temporary directory reproduced all 375 developme
 
 The current development diagnostics are 0.6880 accuracy, 0.6709 macro-F1, 0.6801 weighted-F1, and 0.9893 prediction coverage at threshold 0.1361115729921777. These are development metrics only. The class imbalance and AI-assisted annotation history must be disclosed; do not present these numbers as final test performance.
 
-The end-to-end command-generation component and a development-only request-versus-NLP-context experiment are documented separately. The 375 test examples remain sealed. Only after the model, taxonomy, generation prompt, and validation configuration are frozen should the project owner review the test requests, without model predictions or paired Bash commands, followed by the one-time final test evaluation.
+The end-to-end command-generation component and development-only request-versus-NLP-context experiment are documented separately. All 375 test labels are approved and exported. They have not yet been used to calculate test metrics. Run `uv run nl2bash-annotations validate --partition test`, then run `uv run nl2bash-classifier evaluate-test` exactly once. Do not use the resulting test metrics to tune the evaluated system.
