@@ -9,6 +9,10 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: nl2bash-generation-v7
+  cancel-in-progress: false
+
 jobs:
   evaluate-generation:
     runs-on: ubuntu-latest
@@ -129,6 +133,16 @@ jobs:
           print(f"Condition-masked semantic review rows: {len(rows)}")
           PY
 
+      - name: Preserve generation report and blind worksheet
+        uses: actions/upload-artifact@v4
+        with:
+          name: nl2bash-generation-dev-v7
+          path: |
+            artifacts/evaluation/generation_dev_v7_report.json
+            data/annotations/generation_dev_v7_semantic_review.csv
+          if-no-files-found: error
+          retention-days: 30
+
       - name: Commit development experiment and review worksheet
         run: |
           git config user.name "github-actions[bot]"
@@ -136,4 +150,14 @@ jobs:
           git add artifacts/evaluation/generation_dev_v7_report.json data/annotations/generation_dev_v7_semantic_review.csv
           git diff --cached --check
           git commit -m "Record 40-request frozen command-generation evaluation"
-          git push origin HEAD:main
+          for attempt in 1 2 3; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then
+              echo "Generation report and blind worksheet published to main."
+              exit 0
+            fi
+            echo "Main advanced during publish attempt $attempt; retrying after fetch/rebase."
+          done
+          echo "Unable to publish generation artifacts after three fetch/rebase attempts." >&2
+          exit 1
