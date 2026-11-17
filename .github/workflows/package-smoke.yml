@@ -48,6 +48,41 @@ jobs:
           python -m compileall -q src/nl2bash
           echo "All package entry points import and expose help successfully."
 
+      - name: Verify parse-only Bash validation and safety findings
+        run: |
+          set +e
+          uv run nl2bash validate --command "find . -type f -name '*.py'" --json > "$RUNNER_TEMP/safe-command.json"
+          safe_status=$?
+          uv run nl2bash validate --command "sudo rm -rf /" --json > "$RUNNER_TEMP/risky-command.json"
+          risky_status=$?
+          uv run nl2bash validate --command "if then" --json > "$RUNNER_TEMP/invalid-command.json"
+          invalid_status=$?
+          set -e
+          export SAFE_STATUS="$safe_status" RISKY_STATUS="$risky_status" INVALID_STATUS="$invalid_status"
+          python - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          root = Path(os.environ["RUNNER_TEMP"])
+          safe = json.loads((root / "safe-command.json").read_text())
+          risky = json.loads((root / "risky-command.json").read_text())
+          invalid = json.loads((root / "invalid-command.json").read_text())
+
+          assert os.environ["SAFE_STATUS"] == "0"
+          assert safe["syntax_valid"] is True and safe["review_required"] is False
+          assert safe["risk_level"] == "none" and safe["executed"] is False
+
+          assert os.environ["RISKY_STATUS"] == "3"
+          assert risky["syntax_valid"] is True and risky["review_required"] is True
+          assert risky["risk_level"] == "high" and risky["executed"] is False
+          assert any(item["code"] == "broad_delete_target" for item in risky["findings"])
+
+          assert os.environ["INVALID_STATUS"] == "3"
+          assert invalid["syntax_valid"] is False and invalid["executed"] is False
+          print("Safe Bash, high-risk destructive Bash, and invalid Bash syntax were classified correctly; none was executed.")
+          PY
+
       - name: Verify entity sample provenance and exact candidate spans
         run: |
           python - <<'PY'
