@@ -1,0 +1,139 @@
+name: Frozen command-generation development evaluation
+
+on:
+  push:
+    paths:
+      - ".github/workflows/generation-development-evaluation.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  evaluate-generation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Check out frozen project
+        uses: actions/checkout@v4
+
+      - name: Set up uv and Python
+        uses: astral-sh/setup-uv@v6
+        with:
+          python-version: "3.10"
+          enable-cache: true
+
+      - name: Install exact locked base dependencies
+        run: uv sync --locked
+
+      - name: Build and install the pinned CPU inference runtime
+        env:
+          CMAKE_ARGS: "-DGGML_NATIVE=OFF -DGGML_OPENMP=ON"
+          CMAKE_BUILD_PARALLEL_LEVEL: "2"
+          FORCE_CMAKE: "1"
+        run: uv pip install --python .venv/bin/python llama-cpp-python==0.3.37
+
+      - name: Download the frozen Qwen GGUF model
+        run: |
+          mkdir -p "$RUNNER_TEMP/nl2bash-model"
+          curl --fail --location --retry 5 --retry-all-errors             "https://huggingface.co/Qwen/Qwen2.5-1.5B-Instruct-GGUF/resolve/91cad51170dc346986eccefdc2dd33a9da36ead9/qwen2.5-1.5b-instruct-q4_k_m.gguf"             --output "$RUNNER_TEMP/nl2bash-model/qwen2.5-1.5b-instruct-q4_k_m.gguf"
+          echo "6a1a2eb6d15622bf3c96857206351ba97e1af16c30d7a74ee38970e434e9407  $RUNNER_TEMP/nl2bash-model/qwen2.5-1.5b-instruct-q4_k_m.gguf" | sha256sum --check
+
+      - name: Verify the frozen classifier, prompt, model, threshold and pipeline hashes
+        env:
+          NL2BASH_MODEL: ${{ runner.temp }}/nl2bash-model/qwen2.5-1.5b-instruct-q4_k_m.gguf
+        run: |
+          uv run python - <<'PY'
+          import os
+          from nl2bash.generation_configuration import verify_frozen_generation_configuration
+
+          digest = verify_frozen_generation_configuration(
+              "artifacts/evaluation/frozen_generation_config.json",
+              model_path=os.environ["NL2BASH_MODEL"],
+              classifier_model_path="models/intent_classifier.joblib",
+              classifier_manifest_path="models/intent_classifier_manifest.json",
+              frozen_threshold_path="artifacts/evaluation/frozen_dev_threshold.json",
+              context_size=4096,
+              threads=4,
+              max_tokens=512,
+          )
+          print(f"Frozen generation configuration verified: {digest}")
+          PY
+
+      - name: Run 40-request paired development evaluation
+        env:
+          NL2BASH_MODEL: ${{ runner.temp }}/nl2bash-model/qwen2.5-1.5b-instruct-q4_k_m.gguf
+        run: |
+          uv run nl2bash evaluate-generation-dev             --llm-model "$NL2BASH_MODEL"             --sample-size 40             --seed 20261117             --output artifacts/evaluation/generation_dev_v7_report.json
+
+      - name: Create condition-masked semantic review worksheet
+        run: |
+          python - <<'PY'
+          import csv
+          import json
+          from pathlib import Path
+
+          report = json.loads(Path("artifacts/evaluation/generation_dev_v7_report.json").read_text())
+          assert report["evaluation_type"] == "development_generation_comparison"
+          assert report["sample_size"] == 40
+          assert report["test_data_used"] is False
+          assert report["reference_commands_in_generation_prompts"] is False
+
+          rows = []
+          for index, item in enumerate(report["examples"], start=1):
+              for variant in ("request_only", "nlp_context"):
+                  command = item.get(f"{variant}_command")
+                  rows.append({
+                      "review_item_id": f"semantic-{index:03d}-{('A' if variant == 'request_only' else 'B')}",
+                      "example_id": item["example_id"],
+                      "request": item["request"],
+                      "candidate_command": command or "",
+                      "generation_succeeded": str(bool(item.get(f"{variant}_success"))).lower(),
+                      "semantic_rating": "",
+                      "reviewer_note": "",
+                  })
+
+          output = Path("data/annotations/generation_dev_v7_semantic_review.csv")
+          output.parent.mkdir(parents=True, exist_ok=True)
+          with output.open("w", encoding="utf-8", newline="") as stream:
+              writer = csv.DictWriter(
+                  stream,
+                  fieldnames=[
+                      "review_item_id", "example_id", "request",
+                      "candidate_command", "generation_succeeded",
+                      "semantic_rating", "reviewer_note",
+                  ],
+                  lineterminator="\\n",
+              )
+              writer.writeheader()
+              writer.writerows(rows)
+          assert len(rows) == 80
+          print(f"Created {len(rows)} condition-masked semantic review rows: {output}")
+          PY
+
+      - name: Verify output artifacts
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          import csv
+
+          report = json.loads(Path("artifacts/evaluation/generation_dev_v7_report.json").read_text())
+          with Path("data/annotations/generation_dev_v7_semantic_review.csv").open(newline="", encoding="utf-8") as stream:
+              rows = list(csv.DictReader(stream))
+          assert report["sample_size"] == 40
+          assert len(rows) == 80
+          assert all(not row["semantic_rating"] for row in rows)
+          assert all("request_only" not in row and "nlp_context" not in row for row in rows)
+          print(json.dumps(report["metrics"], indent=2))
+          print(f"Condition-masked semantic review rows: {len(rows)}")
+          PY
+
+      - name: Commit development experiment and review worksheet
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add artifacts/evaluation/generation_dev_v7_report.json data/annotations/generation_dev_v7_semantic_review.csv
+          git diff --cached --check
+          git commit -m "Record 40-request frozen command-generation evaluation"
+          git push origin HEAD:main
