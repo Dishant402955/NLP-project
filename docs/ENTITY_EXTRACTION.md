@@ -96,3 +96,10 @@ The rule set is intentionally conservative and supports common forms rather than
 The end-to-end CLI performs a separate, deliberately limited check after generation. It looks for selected extracted constraints in the command text, including programming-language extensions, file extensions, size values, paths, file names, ports, and process names. For GNU `find -size`, a normalized byte count must include the `c` suffix; a bare integer has different semantics because GNU `find` otherwise counts 512-byte blocks. Missing visible constraints are reported as warnings and cause the CLI to return a review-needed status.
 
 It also flags generated `-size` or time-range filters when the request contains no corresponding size or date entity, and checks that explicit case-sensitivity instructions are not contradicted by `find` ignore-case flags. This is not a semantic-equivalence checker. It may flag equivalent commands that express constraints differently, and it does not cover every entity or utility syntax. The result supplements, but does not replace, Bash syntax and safety checks.
+
+
+## 9. Benchmark status and next step
+
+The extractor and exact-span metric implementation are available, but the repository does not yet contain a manually adjudicated entity gold benchmark. Therefore no entity precision, recall, or F1 result is currently claimed.
+
+Create a versioned entity annotation dataset with, for every request, the exact entity type, exact source value, normalized value where applicable, and half-open character offsets into the normalized request. Keep rule-development examples separate from the final held-out scoring sample. Have a human adjudicate entity boundaries and overlapping values, preserve annotation provenance and source partition checksums, then calculate exact-span micro and per-entity-type metrics. Rule changes must be informed by training/development examples only, never by the held-out entity scoring sample.
