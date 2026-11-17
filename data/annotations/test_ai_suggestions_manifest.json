@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "artifact_type": "request_only_ai_test_intent_suggestions",
+  "date": "2026-11-17",
+  "source_review_sheet": "data/annotations/test_human_review.csv",
+  "source_review_sheet_blob_sha": "ed34ca599425f4acf16f0fd65b4bc1b8ea10c752",
+  "canonical_test_worklist": "data/annotations/test_review.csv",
+  "canonical_test_worklist_sha256": "839c97131aa9778657d397bebbd72e009626a10153bcc0040e9e3ee8e557ce42",
+  "test_partition": "data/processed/nl2bash/test.jsonl",
+  "test_partition_sha256": "0af4b99c3d49cbf32a4d75a30cebe0412a93d3305c66263cb702aff9900dec66",
+  "output_file": "data/annotations/test_ai_suggestions.csv",
+  "row_count": 375,
+  "taxonomy_file": "docs/INTENT_TAXONOMY.md",
+  "input_fields": [
+    "example_id",
+    "request"
+  ],
+  "excluded_fields": [
+    "reference_command",
+    "classifier_prediction",
+    "reference_intent"
+  ],
+  "suggestions_are_ground_truth": false,
+  "confidence_note": "High/medium are uncalibrated review cues, not calibrated probabilities.",
+  "review_policy": "Project owner must review every suggestion and make the final decision independently. Only explicit human decisions belong in confirmed_intent. Do not use test labels to train, tune, or modify the frozen system.",
+  "counts_by_suggested_intent": {
+    "process_job_management": 6,
+    "text_search_processing": 60,
+    "shell_environment_session": 15,
+    "network_remote_operations": 11,
+    "archive_compression": 14,
+    "file_directory_management": 58,
+    "permissions_ownership": 48,
+    "system_information": 16,
+    "other_or_ambiguous": 22,
+    "file_discovery": 125
+  },
+  "csv_commit": "4e43c359e1d4b8e71be252cf7d33aeed248b71ec"
+}
