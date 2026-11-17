@@ -28,6 +28,7 @@ class IntentTrainingData:
     reviewed_csv_sha256: str
     partition_name: str = "train"
     blind_manual_review: bool = False
+    annotation_provenance: dict[str, Any] | None = None
 
 
 def _read_json_object(path: Path, description: str) -> dict[str, Any]:
@@ -313,6 +314,11 @@ def load_confirmed_partition_data(
         reviewed_csv_sha256=reviewed_csv_sha256,
         partition_name=partition_name,
         blind_manual_review=annotation_summary.get("blind_manual_review") is True,
+        annotation_provenance=(
+            annotation_manifest.get("annotation_provenance")
+            if isinstance(annotation_manifest.get("annotation_provenance"), dict)
+            else None
+        ),
     )
 
 
