@@ -20,7 +20,7 @@ It contains no paired reference Bash commands, model predictions, or AI-suggeste
 
 Read each request and choose one primary label from the [Intent Taxonomy](INTENT_TAXONOMY.md). Record the decision in `confirmed_intent` and set `review_status=confirmed`.
 
-For a request that cannot be reliably assigned, choose `ambiguous` or `rejected`, leave `confirmed_intent` blank, and provide a concise rationale in `reviewer_note`. A confirmed `other_or_ambiguous` label also requires a reviewer note.
+For a request that is too unclear to assign reliably, choose `ambiguous`, leave `confirmed_intent` blank, and provide a concise rationale in `reviewer_note`. Use `other_or_ambiguous` for a clearly out-of-scope request; that confirmed label requires a reviewer note. Do not use `rejected` during this blind review because it requires checking a request-command mismatch and the paired command is intentionally hidden.
 
 Review all 375 rows. Keep the example IDs and request text unchanged. Do not inspect paired reference commands or classifier predictions. Do not use test errors to revise the taxonomy, classifier, prompt, model, confidence threshold, or validation rules.
 

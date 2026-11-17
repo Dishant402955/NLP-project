@@ -142,7 +142,7 @@ Only rows explicitly marked confirmed are exported to the confirmed annotation J
 
 The final test review worksheet is `data/annotations/test_human_review.csv`. It contains exactly 375 rows with the stable example ID, the natural-language request, and three blank human-decision fields. It contains no paired reference Bash command, model prediction, or AI-suggested label. The canonical `data/annotations/test_review.csv` remains unchanged and all 375 rows remain pending until the human review is merged.
 
-For each request, choose one primary taxonomy label in `confirmed_intent` and set `review_status` to `confirmed`. A confirmed `other_or_ambiguous` label requires a short reason in `reviewer_note`. When the request cannot be assigned reliably, use `ambiguous` or `rejected`, leave `confirmed_intent` blank, and explain the reason. Complete all 375 rows; the importer refuses to merge a sheet that still has pending rows. Keep every `example_id` and `request` unchanged.
+For each request, choose one primary taxonomy label in `confirmed_intent` and set `review_status` to `confirmed`. A confirmed `other_or_ambiguous` label requires a short reason in `reviewer_note`. When the request is too unclear to assign reliably, use `ambiguous`, leave `confirmed_intent` blank, and explain the reason. Use `other_or_ambiguous` for a clearly out-of-scope request. Do not use `rejected` during this blind test review: that status requires checking a request-command mismatch, and the paired command is intentionally hidden. Complete all 375 rows; the importer refuses to merge a sheet that still has pending rows. Keep every `example_id` and `request` unchanged.
 
 After reviewing all rows, merge only the human decision fields into the canonical worklist and run its validator:
 
