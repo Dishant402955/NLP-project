@@ -85,7 +85,7 @@ Report accuracy, macro and weighted precision/recall/F1, per-class precision/rec
 
 Low-confidence and zero-known-feature requests are mapped to other_or_ambiguous for the public classifier result. The separate coverage and low-confidence fields make abstention visible in the report.
 
-The test annotations are now confirmed and the evaluated configuration is frozen. The remaining gates are to run the project annotation validator, then run the one-time test evaluation. The report must disclose the AI-assisted, owner-approved label provenance.
+The test annotations were confirmed, the project annotation validator passed, and the one-time held-out test evaluation completed successfully. Its report and one-time guard are committed under artifacts/evaluation/. The evaluated configuration is frozen; do not rerun the test evaluation or reset its guard. The report discloses the AI-assisted, owner-approved label provenance.
 
 ## 7. CLI usage
 
