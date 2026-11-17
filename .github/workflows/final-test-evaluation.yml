@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - ".github/workflows/final-test-evaluation.yml"
+      - "uv.lock"
   workflow_dispatch:
 
 permissions:
