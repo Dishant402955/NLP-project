@@ -1,0 +1,90 @@
+name: Final test annotation validation and classifier evaluation
+
+on:
+  push:
+    paths:
+      - ".github/workflows/final-test-evaluation.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  final-test-evaluation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Check out the frozen project
+        uses: actions/checkout@v4
+
+      - name: Set up uv and Python
+        uses: astral-sh/setup-uv@v6
+        with:
+          python-version: "3.10"
+          enable-cache: true
+
+      - name: Install exact locked dependencies
+        run: uv sync --locked
+
+      - name: Validate confirmed test annotations
+        run: uv run nl2bash-annotations validate --partition test
+
+      - name: Run the one-time frozen classifier evaluation
+        run: uv run nl2bash-classifier evaluate-test
+
+      - name: Verify report provenance and metrics
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          report_path = Path("artifacts/evaluation/test_report.json")
+          guard_path = Path("artifacts/evaluation/test_evaluation.lock")
+          report = json.loads(report_path.read_text(encoding="utf-8"))
+          guard = json.loads(guard_path.read_text(encoding="utf-8"))
+
+          assert report["evaluated_once"] is True
+          assert report["test_source"]["partition_name"] == "test"
+          assert report["test_source"]["confirmed_annotations_sha256"]
+          provenance = report["annotation_provenance"]
+          assert provenance["owner_approved_rows"] == 375
+          assert provenance["owner_corrections"] == 0
+          assert provenance["independent_annotation_claimed"] is False
+          assert guard["status"] == "completed"
+          assert guard["report_sha256"]
+
+          metrics = report["metrics"]
+          required = {
+              "accuracy", "macro_precision", "macro_recall", "macro_f1",
+              "weighted_precision", "weighted_recall", "weighted_f1",
+              "per_class", "confusion_matrix", "coverage",
+              "low_confidence_count",
+          }
+          missing = sorted(required - metrics.keys())
+          if missing:
+              raise SystemExit(f"missing metrics: {missing}")
+          print(json.dumps({
+              "report": str(report_path),
+              "rows": report["test_source"].get("record_count", 375),
+              "annotation_provenance": provenance,
+              "metrics": {
+                  key: metrics[key]
+                  for key in (
+                      "accuracy", "macro_f1", "weighted_f1",
+                      "coverage", "low_confidence_count"
+                  )
+              },
+          }, indent=2))
+          PY
+
+      - name: Commit the one-time report and guard
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add artifacts/evaluation/test_report.json artifacts/evaluation/test_evaluation.lock
+          git diff --cached --quiet && {
+            echo "No report changes to commit."
+            exit 0
+          }
+          git commit -m "Record one-time intent classifier test evaluation"
+          git push origin HEAD:main
