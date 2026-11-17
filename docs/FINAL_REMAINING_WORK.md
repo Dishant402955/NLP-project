@@ -15,31 +15,19 @@ The test intent labels are AI-assisted and owner-approved, not independently adj
 
 ## Remaining work
 
-### 1. Run the one-time classifier test evaluation
+### 1. Classifier test evaluation
 
-The annotation/export files have had row identity, source request/command parity, taxonomy, notes, counts, and SHA-256 checksums checked. The project CLI validator has not yet been executed in a Python runtime.
+<badge color="success">Completed</badge>
 
-A GitHub Actions workflow is committed at `.github/workflows/final-test-evaluation.yml`. It installs `uv.lock`, runs the annotation validator, runs the one-time classifier test evaluation, checks the report provenance, and commits the report and one-time guard.
+The workflow at `.github/workflows/final-test-evaluation.yml` completed successfully in GitHub Actions. It installed the locked Python 3.10 environment, passed the project's test annotation validator on 375 records, ran the one-time frozen classifier evaluation, verified the provenance/metrics, and committed the report and guard. The lockfile's Python-version-specific NumPy references were also repaired and `uv sync --locked` passed.
 
-Run it manually from GitHub:
+Results: accuracy 0.6853, macro-F1 0.6400, weighted-F1 0.6793, macro precision 0.7854, macro recall 0.6186, prediction coverage 0.9947, and two low-confidence requests. The development-selected threshold was 0.1361115729921777.
 
-1. Open the repository's **Actions** tab.
-2. Select **Final test annotation validation and classifier evaluation**.
-3. Select **Run workflow** on the `main` branch.
-
-The workflow has not run yet; the current Actions API reports zero workflow runs. Do not launch a second evaluation after a report and guard have been committed.
-
-The equivalent local commands are:
-
-```bash
-uv sync --locked
-uv run nl2bash-annotations validate --partition test
-uv run nl2bash-classifier evaluate-test
-```
+Report: `artifacts/evaluation/test_report.json`. Completed guard: `artifacts/evaluation/test_evaluation.lock`. The evaluation must not be rerun. Test annotation was AI-assisted and owner-approved, not independently adjudicated, and that caveat is embedded in the report.
 
 The test evaluator must not be rerun after its report/guard are produced.
 
-### 2. Build an entity-extraction gold benchmark
+### 2. Build an entity-extraction benchmark
 
 The extractor supports eleven entity types and the exact-span metric implementation exists, but no reviewed entity gold set exists. Create an annotation schema that captures entity type, exact source text, normalized value, and start/end character offsets. Have a human adjudicate a development sample for rule refinement and a separate held-out sample for final scoring. Calculate exact-span micro and per-type precision, recall, and F1. Do not present functional smoke tests as accuracy metrics.
 
