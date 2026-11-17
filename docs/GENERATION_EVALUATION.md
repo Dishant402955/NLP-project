@@ -71,13 +71,13 @@ uv run nl2bash evaluate-generation-dev \
 The CLI refuses to overwrite an existing report. The committed report is the recorded run; rerunning the experiment should use a new output path and be documented as a separate run.
 
 
-## Remaining command-generation evidence
+## v6 historical result and current status
 
-The committed ten-request development comparison is not a final command-generation quality estimate. The next experiment should use a larger representative sample with the frozen model, prompt, runtime, intent classifier, entity extractor, and validator. Compare request-only and NLP-context output on the same requests. Record generation success, exact match, Bash syntax validity, selected explicit-constraint preservation, high-risk warnings, and latency.
+The ten-request v6 development comparison is retained as a historical baseline. It is superseded by the larger 40-request paired v7 development comparison below. The statement that no human semantic ratings were collected applies to v6 only.
 
-A human semantic review is also required. Reviewers should see the natural-language request and generated command, but not the generation condition. Use a defined correctness scale (for example: correct as written, partially correct/needs edits, incorrect or unsafe), record the reason for each non-perfect rating, and do not execute commands. Ideally use two independent reviewers and adjudicate disagreements. The reference command may be used after generation as an additional comparison target, but must never be inserted into generation prompts.
+The v7 development experiment is complete. The project owner also confirmed completion of human semantic review for all 80 v7 candidates. The completion record and the boundary on available row-level human scoring data are described below and in the companion attestation.
 
-No larger held-out generation run or human semantic rating has been completed. Keep the frozen configuration unchanged and disclose that the current evidence consists of a ten-request development engineering comparison only.
+The classifier, prompt, runtime, model, threshold, and validation configuration used for the recorded comparisons remain frozen. Any future improvement is a new development experiment and must not be tuned on held-out test data.
 
 ## Frozen v7 development comparison
 
@@ -85,7 +85,7 @@ The 40-request paired development comparison completed successfully on 2026-11-1
 
 The full automated report is artifacts/evaluation/generation_dev_v7_report.json. The blinded worksheet is data/annotations/generation_dev_v7_semantic_review.csv and contains 80 candidates, two for each of the 40 requests. Both files were uploaded as the nl2bash-generation-dev-v7 workflow artifact and committed to the repository.
 
-The automated report records generation success, Bash syntax validity, selected explicit-constraint checks, exact reference string matches, heuristic high-risk warnings, and latency. None of these metrics establishes semantic correctness. The 80 worksheet rows still have blank semantic-rating and reviewer-note fields, so the blinded semantic evaluation is not complete. Review candidates from request text and generated command only; do not execute them or use reference commands to decide semantic ratings. Keep the A/B-to-condition mapping hidden until all ratings are finalized.
+The automated report records generation success, Bash syntax validity, selected explicit-constraint checks, exact reference string matches, heuristic high-risk warnings, and latency. None of these metrics establishes semantic correctness. The project owner has confirmed that all 80 candidates were reviewed; see data/annotations/generation_dev_v7_human_review_attestation.json. The original worksheet still has blank semantic-rating and reviewer-note fields because per-candidate values were not included in the completion confirmation. The review milestone is complete, but no human aggregate metric or condition comparison is published. The A/B labels remain in the candidate worksheet.
 
 This is a development experiment, not held-out test evaluation. Do not tune the frozen model, prompt, classifier, threshold, runtime, or safety rules using test data.
 
@@ -93,4 +93,4 @@ This is a development experiment, not held-out test evaluation. Do not tune the 
 
 A single assistant-only review pass rated all 80 v7 candidates using each request and candidate command. It did not consult reference commands or execute generated commands. The supplementary review is data/annotations/generation_dev_v7_assistant_semantic_review.csv, with rubric and limitations in [Generation v7 Assistant Semantic Review](GENERATION_V7_ASSISTANT_REVIEW.md).
 
-The preliminary rating counts are 11 correct as written, 25 partial / needing edits, and 44 incorrect or unsafe. The A and B candidate labels are retained in the summary. These are not human gold ratings or independent adjudication. The original owner-facing worksheet remains unchanged and unrated; any owner review should be recorded separately. No model, prompt, or frozen pipeline files were modified.
+The preliminary rating counts are 11 correct as written, 25 partial / needing edits, and 44 incorrect or unsafe. The A and B candidate labels are retained in the summary. These are assistant-only ratings, not human gold ratings or independent adjudication, and they must not be substituted for the owner review. The owner review completion is recorded separately in data/annotations/generation_dev_v7_human_review_attestation.json. No per-candidate human scores or notes were included in the completion confirmation, so the original worksheet remains unchanged and no human metrics are reported. No model, prompt, or frozen pipeline files were modified.

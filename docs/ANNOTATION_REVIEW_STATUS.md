@@ -112,8 +112,21 @@ The project owner reviewed all 66 request-only AI-assisted entity proposals and 
 
 The guarded exact-span entity test evaluation ran once. It produced 0.8588 micro precision, 0.6460 micro recall, 0.7374 micro F1, and 0.7517 macro-F1 over nine entity types with gold support. Per-type results and support appear in [Entity Evaluation](ENTITY_EVALUATION.md). The sample is targeted rather than prevalence-representative; it has zero gold support for process_name and process_metric and only one port example. Do not rerun the evaluation or tune extraction rules on this held-out sample.
 
-## Remaining work
+## Final review and completion status
 
-1. The 40-request generation v7 development comparison is complete. A separate assistant-only pass rated all 80 A/B candidates (11 correct, 25 partial, 44 incorrect/unsafe); see [Generation v7 Assistant Semantic Review](GENERATION_V7_ASSISTANT_REVIEW.md). The original owner-facing worksheet remains blank, so owner semantic sign-off is still pending. Do not execute candidates or use reference commands to determine ratings. Keep the A/B-to-condition mapping hidden until owner ratings are finalized.
-2. The final engineering audit completed its selected clean-install, malformed-output, missing-model/runtime, grounding, frozen-checksum, and parse-only safety checks. Known gaps are recorded in [Engineering Audit](ENGINEERING_AUDIT.md); do not patch the frozen pipeline without a new development evaluation.
-3. Prepare the final report, presentation, and demonstration. Include classifier and entity results, generation metrics plus semantic-review status, dataset/license provenance, AI-assisted annotation limitations, error analysis, safety boundaries, and reproducibility details. Do not invent missing semantic ratings.
+1. **Generation v7 human semantic review: complete.** The project owner confirmed that all 80 candidates from the 40-request v7 development comparison were reviewed. The completion attestation is `data/annotations/generation_dev_v7_human_review_attestation.json`. The confirmation did not include row-level ratings or comments, so no human aggregate score or A/B condition comparison is published. The original candidate CSV remains unchanged rather than receiving invented ratings.
+2. **Engineering audit: complete for the selected checks.** Clean install, CLI entry points, malformed-output rejection, missing-model/runtime fail-closed behavior, selected constraint grounding, frozen-component checksum rejection, and parse-only safety checks passed. Known limitations remain documented in [Engineering Audit](ENGINEERING_AUDIT.md); the audit is not a formal safety guarantee.
+3. **Presentation: approved and complete.** The project owner confirmed the presentation is good and requires no further project edits.
+4. **Technical project status: complete.** No additional feature implementation or held-out evaluation is required. Use the [Reproducibility Guide](REPRODUCIBILITY.md) for clean-clone setup and safe reproduction.
+
+Institution-specific details such as college, department, supervisor, student identifiers, submission date, and declaration wording belong in the final report only where the institution requires them. They do not change the technical completion status.
+
+## Evaluation safeguards
+
+- The one-time classifier test report and guard are complete. Do not rerun them.
+- The one-time entity test report and guard are complete. Do not rerun them.
+- Keep the frozen model, prompt, classifier, threshold, and safety rules unchanged for the published results.
+- Generated Bash commands are proposals only; never execute them as part of generation or evaluation.
+- The entity test sample is targeted, not prevalence-representative, and its labels are AI-assisted and owner-approved rather than independently adjudicated.
+- The generation human-review milestone is attested as complete, but row-level human score values were not included in the completion record. Do not report numeric human semantic metrics.
+- Keep temporary test source and fixtures outside Git.

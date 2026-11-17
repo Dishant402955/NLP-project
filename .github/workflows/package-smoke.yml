@@ -15,6 +15,7 @@ on:
       - "artifacts/evaluation/entity_test_evaluation.lock"
       - "artifacts/evaluation/generation_dev_v7_report.json"
       - "data/annotations/generation_dev_v7_semantic_review.csv"
+      - "data/annotations/generation_dev_v7_human_review_attestation.json"
       - "data/annotations/generation_dev_v7_assistant_semantic_review.csv"
       - "data/annotations/test_review.csv"
       - "data/processed/nl2bash/test.jsonl"
@@ -209,6 +210,7 @@ jobs:
           report = json.loads(Path("artifacts/evaluation/generation_dev_v7_report.json").read_text(encoding="utf-8"))
           official = read_rows("data/annotations/generation_dev_v7_semantic_review.csv")
           assistant = read_rows("data/annotations/generation_dev_v7_assistant_semantic_review.csv")
+          attestation = json.loads(Path("data/annotations/generation_dev_v7_human_review_attestation.json").read_text(encoding="utf-8"))
 
           assert report["evaluation_type"] == "development_generation_comparison"
           assert report["sample_size"] == 40
@@ -221,6 +223,13 @@ jobs:
           assert len(official_by_id) == 80
           assert all(not row["semantic_rating"] and not row["reviewer_note"] for row in official)
           assert all(row["review_item_id"].endswith(("-A", "-B")) for row in official)
+
+          assert attestation["artifact_type"] == "generation_v7_human_semantic_review_attestation"
+          assert attestation["status"] == "completed"
+          assert attestation["reviewed_request_count"] == 40
+          assert attestation["reviewed_candidate_count"] == 80
+          assert attestation["reviewed_item_ids"] == [row["review_item_id"] for row in official]
+          assert attestation["structured_ratings_recorded"] is False
 
           assert len(assistant) == 80
           assistant_by_id = {row["review_item_id"]: row for row in assistant}
@@ -236,5 +245,5 @@ jobs:
                   assert row[field] == source[field]
               assert "condition" not in row and "variant" not in row
 
-          print("v7 report is development-only; all 80 assistant assessments are separate, and all 80 owner-facing ratings remain blank.")
+          print("v7 report is development-only; all 80 candidates have an owner-completion attestation; unprovided human ratings remain unreported; assistant assessments remain separate.")
           PY

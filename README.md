@@ -1,132 +1,143 @@
 # Natural Language to Bash Command Generator
 
-A hybrid NLP system that translates natural-language instructions into Bash commands. It combines traditional NLP techniques for understanding requests with a lightweight instruction-tuned language model for command generation.
+A hybrid NLP system that translates natural-language Linux requests into Bash command proposals. Traditional NLP predicts the requested operation and extracts explicit parameters; a local instruction-tuned language model generates a command; deterministic checks inspect syntax, selected constraints, and known risky patterns.
 
-The system displays the generated command, explains what it does, and checks its syntax and basic safety properties. It does not execute commands automatically. Safety checks are heuristic warnings, not proof of safety.
+**Safety boundary: generated commands are displayed only. The application does not execute them.**
 
 ## Project status
 
-The Python package foundation, reproducible dataset preparation, intent classifier, deterministic entity extractor, local Qwen command-generation adapter, Bash syntax/safety validation, and end-to-end CLI are implemented. The project owner reviewed the 500 training and 375 development annotations after AI-assisted labelling and reported zero further corrections. The 375 test intent labels were approved without corrections from request-only AI proposals and are present in the confirmed test export. These test annotations are AI-assisted and owner-approved, not independent ground truth; see the Annotation Review Status. The classifier, threshold, generator, prompt, and validation configuration are frozen from development work. The one-time classifier test evaluation is complete: 68.53% accuracy, 0.6400 macro-F1, 0.6793 weighted-F1, and 99.47% coverage on 375 examples at the frozen development threshold. The targeted 66-request entity review was approved without corrections and its one-time exact-span test evaluation is complete: 0.8588 micro precision, 0.6460 micro recall, 0.7374 micro F1, and 0.7517 macro-F1 across nine supported types; see Entity Evaluation. These entity labels are AI-assisted and owner-approved, and the sample is not prevalence-representative. The 40-request generation v7 development comparison completed. A preliminary assistant-only semantic review rated 11 of 80 candidates correct as written; the original owner-facing worksheet remains unrated. The final engineering audit passed its selected checks and documented validator limitations; see Engineering Audit.
+**Core implementation, recorded evaluations, selected engineering audit, human semantic-review milestone, and presentation review are complete.** The project owner confirmed that all 80 generated candidates from the 40-request v7 development comparison received human semantic review. The completion record is `data/annotations/generation_dev_v7_human_review_attestation.json`. The completion confirmation did not include per-candidate scores or reviewer notes, so no human semantic accuracy score or A/B win rate is claimed. The original worksheet remains unchanged rather than being populated with invented ratings.
 
-## Versioned research artifacts
-
-The repository includes the licensed NL2Bash raw source files, reproducibly generated partitions, train/development/test annotation worklists and exports, the classifier, and its frozen development threshold. Source revisions, checksums, and annotation provenance are recorded in manifests, the [Annotation Review Status](docs/ANNOTATION_REVIEW_STATUS.md), and the [Intent Audit Log](docs/INTENT_AUDIT_LOG.md). The test decision worksheet contains no reference commands or classifier predictions; its separate AI proposal file is retained for transparency. The test export includes explicit AI-assisted, owner-approved provenance. Test scripts, temporary fixtures, caches, virtual environments, and secrets are not committed.
-
-## Project objectives
-
-- Accept Linux command requests written in plain English.
-- Identify the operation the user wants to perform.
-- Extract relevant parameters such as file extensions, paths, sizes, ports, dates, and process names.
-- Generate an appropriate Bash command.
-- Explain the generated command in understandable language.
-- Validate Bash syntax and flag potentially dangerous commands.
-- Evaluate the performance of the individual components and the complete system.
+The project owner has also approved the presentation. Any college-specific cover-page fields or required formatting are administrative submission details, not outstanding technical work.
 
 ## How it works
 
-1. **Input:** The user enters a natural-language request.
-2. **NLP understanding:** The system preprocesses the text, classifies the intent, and extracts relevant entities and parameters.
-3. **Command generation:** A language model uses the original request and extracted information to generate a Bash command and explanation.
-4. **Validation:** The generated command is checked for Bash syntax and against basic safety rules.
-5. **Output:** The system displays the command, explanation, and validation result. It does not run the command.
+1. The CLI accepts a natural-language Linux task and preserves its original wording.
+2. Preprocessing validates the request and trims surrounding whitespace only.
+3. A Scikit-learn TF-IDF + Logistic Regression model predicts an intent category and confidence.
+4. A deterministic rule-based extractor finds supported parameters such as extensions, paths, file names, sizes, ports, process names, dates, comparison conditions, programming languages, and case-sensitivity requirements. It preserves exact values and source spans, and reports incomplete or conflicting cues.
+5. The generation adapter sends the original request and structured NLP context to a local Qwen2.5-1.5B-Instruct model. The model must return structured JSON containing a Bash command, explanation, and assumptions.
+6. The validator runs Bash syntax parsing in parse-only mode, applies heuristic risk checks, and checks selected explicit constraints against the generated text.
+7. The CLI displays the command and all findings. It never invokes a shell to execute generated text.
 
-For example, the request:
+See [System Architecture](docs/ARCHITECTURE.md), [Technical Design](docs/TECHNICAL_DESIGN.md), and [Reproducibility Guide](docs/REPRODUCIBILITY.md).
 
-> Find all Python files larger than 10 MB in the current directory.
+## Technology
 
-Could produce:
-
-```bash
-find . -type f -name "*.py" -size +10000000c
-```
-
-## Implemented technology stack
-
-| Area | Technology |
+| Area | Implementation |
 |---|---|
-| Programming language | Python |
-| Text preprocessing | Python standard library and custom utilities |
-| Intent classification | Scikit-learn, TF-IDF, Logistic Regression |
-| Entity and parameter extraction | Rule-based extraction |
-| Command generation | Qwen2.5-1.5B-Instruct Q4_K_M GGUF through llama-cpp-python (local CPU inference) |
-| Bash syntax parsing | `bash -n` parse-only mode plus bashlex AST analysis |
-| Verification | Temporary scripts outside the repository; no test source is committed |
-| Initial interface | Command-line interface |
+| Language | Python 3.10+ |
+| Packaging/environment | setuptools, uv, locked dependencies |
+| Intent classification | Scikit-learn TF-IDF word unigrams/bigrams + Logistic Regression |
+| Entity extraction | Deterministic Python rules and regular expressions |
+| Generation | Qwen2.5-1.5B-Instruct Q4_K_M GGUF |
+| Inference | llama-cpp-python 0.3.37, local CPU inference |
+| Bash parsing | `bash -n` parse-only mode and bashlex AST analysis |
+| Interfaces | `nl2bash`, `nl2bash-classifier`, `nl2bash-annotations`, `nl2bash-prepare-dataset` CLIs |
 
-The generation runtime and quantization were selected after inspecting the agent host (4 logical CPU cores, approximately 7.5 GiB RAM, no detected NVIDIA GPU). Model weights are downloaded separately and are not committed to Git. See [Local Model Setup](docs/LOCAL_MODEL_SETUP.md).
-
-## Documentation
-
-Detailed project documentation is maintained in the [docs](docs/) directory.
-
-- [Project Plan](docs/PROJECT_PLAN.md): scope, objectives, requirements, deliverables, and exclusions.
-- [System Architecture](docs/ARCHITECTURE.md): component responsibilities and the end-to-end data flow.
-- [Technical Design](docs/TECHNICAL_DESIGN.md): implemented modules, technology choices, and validation boundaries.
-- [Dataset and Evaluation](docs/DATASET_AND_EVALUATION.md): dataset audit, licensing, split strategy, metrics, and experiments.
-- [Intent Taxonomy](docs/INTENT_TAXONOMY.md): intent labels, definitions, boundary examples, and taxonomy rules.
-- [Annotation Guide](docs/ANNOTATION_GUIDE.md): commands and instructions for reviewing, confirming, and validating the training and held-out annotation worklists.
-- [Intent Classifier](docs/INTENT_CLASSIFIER.md): TF-IDF and Logistic Regression training, prediction, threshold selection, and one-time test evaluation commands.
-- [Annotation Review Status](docs/ANNOTATION_REVIEW_STATUS.md): annotation provenance, partition counts, development metrics, approved test-label distribution, and remaining evaluation steps.
-- [Entity Extraction](docs/ENTITY_EXTRACTION.md): supported entity types, extraction rules, structured output, and generation-time grounding checks.
-- [Entity Evaluation](docs/ENTITY_EVALUATION.md): owner-reviewed targeted test sample, exact-span metrics, per-type support, and limitations.
-- [Generation v7 Assistant Semantic Review](docs/GENERATION_V7_ASSISTANT_REVIEW.md): preliminary request-only assistant ratings for the 80 blinded candidates.
-- [Engineering Audit](docs/ENGINEERING_AUDIT.md): local clean-install, adversarial, grounding, checksum, and safety checks with known limitations.
-- [Implementation Roadmap](docs/IMPLEMENTATION_ROADMAP.md): ordered development steps, acceptance criteria, verification protocol, and commit strategy.
-- [Local Model Setup](docs/LOCAL_MODEL_SETUP.md): local GGUF model installation, runtime setup, and CLI usage.
-- [Command-Generation Evaluation](docs/GENERATION_EVALUATION.md): development-only comparison of request-only and NLP-context generation, with limitations and frozen configuration.
-- [Final Test Review](docs/ANNOTATION_GUIDE.md#10-final-test-review-outcome): completed test annotation outcome, provenance, and validation/evaluation commands.
-- [Test Review Protocol](docs/TEST_PRELIMINARY_ANNOTATION_PROTOCOL.md): completed owner-approved test annotation, provenance, and one-time evaluation protocol.
-- [Human Review Attestation](docs/HUMAN_REVIEW_ATTESTATION.md): project-owner review of the AI-assisted training and development intent labels.
-- [Final Remaining Work](docs/FINAL_REMAINING_WORK.md): current evaluation, engineering-audit, and academic-submission tasks.
+The base package works without the optional LLM runtime. The model binary is downloaded separately, not committed to Git, and verified using a pinned SHA-256. Setup instructions are in [Local Model Setup](docs/LOCAL_MODEL_SETUP.md).
 
 ## Quick start
 
-Install the base package and run the syntax/risk validator:
+Prerequisites: Linux, Bash, Python 3.10+, and uv.
 
 ```bash
-uv sync
+git clone https://github.com/Dishant402955/NLP-project.git
+cd NLP-project
+uv sync --locked
+
+uv run nl2bash --help
 uv run nl2bash validate --command 'find . -type f -name "*.py" -size +10000000c'
 ```
 
-To enable local generation, install the optional local inference runtime separately and download the model as described in [Local Model Setup](docs/LOCAL_MODEL_SETUP.md), then run:
+The last command checks syntax and heuristic risks without executing it.
+
+### Enable local generation
+
+On Debian/Ubuntu, install build tools, then install the pinned inference runtime:
 
 ```bash
-uv sync --locked
+sudo apt-get update
+sudo apt-get install -y build-essential cmake python3-dev curl
+
+CMAKE_ARGS="-DGGML_NATIVE=OFF -DGGML_OPENMP=ON" \
+CMAKE_BUILD_PARALLEL_LEVEL=2 FORCE_CMAKE=1 \
 uv pip install --python .venv/bin/python llama-cpp-python==0.3.37
+```
+
+Download the pinned GGUF model and verify its checksum:
+
+```bash
+mkdir -p "$HOME/.cache/nl2bash/models"
+curl -fL --retry 4 \
+  'https://huggingface.co/Qwen/Qwen2.5-1.5B-Instruct-GGUF/resolve/91cad51170dc346986eccefdc2dd33a9da36ead9/qwen2.5-1.5b-instruct-q4_k_m.gguf' \
+  -o "$HOME/.cache/nl2bash/models/qwen2.5-1.5b-instruct-q4_k_m.gguf"
+
+echo "6a1a2eb6d15622bf3c96857206351ba97e1af16c30d7a74ee38970e434e9407e  $HOME/.cache/nl2bash/models/qwen2.5-1.5b-instruct-q4_k_m.gguf" | sha256sum --check
+```
+
+Run an example:
+
+```bash
 uv run nl2bash generate --request 'Find all Python files larger than 10 MB in the current directory.'
 ```
 
-The CLI prints the proposed command, explanation, assumptions, syntax result, and risk warnings. It never executes the command.
+For full reproduction instructions, including safe data preparation and evaluation commands, see [Reproducibility Guide](docs/REPRODUCIBILITY.md).
 
-## Project evaluation
+## Recorded results
 
-The project has development and one-time test classifier evaluations, a one-time targeted entity exact-span test evaluation, and a 40-request paired development-only generation comparison. A preliminary assistant review of its 80 candidates is documented separately; owner semantic sign-off remains pending.
+| Component | Result | Interpretation |
+|---|---|---|
+| Intent classifier | 375-example one-time test: accuracy 0.6853, macro-F1 0.6400, weighted-F1 0.6793, coverage 0.9947 | Test labels were AI-assisted and owner-approved, not independently adjudicated |
+| Entity extraction | 66 targeted requests / 113 gold spans: micro precision 0.8588, recall 0.6460, F1 0.7374; macro-F1 0.7517 | Targeted sample, not prevalence-representative; some entity types have sparse or zero support |
+| Command generation | 40-request paired development comparison (80 candidates): request-only generated 39/40; NLP context 40/40; both had 2/40 exact string matches | Development-only experiment; automated syntax/constraint checks are not semantic accuracy |
+| Human semantic review | Owner confirmed all 80 v7 candidates reviewed | Completion is attested; no per-row ratings were provided for computing a human aggregate score |
 
-- Intent classification: accuracy, precision, recall, and F1-score.
-- Entity extraction: precision, recall, and F1-score.
-- Command generation: exact-match accuracy.
-- Syntax validation: proportion of generated commands accepted by the Bash parser.
-- Runtime: command-generation latency.
+Detailed reports and per-class/per-type metrics are committed under `artifacts/evaluation/`. The classifier and entity test evaluations are one-time guarded runs. **Do not rerun them, remove their guards, or use held-out test results for tuning.**
 
-Exact command matching is useful for comparison but does not capture every semantically equivalent command. Evaluation will account for this limitation where practical.
+## Documentation map
 
-## Safety boundary
+- [Reproducibility Guide](docs/REPRODUCIBILITY.md): clean clone, environment setup, model download, CLI, data preparation, annotation workflow, safe evaluation, artifacts, and CI.
+- [System Architecture](docs/ARCHITECTURE.md): end-to-end flow and source-module map.
+- [Technical Design](docs/TECHNICAL_DESIGN.md): module responsibilities, technology choices, runtime, and validation boundaries.
+- [Project Plan](docs/PROJECT_PLAN.md): objectives, scope, requirements, and deliverables.
+- [Dataset and Evaluation](docs/DATASET_AND_EVALUATION.md): NL2Bash provenance/licensing, data audit, duplicate-aware split, annotations, and methodology.
+- [Intent Taxonomy](docs/INTENT_TAXONOMY.md): intent categories and definitions.
+- [Annotation Guide](docs/ANNOTATION_GUIDE.md): worklist creation, review, validation, and exports.
+- [Annotation Review Status](docs/ANNOTATION_REVIEW_STATUS.md): intent/entity annotation status, provenance, and classifier results.
+- [Intent Classifier](docs/INTENT_CLASSIFIER.md): TF-IDF, Logistic Regression, training, prediction, threshold selection, and test evaluation.
+- [Entity Extraction](docs/ENTITY_EXTRACTION.md): entity types, rules, exact spans, normalized values, and limitations.
+- [Entity Evaluation](docs/ENTITY_EVALUATION.md): targeted sample, exact-span metrics, per-type support, and caveats.
+- [Command-Generation Evaluation](docs/GENERATION_EVALUATION.md): v6/v7 development comparisons and semantic-review status.
+- [Owner Review Attestation](data/annotations/generation_dev_v7_human_review_attestation.json): completion record for all 80 v7 candidates.
+- [Assistant Semantic Review](docs/GENERATION_V7_ASSISTANT_REVIEW.md): separate preliminary assistant assessment, not human labels.
+- [Engineering Audit](docs/ENGINEERING_AUDIT.md): clean-install, adversarial, grounding, checksum, and parse-only checks; known gaps.
+- [Implementation Roadmap](docs/IMPLEMENTATION_ROADMAP.md): implementation history and acceptance evidence.
+- [Project Completion Status](docs/FINAL_REMAINING_WORK.md): final handoff status and administrative notes.
+- [Local Model Setup](docs/LOCAL_MODEL_SETUP.md): optional CPU inference runtime and model installation.
+- [Human Review Attestation](docs/HUMAN_REVIEW_ATTESTATION.md): review of intent annotations.
 
-Generated commands are shown to the user and are not executed automatically. Syntax validity does not establish that a command is safe or that it will have the intended effect. Safety checks are intended to flag known risks, not to provide a formal guarantee.
+## Repository layout
 
-## Development verification
+- `src/nl2bash/`: application, data, annotation, classifier, generation, validation, and evaluation modules.
+- `data/raw/nl2bash/`: licensed original corpus files and dataset notice.
+- `data/processed/nl2bash/`: duplicate-aware train/dev/test JSONL and checksum manifest.
+- `data/annotations/`: worklists, confirmed exports, provenance manifests, and review records.
+- `models/`: committed classifier and manifest.
+- `artifacts/evaluation/`: frozen configuration/threshold, reports, and one-time guards.
+- `docs/`: project, methodology, implementation, evaluation, audit, and reproducibility documentation.
+- `.github/workflows/`: package smoke and experiment workflows.
 
-The application is verified at every implementation step. Test scripts and temporary fixtures are kept outside this repository; no test source or test directory is committed. The review and verification process is defined in [Implementation Roadmap](docs/IMPLEMENTATION_ROADMAP.md).
+Temporary test fixtures, caches, virtual environments, model binaries, and secrets are not committed. Project policy keeps standalone test source outside the repository; CI uses inline smoke and integrity checks.
 
-## Initial scope
+## Limitations and safety
 
-The first version targets Bash commands on Linux. Support for other shells, automatic execution, autonomous terminal operation, and model training from scratch are outside the initial project scope.
+- Syntax validity does not prove that a command is semantically correct or safe.
+- Safety rules and entity grounding are heuristic checks, not a sandbox or formal guarantee.
+- The model can omit constraints, invent values, or generate an incorrect command.
+- Known validator gaps are listed in [Engineering Audit](docs/ENGINEERING_AUDIT.md).
+- NL2Bash covers only a subset of Bash syntax.
+- Intent and entity test labels are AI-assisted and owner-approved; the entity sample is targeted and not prevalence-representative.
+- Generation v7 is a small development experiment, not held-out generation test accuracy.
 
-## Reference
-
-The project will investigate the NL2Bash dataset and the associated research:
-
-- [NL2Bash: A Corpus and Semantic Parser for Natural Language Interface to the Linux Operating System](https://arxiv.org/abs/1802.08979)
-- [NL2Bash repository](https://github.com/TellinaTool/nl2bash)
-
-The NL2Bash dataset license and structure have been audited. The licensed raw data, processed splits, annotations, and provenance manifests are included in Git; see the dataset documentation for the audit findings and limitations.
+Generated commands must always be reviewed by a person before any use.

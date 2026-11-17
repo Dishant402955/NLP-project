@@ -107,3 +107,25 @@ The validator checks the command syntax and applies configured safety and explic
 - Do not treat model output as trusted shell input.
 - Do not execute generated commands automatically.
 - Report uncertainty and missing information instead of silently inventing parameters.
+
+
+## 6. Source-module map
+
+| Stage | Main source files | Responsibility |
+|---|---|---|
+| End-to-end CLI | `src/nl2bash/cli.py` | Defines `generate`, `validate`, and `evaluate-generation-dev`; orchestrates the application |
+| Input normalization | `preprocessing.py` | Validates requests and trims surrounding whitespace without altering internal text |
+| Intent prediction | `intent_prediction.py`, `intent_classifier.py` | Loads the checksum-verified model and returns label/confidence information |
+| Classifier data and commands | `classifier_data.py`, `classifier_cli.py` | Validates confirmed labels, trains the pipeline, selects the development threshold, predicts, and evaluates |
+| Entity extraction | `entity_extraction.py` | Extracts supported parameter types, exact source spans, normalized values, and extraction issues |
+| Entity grounding | `entity_validation.py` | Checks selected explicit constraints against the generated command text |
+| Model prompt and generation | `command_generation.py` | Loads the local GGUF model, constructs prompts, validates structured output, and returns command/explanation/assumptions |
+| Frozen configuration | `generation_configuration.py` | Verifies model, runtime, prompt, classifier, threshold, package, and pipeline hashes/settings |
+| Bash validation | `bash_validation.py` | Runs syntax-only Bash parsing, bashlex analysis, and heuristic risk checks |
+| Corpus and splits | `corpus.py`, `dataset_builder.py`, `grouping.py`, `splitting.py`, `dataset_cli.py` | Loads parallel data, groups duplicate-linked rows, creates splits and manifests |
+| Annotation | `annotations.py`, `annotation_validation.py`, `review_import.py`, `annotation_cli.py` | Creates review worklists, validates human decisions, imports test decisions, and exports confirmed labels |
+| Classifier evaluation | `evaluation.py` | Selects the development threshold and implements the guarded one-time test evaluation |
+| Entity evaluation | `entity_evaluation.py`, `entity_benchmark_cli.py` | Computes exact type/value/span metrics and enforces the one-time guard |
+| Generation experiment | `generation_evaluation.py` | Runs paired request-only/NLP-context development evaluation and records automated metrics |
+
+The pipeline is deliberately staged: classifier and extractor outputs are structured inputs to generation; the generator does not receive the paired reference command; validation inspects the generated text but does not execute it.

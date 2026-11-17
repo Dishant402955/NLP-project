@@ -360,7 +360,7 @@ The implementation is divided into small commits. See [Intent Classifier](INTENT
 
 #### Step 4.1: deterministic extraction API and exact-span metrics
 
-**Status:** Extractor and exact-span evaluator implemented; targeted 66-request annotation sample and owner-review worksheet prepared; human review pending.
+**Status:** Complete. The targeted 66-request owner review was approved, exact-span validation passed, and the one-time guarded entity test evaluation is recorded.
 
 **Delivered:**
 - Rule-based extraction for eleven entity types, including programming-language mentions, process metrics, and explicit case-sensitivity requirements.
@@ -370,7 +370,7 @@ The implementation is divided into small commits. See [Intent Classifier](INTENT
 
 **Verification:** External checks under `/tmp/nl2bash-verification/` cover common requests, quoted and variable paths, URL rejection, compound extensions, SI/IEC size conversion, contradictory size limits, missing values/units, port range validation, process-name edge cases, date/time expressions, exact source spans, and invalid evaluation inputs. The extractor also processed all 10,085 training requests without runtime failures (about 12,350 requests/second in this workspace). No development or test requests were used for this smoke scan. No test source or fixture is stored in the repository.
 
-**Remaining:** Obtain owner approval/corrections for the 66 request-only entity proposals in [Entity Annotation Review](ENTITY_ANNOTATION_REVIEW.md). The separate human-review CSV remains unconfirmed. After review, record the required provenance, validate all exact spans and source identities, and run the guarded entity test evaluator once. Do not tune extraction rules from this held-out sample.
+**Completed:** The owner approved all 66 request-only entity proposals without corrections. The canonical review CSV contains 113 confirmed exact spans across 58 requests and eight approved empty-entity rows. Provenance, source identity, exact offsets, one-time report, and guard are committed. Do not rerun the evaluator or tune from this held-out sample.
 
 **Work:**
 - Implement rule-based extraction for the selected supported entities.
@@ -428,7 +428,7 @@ The implementation is divided into small commits. See [Intent Classifier](INTENT
 
 ### Step 8: Evaluation and experiments
 
-**Status:** Classifier and entity one-time test evaluations complete; generation v7 development comparison complete; preliminary assistant ratings recorded; owner-facing semantic sign-off remains open.
+**Status:** Complete. Classifier and entity one-time test evaluations, generation v7 development comparison, owner-confirmed 80-candidate human review milestone, and selected engineering audit are recorded.
 
 **Completed:**
 - Training/dev annotation checksums and source provenance revalidated.
@@ -446,7 +446,7 @@ The implementation is divided into small commits. See [Intent Classifier](INTENT
 
 **Completed:** The ten-request v6 development experiment is recorded in `artifacts/evaluation/generation_dev_v6_report.json`. The context-aware condition achieved 10/10 selected explicit-constraint checks and 9/10 syntax-valid outputs; request-only achieved 8/10 constraint checks and 9/10 syntax-valid outputs. Neither condition exactly matched the reference command on this small sample. The prompt/model/runtime/validator setup is frozen in `artifacts/evaluation/frozen_generation_config.json`.
 
-**Completed:** The 40-request v7 development workflow committed its report and 80-row condition-masked worksheet. The 66-row entity review was approved without corrections and its guarded exact-span evaluation ran once. A separate assistant-only semantic review is recorded; owner-facing semantic sign-off remains open. Do not rerun either one-time test evaluation or use held-out test labels/results to tune the frozen system.
+**Completed:** The 40-request v7 development workflow committed its report and 80-row candidate worksheet. The 66-row entity review was approved without corrections and its guarded exact-span evaluation ran once. The project owner confirmed that all 80 v7 candidates received human semantic review; the attestation is data/annotations/generation_dev_v7_human_review_attestation.json. No per-candidate human rating values were supplied with the completion confirmation, so no human semantic aggregate is published. Do not rerun either one-time test evaluation or use held-out test labels/results to tune the frozen system.
 
 ### Step 9: Final integration review and documentation
 
@@ -454,7 +454,7 @@ The implementation is divided into small commits. See [Intent Classifier](INTENT
 
 **Delivered:** README quick start, local model setup, human-review attestation, annotation status, generation experiment protocol, updated architecture/technical design, and Bash/constraint-validation limitations.
 
-**Remaining:** Run the final external temporary verification and adversarial checks, inspect the final repository diff, verify base and optional installs with `uv sync --locked` and `llama-cpp-python==0.3.37`, and recheck generation/validation CLI integration. No temporary test source, fixtures, caches, virtual environments, or secrets may enter Git. GitHub publication has been completed; runtime checks remain unverified because the configured remote coding workspace is unreachable.
+**Completed:** The final engineering audit ran from a fresh isolated local checkout and passed the selected clean-install, CLI, malformed-output, missing-runtime, grounding, frozen-checksum, and Bash parse-only checks. Known validator gaps are documented in docs/ENGINEERING_AUDIT.md. Documentation now includes a clean-clone reproduction guide. The presentation has been approved by the project owner. No temporary test source, fixtures, caches, virtual environments, or secrets are committed.
 
 ## 5. Per-step engineering and review protocol
 
