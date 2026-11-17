@@ -5,6 +5,8 @@ on:
     paths:
       - ".github/workflows/final-test-evaluation.yml"
       - "uv.lock"
+      - "src/nl2bash/annotation_validation.py"
+      - "data/annotations/test_review_manifest.json"
   workflow_dispatch:
 
 permissions:
