@@ -332,7 +332,7 @@ The implementation is divided into small commits. See [Intent Classifier](INTENT
 
 ##### Step 3.3.d.b: development threshold selection and test evaluation
 
-**Status:** Implementation completed; final project test evaluation pending.
+**Status:** Completed; the one-time final classifier test evaluation passed in GitHub Actions.
 
 **Delivered:**
 - Confirmed development/test data loaders with partition-specific source checksums, annotation checksums, source-row identity, and explicit held-out review provenance.
@@ -354,13 +354,13 @@ The implementation is divided into small commits. See [Intent Classifier](INTENT
 - A completed test report cannot be silently overwritten or re-run for the same project evaluation.
 
 
-**Current state (2026-11-17):** Training and development contain 500 and 375 confirmed labels. The project owner reviewed all 875 AI-assisted annotations and reported zero further corrections. Test contains 375 confirmed labels generated from request-only AI proposals and approved by the project owner without corrections. The canonical test worklist and confirmed JSONL export were constructed and their row identity, source-pair identity, label validity, and SHA-256 manifests were checked. The project CLI validator and one-time classifier test evaluation have not yet been executed in the target Python environment. Test annotation is AI-assisted and owner-approved, not independently adjudicated; no inter-annotator agreement study was performed. The classifier and development threshold remain frozen. See [Annotation Review Status](ANNOTATION_REVIEW_STATUS.md), [Human Review Attestation](HUMAN_REVIEW_ATTESTATION.md), and [Intent Audit Log](INTENT_AUDIT_LOG.md).
+**Current state (2026-11-17):** Training and development contain 500 and 375 confirmed labels. The project owner reviewed all 875 AI-assisted annotations and reported zero further corrections. Test contains 375 request-only AI-proposed labels approved by the project owner without corrections. The clean Python 3.10 locked environment, test annotation validator, and one-time classifier evaluation completed successfully in GitHub Actions. Test results are accuracy 0.6853, macro-F1 0.6400, weighted-F1 0.6793, and prediction coverage 0.9947 (373/375), using the frozen development threshold 0.1361115729921777. Test annotation remains AI-assisted and owner-approved, not independently adjudicated. The one-time test evaluation is complete and must not be rerun. See [Annotation Review Status](ANNOTATION_REVIEW_STATUS.md), [Human Review Attestation](HUMAN_REVIEW_ATTESTATION.md), and [Intent Audit Log](INTENT_AUDIT_LOG.md).
 
 ### Step 4: Entity and parameter extraction
 
 #### Step 4.1: deterministic extraction API and exact-span metrics
 
-**Status:** Initial implementation completed; reviewed entity benchmark remains outstanding.
+**Status:** Extractor and exact-span evaluator implemented; targeted 66-request annotation sample and owner-review worksheet prepared; human review pending.
 
 **Delivered:**
 - Rule-based extraction for eleven entity types, including programming-language mentions, process metrics, and explicit case-sensitivity requirements.
@@ -370,7 +370,7 @@ The implementation is divided into small commits. See [Intent Classifier](INTENT
 
 **Verification:** External checks under `/tmp/nl2bash-verification/` cover common requests, quoted and variable paths, URL rejection, compound extensions, SI/IEC size conversion, contradictory size limits, missing values/units, port range validation, process-name edge cases, date/time expressions, exact source spans, and invalid evaluation inputs. The extractor also processed all 10,085 training requests without runtime failures (about 12,350 requests/second in this workspace). No development or test requests were used for this smoke scan. No test source or fixture is stored in the repository.
 
-**Remaining:** Create a manually adjudicated entity benchmark with partition provenance, run precision/recall/F1 against it, and refine rules only from training/development examples. Do not tune against the held-out entity test sample.
+**Remaining:** Obtain owner approval/corrections for the 66 request-only entity proposals in [Entity Annotation Review](ENTITY_ANNOTATION_REVIEW.md). The separate human-review CSV remains unconfirmed. After review, record the required provenance, validate all exact spans and source identities, and run the guarded entity test evaluator once. Do not tune extraction rules from this held-out sample.
 
 **Work:**
 - Implement rule-based extraction for the selected supported entities.
@@ -428,7 +428,7 @@ The implementation is divided into small commits. See [Intent Classifier](INTENT
 
 ### Step 8: Evaluation and experiments
 
-**Status:** Development experiments and generation-configuration freeze complete; test annotations are approved and exported; final test evaluation is pending.
+**Status:** Classifier test evaluation complete; the 40-request generation v7 workflow is running; blinded semantic ratings remain pending.
 
 **Completed:**
 - Training/dev annotation checksums and source provenance revalidated.
@@ -446,7 +446,7 @@ The implementation is divided into small commits. See [Intent Classifier](INTENT
 
 **Completed:** The ten-request v6 development experiment is recorded in `artifacts/evaluation/generation_dev_v6_report.json`. The context-aware condition achieved 10/10 selected explicit-constraint checks and 9/10 syntax-valid outputs; request-only achieved 8/10 constraint checks and 9/10 syntax-valid outputs. Neither condition exactly matched the reference command on this small sample. The prompt/model/runtime/validator setup is frozen in `artifacts/evaluation/frozen_generation_config.json`.
 
-**Remaining:** Run `uv run nl2bash-annotations validate --partition test`, then run `uv run nl2bash-classifier evaluate-test` exactly once. The test annotation provenance must be disclosed. Test examples must not be used to tune the frozen system. Complete the entity benchmark, larger generation evaluation, and semantic ratings as separate evaluation workstreams.
+**Remaining:** Do not rerun the guarded classifier test evaluation. Verify that the 40-request v7 development workflow commits its report and 80-row condition-masked worksheet. Obtain owner-reviewed semantic ratings before unmasking A/B conditions. Complete the separate entity benchmark only after owner review of the 66-row entity worksheet. Do not use held-out test labels or results to tune the frozen system.
 
 ### Step 9: Final integration review and documentation
 
