@@ -138,6 +138,22 @@ def validate_reviewed_annotations(
             f"review CSV has {len(rows)} rows; pilot manifest expects {len(expected_ids)}"
         )
 
+    annotation_provenance = pilot_manifest.get("annotation_provenance")
+    if partition_name == "test":
+        if (
+            not isinstance(annotation_provenance, dict)
+            or annotation_provenance.get("method")
+            != "request-only AI-proposed intents reviewed and explicitly approved by project owner"
+            or annotation_provenance.get("owner_approved_rows") != len(rows)
+            or annotation_provenance.get("owner_corrections") != 0
+            or annotation_provenance.get("reference_commands_exposed_during_suggestion") is not False
+            or annotation_provenance.get("classifier_predictions_exposed_during_review") is not False
+            or annotation_provenance.get("independent_annotation_claimed") is not False
+        ):
+            raise AnnotationError(
+                "test review manifest must record complete request-only AI-assisted owner-approval provenance"
+            )
+
     seen_ids: set[str] = set()
     seen_groups: set[str] = set()
     confirmed: list[dict[str, str]] = []
@@ -284,6 +300,11 @@ def validate_reviewed_annotations(
             "only rows explicitly marked confirmed are exported; held-out exports must not be used for fitting"
             if partition_name in {"dev", "test"}
             else "only rows explicitly marked confirmed are exported"
+        ),
+        **(
+            {"annotation_provenance": annotation_provenance}
+            if partition_name == "test"
+            else {}
         ),
     }
     manifest_payload = (
