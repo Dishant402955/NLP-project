@@ -83,7 +83,18 @@ def _validate_evaluation_data(
             f"{expected_partition} evaluation requires {expected_partition} annotations, "
             f"not {data.partition_name}"
         )
-    if data.blind_manual_review is not True:
+    if expected_partition == "test":
+        provenance = data.annotation_provenance
+        if (
+            not isinstance(provenance, dict)
+            or provenance.get("method") != "request-only AI-proposed intents reviewed and explicitly approved by project owner"
+            or provenance.get("owner_approved_rows") != len(data.requests)
+            or provenance.get("independent_annotation_claimed") is not False
+        ):
+            raise EvaluationError(
+                "test evaluation requires explicit, complete AI-assisted annotation provenance"
+            )
+    elif data.blind_manual_review is not True:
         raise EvaluationError(
             f"{expected_partition} evaluation requires labels from blind manual review"
         )
@@ -565,6 +576,7 @@ def evaluate_test_once(
             "development_partition_sha256": development_source.get("partition_sha256"),
             "development_annotations_sha256": development_source.get("confirmed_annotations_sha256"),
         },
+        "annotation_provenance": test_data.annotation_provenance,
         "test_source": {
             "dataset_revision": test_data.dataset_revision,
             "partition_name": "test",
@@ -576,7 +588,8 @@ def evaluate_test_once(
         "metrics": _metrics_dict(metrics),
         "interpretation": (
             "The confidence value is an uncalibrated Logistic Regression probability estimate. "
-            "A prediction below the frozen development threshold is mapped to other_or_ambiguous."
+            "A prediction below the frozen development threshold is mapped to other_or_ambiguous. "
+            "Test labels are AI-assisted and owner-approved, not independently adjudicated ground truth."
         ),
     }
         _atomic_write_once(report_path, _json_bytes(result))
