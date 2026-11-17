@@ -52,6 +52,14 @@
     "src/nl2bash/entity_validation.py": "d95dddefb548555252be503b470019f81a895cfd202e43e87aee8db43a12cb86",
     "src/nl2bash/generation_configuration.py": "614292f7e6f93728977c2fa594119b39853d3d0126951166f18b2cf38f59d1f8",
     "src/nl2bash/generation_evaluation.py": "2cd7a2376f88572ce065a8ffa43ada4cc4859451fe6a9b1ffda4b5a9c1b8311f",
-    "uv.lock": "c1f8aece40aa86d8e872c1cfcee7d7ef3b55f6c26df99f373602e34c726e513c"
+    "uv.lock": "0ccd05b8678876c4c8d2ea95fe05bea96ddbc5785885d2da52801c4ddc33f800"
+  },
+  "lockfile_repair": {
+    "date": "2026-11-17",
+    "reason": "The initial lock contained multiple NumPy resolution variants but the editable root dependency was not version/marker-qualified, which uv 0.13.9 rejected as ambiguous.",
+    "repair": "Added the exact, already locked NumPy version and source for each Python-version marker. The model runtime remains on the Python 3.10 dependency versions recorded by the classifier manifest.",
+    "previous_sha256": "c1f8aece40aa86d8e872c1cfcee7d7ef3b55f6c26df99f373602e34c726e513c",
+    "updated_sha256": "0ccd05b8678876c4c8d2ea95fe05bea96ddbc5785885d2da52801c4ddc33f800",
+    "note": "This repairs lock metadata only; it does not change the frozen Python 3.10 classifier library versions."
   }
 }
