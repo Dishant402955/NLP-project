@@ -2,51 +2,47 @@
 
 **Status date:** 2026-11-17
 
-## Completed and committed
+## Completed and verified
 
-- Core Python package, TF-IDF/Logistic Regression intent classifier, rule-based entity extractor, local Qwen command generator, Bash syntax/risk checks, and end-to-end CLI.
-- Duplicate-aware NL2Bash partitions and source/checksum manifests.
-- 500 training and 375 development intent annotations; the project owner reported zero further corrections after AI-assisted annotation.
-- Frozen classifier, development-selected confidence threshold, generation prompt/model/runtime, and validation configuration.
-- Ten-request development-only command-generation comparison.
-- 375 test intent decisions: request-only AI suggestions were reviewed and all accepted by the project owner without correction. The canonical test worklist, confirmed JSONL export, checksums, and AI-assisted provenance manifest are committed.
+- Core hybrid NLP + local Qwen Bash-generation application, deterministic entity extraction, parse-only Bash validation, safety heuristics, and CLI are implemented.
+- NL2Bash data partitions, annotation provenance, checksums, and frozen classifier/generation configuration are committed.
+- The project owner reviewed the 500 training and 375 development intent annotations with zero further corrections.
+- All 375 test intent proposals were accepted by the project owner without corrections. They remain AI-assisted and owner-approved, not independently adjudicated.
+- The one-time classifier test evaluation completed successfully. Results: accuracy 0.6853, macro-F1 0.6400, weighted-F1 0.6793, macro precision 0.7854, macro recall 0.6186, and coverage 0.9947 (373/375) at the frozen development threshold 0.1361115729921777. Report: `artifacts/evaluation/test_report.json`; guard: `artifacts/evaluation/test_evaluation.lock`. **Do not rerun or reset this evaluation.**
+- The ten-request generation v6 development comparison is recorded in `artifacts/evaluation/generation_dev_v6_report.json`.
+- The entity exact-span evaluator and CLI entry point are implemented. Its 66-row targeted request-only AI suggestion sample, owner-review CSV, and manifest are committed. The [assistant-reviewed entity proposal sheet](ENTITY_ANNOTATION_REVIEW.md) contains the 66 requests, proposed exact spans, offsets, and review notes. The separate owner-review CSV remains blank/pending.
+- A clean Python 3.10 `uv sync --locked` smoke run passed. All package CLI entry points, including `nl2bash-entity-eval`, imported and exposed help successfully.
+- Parse-only Bash smoke checks accepted a safe command, flagged `sudo rm -rf /` as high risk, rejected invalid Bash syntax, and confirmed `executed: false` for all three. No generated command was executed.
+- Entity sample checks passed: 66 distinct source examples/groups, checksums matched, all 119 original AI candidate spans matched their exact source offsets, and all 66 human-review rows remained pending.
 
-The test intent labels are AI-assisted and owner-approved, not independently adjudicated ground truth. Any classifier test metrics must state that limitation.
+## Remaining owner-review work
 
-## Remaining work
+### 1. Entity benchmark review
 
-### 1. Classifier test evaluation
+Review all 66 rows in [Entity Annotation Review](ENTITY_ANNOTATION_REVIEW.md). Correct or approve the proposed entity types, exact values, and half-open offsets. After approval, populate `data/annotations/entity_test_human_review.csv`, mark each row confirmed, add reviewer notes, and record owner-review provenance in the manifest. Validate the complete worksheet and run the guarded entity test evaluator exactly once.
 
-<badge color="success">Completed</badge>
+The sample is targeted, not prevalence-representative. It has no observed `process_name` or `process_metric` candidates and only one explicit port candidate. Any resulting metrics must display support and this limitation. Do not tune extraction rules using this held-out sample.
 
-The workflow at `.github/workflows/final-test-evaluation.yml` completed successfully in GitHub Actions. It installed the locked Python 3.10 environment, passed the project's test annotation validator on 375 records, ran the one-time frozen classifier evaluation, verified the provenance/metrics, and committed the report and guard. The lockfile's Python-version-specific NumPy references were also repaired and `uv sync --locked` passed.
+### 2. Command-generation v7 evaluation and semantic review
 
-Results: accuracy 0.6853, macro-F1 0.6400, weighted-F1 0.6793, macro precision 0.7854, macro recall 0.6186, prediction coverage 0.9947, and two low-confidence requests. The development-selected threshold was 0.1361115729921777.
+The 40-request paired development workflow has completed its model, frozen-configuration, and generation stages in a prior run, but that run's final Git push was rejected because `main` advanced during inference. The workflow now uploads its outputs and rebases before publishing. The corrected run is in progress.
 
-Report: `artifacts/evaluation/test_report.json`. Completed guard: `artifacts/evaluation/test_evaluation.lock`. The evaluation must not be rerun. Test annotation was AI-assisted and owner-approved, not independently adjudicated, and that caveat is embedded in the report.
+When it completes, verify that `artifacts/evaluation/generation_dev_v7_report.json` and `data/annotations/generation_dev_v7_semantic_review.csv` are committed. The CSV contains 80 condition-masked candidates (two per request). Reviewers must see only request text and A/B commands; do not disclose the A/B-to-condition mapping until ratings are complete. Do not execute generated commands or use reference commands to create semantic ratings.
 
-The test evaluator must not be rerun after its report/guard are produced.
+### 3. Final engineering audit
 
-### 2. Build an entity-extraction benchmark
+The clean locked Python 3.10 installation, package entry points, entity sample integrity, parse-only syntax checks, and high-risk detection smoke checks have passed in GitHub Actions. The generation v7 workflow also verifies the pinned CPU runtime, Qwen model checksum, and frozen configuration before evaluation.
 
-The extractor supports eleven entity types and the exact-span metric implementation exists, but no reviewed entity gold set exists. Create an annotation schema that captures entity type, exact source text, normalized value, and start/end character offsets. Have a human adjudicate a development sample for rule refinement and a separate held-out sample for final scoring. Calculate exact-span micro and per-type precision, recall, and F1. Do not present functional smoke tests as accuracy metrics.
+After the outstanding owner reviews, complete the remaining adversarial/integration review for malformed model output, missing model/runtime, unresolved or invented constraints, and frozen-configuration mismatch. Reconfirm that no temporary test scripts/fixtures, caches, virtual environments, or secrets are committed. Preserve the user's existing uncommitted workspace; the remote coding-agent workspace was previously dirty and stale, so it must not be reset or cleaned to perform this audit.
 
-### 3. Run a larger command-generation evaluation
+### 4. Academic submission
 
-The existing comparison has ten development requests only. Run a larger representative sample with the frozen Qwen model, prompt, runtime, classifier, extractor, and validator. Compare request-only and NLP-context generation on the same requests. Report exact match, syntax validity, selected constraint preservation, warnings, and latency.
+After the entity and command-generation reviews and final audit, prepare the final report, presentation, and demonstration. Include dataset and license provenance, AI-assisted annotation limitations, architecture, classifier metrics and per-class support, exact-span entity metrics and coverage limits, generation metrics and blind semantic ratings, error analysis, safety boundaries, and reproducibility details. Do not invent missing results.
 
-Add blinded human semantic-correctness ratings for generated commands. A valid Bash parse is not evidence that the command does the right thing. Do not execute generated commands as part of the normal evaluation.
+## Evaluation safeguards
 
-### 4. Complete the final engineering audit
-
-- Verify `uv sync --locked` from a clean Python 3.10 environment.
-- Verify the optional `llama-cpp-python==0.3.37` installation and the Qwen GGUF SHA-256.
-- Run the annotation validator, classifier CLI, generation CLI, and standalone Bash validator after installing from the lockfile.
-- Recheck malformed inputs, dangerous command patterns, missing model/runtime cases, and frozen-configuration rejection.
-- Inspect the final Git diff and verify that no test source, temporary fixtures, caches, virtual environments, or secrets are committed.
-
-The remote coding-agent workspace is currently unreachable. GitHub repository reads and commits are available, but they do not execute Python commands. The final runtime audit therefore remains unverified.
-
-### 5. Finish the academic submission
-
-After the outstanding evaluations, prepare the final report, presentation, and live demonstration. The report must include dataset provenance/licensing, annotation methodology, the AI-assisted test-label caveat, frozen model details, per-class metrics, entity benchmark results, command-generation semantic ratings, failure analysis, safety limitations, and reproducibility instructions. Do not fill missing results with estimates.
+- The one-time classifier test report and guard are complete. Do not rerun them.
+- Entity test evaluation is one-time and must not run until all 66 owner decisions are finalized and provenance is recorded.
+- The frozen model, prompt, classifier, threshold, and safety rules must not be tuned using held-out test data.
+- Generated Bash commands are proposals only; never execute them as part of generation or evaluation.
+- Keep temporary test source and fixtures outside Git.
