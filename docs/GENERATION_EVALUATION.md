@@ -69,3 +69,12 @@ uv run nl2bash evaluate-generation-dev \
 ```
 
 The CLI refuses to overwrite an existing report. The committed report is the recorded run; rerunning the experiment should use a new output path and be documented as a separate run.
+
+
+## Remaining command-generation evidence
+
+The committed ten-request development comparison is not a final command-generation quality estimate. The next experiment should use a larger representative sample with the frozen model, prompt, runtime, intent classifier, entity extractor, and validator. Compare request-only and NLP-context output on the same requests. Record generation success, exact match, Bash syntax validity, selected explicit-constraint preservation, high-risk warnings, and latency.
+
+A human semantic review is also required. Reviewers should see the natural-language request and generated command, but not the generation condition. Use a defined correctness scale (for example: correct as written, partially correct/needs edits, incorrect or unsafe), record the reason for each non-perfect rating, and do not execute commands. Ideally use two independent reviewers and adjudicate disagreements. The reference command may be used after generation as an additional comparison target, but must never be inserted into generation prompts.
+
+No larger held-out generation run or human semantic rating has been completed. Keep the frozen configuration unchanged and disclose that the current evidence consists of a ten-request development engineering comparison only.
