@@ -317,25 +317,25 @@ The implementation is divided into small commits. See [Intent Classifier](INTENT
 
 ##### Step 3.3.d: held-out annotations and evaluation
 
-##### Step 3.3.d.a: blind development and test annotation worklists
+##### Step 3.3.d.a: held-out development and test annotation worklists
 
 **Status:** Completed.
 
 **Delivered:**
 - Partition-aware worklist generation for train, development, and test.
-- Development and test default to blind manual review with no heuristic label suggestions.
+- Development and test canonical worklists contain no in-file heuristic label suggestions. The test proposals are kept separately with request-only AI provenance.
 - One original request is selected from each duplicate group in the held-out partition.
 - Confirmed exports record their partition names and source checksums.
 - Classifier training rejects development and test annotation exports.
 
-**Verified current worklists:** 375 pending development examples and 375 pending test examples, with 375 unique duplicate groups in each partition. No suggested labels were generated.
+**Verified current worklists:** 375 development and 375 test examples, with 375 unique duplicate groups in each partition. The test suggestion artifact contains 375 request-only AI proposals; the project owner approved all 375 without corrections.
 
 ##### Step 3.3.d.b: development threshold selection and test evaluation
 
-**Status:** Completed.
+**Status:** Implementation completed; final project test evaluation pending.
 
 **Delivered:**
-- Confirmed development/test data loaders with partition-specific source checksums, annotation checksums, source-row identity, and blind-review provenance.
+- Confirmed development/test data loaders with partition-specific source checksums, annotation checksums, source-row identity, and explicit held-out review provenance.
 - Threshold selection on development data using macro-F1 with a minimum 80% prediction coverage requirement.
 - Deterministic tie-breaking: higher macro-F1, then higher coverage, then lower threshold.
 - Frozen threshold artifact records model, development partition, and annotation provenance.
@@ -347,14 +347,14 @@ The implementation is divided into small commits. See [Intent Classifier](INTENT
 
 **Acceptance criteria:**
 - No development or test annotation enters model fitting.
-- Held-out annotations are manually confirmed without model or heuristic suggestions.
+- Held-out labels are explicitly owner-approved, and any AI assistance is recorded. Test-label provenance is disclosed; labels are not represented as independent ground truth.
 - No duplicate-linked group appears across train, development, and test.
 - Test evaluation fails closed when labels are missing, unconfirmed, or inconsistent.
 - The test report records model hash, test partition checksum, annotation checksum, and frozen development threshold.
 - A completed test report cannot be silently overwritten or re-run for the same project evaluation.
 
 
-**Current state (2026-11-17):** The training and development worklists contain 500 and 375 confirmed labels. An AI-assisted second-pass audit changed 30 labels; the project owner subsequently reviewed all 875 rows and reported zero further corrections. Both exports pass partition and checksum validation. The test worklist remains 375 pending rows with an empty confirmed export. The classifier and development threshold are frozen. The generation prompt/model/runtime and validator configuration are also frozen after a development-only comparison. The original AI-assisted annotation history must still be disclosed; no inter-annotator agreement study was performed. See [Annotation Review Status](ANNOTATION_REVIEW_STATUS.md), [Human Review Attestation](HUMAN_REVIEW_ATTESTATION.md), and [Intent Audit Log](INTENT_AUDIT_LOG.md).
+**Current state (2026-11-17):** Training and development contain 500 and 375 confirmed labels. The project owner reviewed all 875 AI-assisted annotations and reported zero further corrections. Test contains 375 confirmed labels generated from request-only AI proposals and approved by the project owner without corrections. The canonical test worklist and confirmed JSONL export were constructed and their row identity, source-pair identity, label validity, and SHA-256 manifests were checked. The project CLI validator and one-time classifier test evaluation have not yet been executed in the target Python environment. Test annotation is AI-assisted and owner-approved, not independently adjudicated; no inter-annotator agreement study was performed. The classifier and development threshold remain frozen. See [Annotation Review Status](ANNOTATION_REVIEW_STATUS.md), [Human Review Attestation](HUMAN_REVIEW_ATTESTATION.md), and [Intent Audit Log](INTENT_AUDIT_LOG.md).
 
 ### Step 4: Entity and parameter extraction
 
@@ -428,7 +428,7 @@ The implementation is divided into small commits. See [Intent Classifier](INTENT
 
 ### Step 8: Evaluation and experiments
 
-**Status:** Development experiments and generation-configuration freeze complete; final test review and one-time test evaluation intentionally pending.
+**Status:** Development experiments and generation-configuration freeze complete; test annotations are approved and exported; final test evaluation is pending.
 
 **Completed:**
 - Training/dev annotation checksums and source provenance revalidated.
@@ -446,15 +446,15 @@ The implementation is divided into small commits. See [Intent Classifier](INTENT
 
 **Completed:** The ten-request v6 development experiment is recorded in `artifacts/evaluation/generation_dev_v6_report.json`. The context-aware condition achieved 10/10 selected explicit-constraint checks and 9/10 syntax-valid outputs; request-only achieved 8/10 constraint checks and 9/10 syntax-valid outputs. Neither condition exactly matched the reference command on this small sample. The prompt/model/runtime/validator setup is frozen in `artifacts/evaluation/frozen_generation_config.json`.
 
-**Remaining:** Complete final code audit and GitHub publication. The blind 375-row human review worksheet is prepared at `data/annotations/test_human_review.csv`. The project owner must complete every row, merge only human decisions into `test_review.csv`, validate the export, and then run the one-time test evaluation. Test examples must not be used to tune the frozen system.
+**Remaining:** Run `uv run nl2bash-annotations validate --partition test`, then run `uv run nl2bash-classifier evaluate-test` exactly once. The test annotation provenance must be disclosed. Test examples must not be used to tune the frozen system. Complete the entity benchmark, larger generation evaluation, and semantic ratings as separate evaluation workstreams.
 
 ### Step 9: Final integration review and documentation
 
-**Status:** Documentation updated; final code audit and GitHub publication pending.
+**Status:** Documentation updated and published; clean-environment runtime audit pending.
 
 **Delivered:** README quick start, local model setup, human-review attestation, annotation status, generation experiment protocol, updated architecture/technical design, and Bash/constraint-validation limitations.
 
-**Remaining:** Run the final external temporary verification and adversarial checks, inspect every changed file and staged diff, verify both base and optional installs, ensure no test source/fixtures/caches enter Git, and publish the reviewed changes to `origin/main` through the GitHub connector because the agent machine's GitHub network route is unreliable.
+**Remaining:** Run the final external temporary verification and adversarial checks, inspect the final repository diff, verify base and optional installs with `uv sync --locked` and `llama-cpp-python==0.3.37`, and recheck generation/validation CLI integration. No temporary test source, fixtures, caches, virtual environments, or secrets may enter Git. GitHub publication has been completed; runtime checks remain unverified because the configured remote coding workspace is unreachable.
 
 ## 5. Per-step engineering and review protocol
 
