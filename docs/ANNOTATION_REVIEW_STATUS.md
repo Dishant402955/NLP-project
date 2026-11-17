@@ -8,7 +8,7 @@
 |---|---:|---:|---:|---|
 | Training | 500 | 500 | 0 | Model fitting |
 | Development | 375 | 375 | 0 | Model and threshold development |
-| Test | 375 | 375 | 0 | One-time held-out classifier evaluation pending |
+| Test | 375 | 375 | 0 | One-time held-out classifier evaluation completed |
 
 The training and development annotations were initially AI-assisted. A second-pass AI audit changed 30 labels (10 training, 20 development); see [Intent Audit Log](INTENT_AUDIT_LOG.md). The project owner subsequently reviewed all 875 rows and reported zero further changes. See [Human Review Attestation](HUMAN_REVIEW_ATTESTATION.md).
 
@@ -16,7 +16,7 @@ The test annotation suggestions were created from the 375 natural-language reque
 
 **Interpretation caveat:** the test labels are AI-assisted and owner-approved, not independently annotated ground truth. The classifier test metrics will measure agreement with these labels. This is weaker evidence than a separately annotated or independently adjudicated test set and must be disclosed in the report.
 
-The test worklist and export were checked against the test partition: all 375 IDs and duplicate-group IDs match, request and reference-command source pairs match, all labels belong to the ten-label taxonomy, all rows are confirmed, all 22 `other_or_ambiguous` rows have reviewer notes, and the reviewed-CSV/export SHA-256 values match their manifests. The project CLI validator and model evaluation have not yet been executed in the target Python environment.
+The test worklist and export passed the project CLI validator: all 375 IDs and duplicate-group IDs match, request and reference-command source pairs match, all labels belong to the ten-label taxonomy, all rows are confirmed, all 22 `other_or_ambiguous` rows have reviewer notes, and the reviewed-CSV/export SHA-256 values match their manifests. The clean Python 3.10 `uv sync --locked` run and one-time classifier evaluation succeeded in GitHub Actions.
 
 ## Test label distribution
 
@@ -66,16 +66,51 @@ The classifier was fitted on the 500 confirmed training rows. Its confidence thr
 
 These are development-set results, not final test results. The model scores are uncalibrated probability estimates.
 
+## Final held-out classifier result
+
+<badge color="success">One-time evaluation completed</badge>
+
+The classifier was evaluated once on all 375 confirmed test examples using the frozen development-selected threshold of `0.1361115729921777`. The model and threshold checksums are recorded in `artifacts/evaluation/test_report.json`; the completed one-time guard is `artifacts/evaluation/test_evaluation.lock`.
+
+| Metric | Test result |
+|---|---:|
+| Accuracy | 0.6853 |
+| Macro precision | 0.7854 |
+| Macro recall | 0.6186 |
+| Macro-F1 | 0.6400 |
+| Weighted precision | 0.7285 |
+| Weighted recall | 0.6853 |
+| Weighted-F1 | 0.6793 |
+| Prediction coverage | 0.9947 |
+| Low-confidence requests | 2 / 375 |
+| Frozen threshold | 0.1361115729921777 |
+
+Per-class test F1:
+
+| Intent | Support | Precision | Recall | F1 |
+|---|---:|---:|---:|---:|
+| `archive_compression` | 14 | 1.0000 | 0.7143 | 0.8333 |
+| `file_directory_management` | 58 | 0.8214 | 0.7931 | 0.8070 |
+| `file_discovery` | 125 | 0.6577 | 0.7840 | 0.7153 |
+| `network_remote_operations` | 11 | 1.0000 | 0.8182 | 0.9000 |
+| `other_or_ambiguous` | 22 | 0.5385 | 0.3182 | 0.4000 |
+| `permissions_ownership` | 48 | 0.8235 | 0.5833 | 0.6829 |
+| `process_job_management` | 6 | 1.0000 | 0.5000 | 0.6667 |
+| `shell_environment_session` | 15 | 0.3514 | 0.8667 | 0.5000 |
+| `system_information` | 16 | 1.0000 | 0.1250 | 0.2222 |
+| `text_search_processing` | 60 | 0.6613 | 0.6833 | 0.6721 |
+
+**Interpretation:** macro-F1 is materially lower than the development macro-F1 (0.6709 vs 0.6400), with particularly weak recall for `system_information` and `other_or_ambiguous`. Supports are small for several classes. Because the 375 test labels were AI-proposed and then accepted by the project owner, these results are agreement with an AI-assisted owner-approved label set, not a fully independent gold-standard estimate. The one-time test guard is complete; do not rerun this evaluation.
+
 ## Frozen configuration and remaining evaluation
 
 The classifier artifact, development-selected confidence threshold, local command-generation model, prompt, runtime settings, and validation configuration are frozen. Test annotations must not be used to change them.
 
-The next steps are:
+Remaining work:
 
-1. Run `uv run nl2bash-annotations validate --partition test` in a clean project environment.
-2. Run `uv run nl2bash-classifier evaluate-test` once and preserve the report and evaluation guard.
-3. Build a separate manually adjudicated entity benchmark and report exact-span metrics. Do not tune extraction rules against its held-out portion.
-4. Run a larger command-generation experiment and obtain human semantic-correctness ratings. The existing ten-request development comparison is an engineering sample only.
-5. Complete the final clean-install, integration, and adversarial engineering audit.
+1. Build a separate entity benchmark and report exact-span metrics. Do not tune extraction rules against its held-out portion.
+2. Run a larger command-generation experiment and obtain human semantic-correctness ratings. The existing ten-request development comparison is an engineering sample only.
+3. Complete the final clean-install, integration, and adversarial engineering audit.
+4. Prepare the final report, presentation, and demonstration.
 
 No test result may be used to revise intent labels, prompt text, model parameters, thresholds, or safety rules. Any change motivated by test errors must be reported as post-test exploratory work, not as part of the evaluated system.
