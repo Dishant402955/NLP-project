@@ -103,7 +103,7 @@ jobs:
                       "candidate_command", "generation_succeeded",
                       "semantic_rating", "reviewer_note",
                   ],
-                  lineterminator="\\n",
+                  lineterminator="\n",
               )
               writer.writeheader()
               writer.writerows(rows)
