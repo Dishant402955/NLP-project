@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "artifact_type": "request_only_ai_entity_annotation_suggestions",
+  "date": "2026-11-17",
+  "source_partition": "test",
+  "source_partition_file": "data/processed/nl2bash/test.jsonl",
+  "source_partition_sha256": "0af4b99c3d49cbf32a4d75a30cebe0412a93d3305c66263cb702aff9900dec66",
+  "source_annotation_worklist": "data/annotations/test_review.csv",
+  "source_worklist_sha256": "70a7bc94de0de0abd6df073a4044bb5a8fa4046237884991906dd49dbc543b43",
+  "sample_size": 66,
+  "selection": "Targeted request-text sample selected to exercise explicit entity cues; one example per duplicate group. Not a prevalence-representative random sample.",
+  "request_only": true,
+  "reference_commands_used": false,
+  "extractor_predictions_used": false,
+  "entity_types": [
+    "file_extension",
+    "path",
+    "file_name",
+    "size",
+    "port",
+    "process_name",
+    "process_metric",
+    "date_time",
+    "comparison_condition",
+    "programming_language",
+    "case_sensitivity"
+  ],
+  "candidate_entity_counts": {
+    "file_extension": 39,
+    "path": 32,
+    "file_name": 2,
+    "programming_language": 8,
+    "size": 8,
+    "comparison_condition": 14,
+    "port": 1,
+    "date_time": 7,
+    "case_sensitivity": 8
+  },
+  "unsupported_or_not_observed_entity_types": [
+    "process_name",
+    "process_metric"
+  ],
+  "limitations": "AI-assisted candidate annotations require human correction/approval. Do not call these gold labels until the project owner completes review. The sample has weak or zero coverage for rare types such as process_name/process_metric and only one explicit port example; add separate challenge examples if those metrics matter.",
+  "offset_contract": "Zero-based Python string offsets with exclusive end, into the original request after outer whitespace trimming; entity value must equal request[start:end].",
+  "normalization": "Retain exact source value; normalized_value is additional metadata only.",
+  "overlap_policy": "Overlapping spans of different entity types are allowed, e.g. a suffix inside a filename/path.",
+  "outputs": {
+    "suggestion_file": "data/annotations/entity_test_ai_suggestions.jsonl",
+    "human_review_file": "data/annotations/entity_test_human_review.csv"
+  },
+  "human_review_policy": "Only the human-confirmed_entities_json field in the separate worksheet may be exported as gold. The suggestion JSONL must not be used as gold or for rule tuning until reviewed.",
+  "rows": 66,
+  "rows_with_any_suggested_entity": 61,
+  "rows_with_no_suggested_entities": 5
+}
