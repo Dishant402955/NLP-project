@@ -1,0 +1,9 @@
+{
+  "frozen_threshold_sha256": "a0ac257309d234e0266d8fd1ca3ad6a0cbf2160d4c4786e87c126a356975a647",
+  "model_sha256": "b2c4c64fc4723b5279bb198dff04dd58921f969406b91739ff6524fa97e12d2e",
+  "report_file": "artifacts/evaluation/test_report.json",
+  "report_sha256": "a6329b9f715d691ffb4a8b7cba017a584102a39a51542aa3def13c79bae26d64",
+  "schema_version": 1,
+  "status": "completed",
+  "test_partition_sha256": "0af4b99c3d49cbf32a4d75a30cebe0412a93d3305c66263cb702aff9900dec66"
+}

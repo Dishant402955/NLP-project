@@ -1,0 +1,235 @@
+{
+  "annotation_provenance": {
+    "classifier_predictions_exposed_during_review": false,
+    "independent_annotation_claimed": false,
+    "limitation": "These labels are AI-assisted and owner-approved, not independently adjudicated ground truth. Report this provenance when interpreting test metrics.",
+    "method": "request-only AI-proposed intents reviewed and explicitly approved by project owner",
+    "owner_approved_rows": 375,
+    "owner_corrections": 0,
+    "reference_commands_exposed_during_suggestion": false,
+    "suggestion_file": "data/annotations/test_ai_suggestions.csv",
+    "suggestion_manifest": "data/annotations/test_ai_suggestions_manifest.json"
+  },
+  "artifact_type": "intent_classifier_test_evaluation",
+  "evaluated_once": true,
+  "evaluation_policy": "single_final_test_evaluation_after_development_threshold_freeze",
+  "frozen_development_threshold": {
+    "development_annotations_sha256": "72bca2300f8c983ffb01d469523d18db2518dfff383c165be111d2f9a69d2cf5",
+    "development_partition_sha256": "22f30b63140a34c9d12dfd98a0dc0110111f19d46cc8771088c9ddd65e6002f5",
+    "file": "artifacts/evaluation/frozen_dev_threshold.json",
+    "selection_method": "maximize_development_macro_f1_with_minimum_coverage",
+    "sha256": "a0ac257309d234e0266d8fd1ca3ad6a0cbf2160d4c4786e87c126a356975a647",
+    "threshold": 0.1361115729921777
+  },
+  "interpretation": "The confidence value is an uncalibrated Logistic Regression probability estimate. A prediction below the frozen development threshold is mapped to other_or_ambiguous. Test labels are AI-assisted and owner-approved, not independently adjudicated ground truth.",
+  "metrics": {
+    "accuracy": 0.6853333333333333,
+    "confusion_matrix": [
+      [
+        98,
+        14,
+        3,
+        5,
+        0,
+        0,
+        0,
+        0,
+        3,
+        2
+      ],
+      [
+        15,
+        41,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1
+      ],
+      [
+        11,
+        0,
+        46,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0
+      ],
+      [
+        17,
+        2,
+        1,
+        28,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        1,
+        0,
+        3,
+        0,
+        0,
+        0,
+        0,
+        2
+      ],
+      [
+        2,
+        2,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        9,
+        1
+      ],
+      [
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        9,
+        0,
+        1,
+        0
+      ],
+      [
+        2,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        10,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        13,
+        0
+      ],
+      [
+        3,
+        2,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        9,
+        7
+      ]
+    ],
+    "coverage": 0.9946666666666667,
+    "low_confidence_count": 2,
+    "macro_f1": 0.6399626210044433,
+    "macro_label_count": 10,
+    "macro_precision": 0.7853779316392182,
+    "macro_recall": 0.6186086132258547,
+    "per_class": {
+      "archive_compression": {
+        "f1": 0.8333333333333334,
+        "precision": 1.0,
+        "recall": 0.7142857142857143,
+        "support": 14
+      },
+      "file_directory_management": {
+        "f1": 0.8070175438596491,
+        "precision": 0.8214285714285714,
+        "recall": 0.7931034482758621,
+        "support": 58
+      },
+      "file_discovery": {
+        "f1": 0.7153284671532847,
+        "precision": 0.6577181208053692,
+        "recall": 0.784,
+        "support": 125
+      },
+      "network_remote_operations": {
+        "f1": 0.9,
+        "precision": 1.0,
+        "recall": 0.8181818181818182,
+        "support": 11
+      },
+      "other_or_ambiguous": {
+        "f1": 0.4,
+        "precision": 0.5384615384615384,
+        "recall": 0.3181818181818182,
+        "support": 22
+      },
+      "permissions_ownership": {
+        "f1": 0.6829268292682927,
+        "precision": 0.8235294117647058,
+        "recall": 0.5833333333333334,
+        "support": 48
+      },
+      "process_job_management": {
+        "f1": 0.6666666666666666,
+        "precision": 1.0,
+        "recall": 0.5,
+        "support": 6
+      },
+      "shell_environment_session": {
+        "f1": 0.5,
+        "precision": 0.35135135135135137,
+        "recall": 0.8666666666666667,
+        "support": 15
+      },
+      "system_information": {
+        "f1": 0.2222222222222222,
+        "precision": 1.0,
+        "recall": 0.125,
+        "support": 16
+      },
+      "text_search_processing": {
+        "f1": 0.6721311475409836,
+        "precision": 0.6612903225806451,
+        "recall": 0.6833333333333333,
+        "support": 60
+      }
+    },
+    "record_count": 375,
+    "weighted_f1": 0.6793430795135454,
+    "weighted_precision": 0.7284823399453253,
+    "weighted_recall": 0.6853333333333333
+  },
+  "model": {
+    "file": "models/intent_classifier.joblib",
+    "sha256": "b2c4c64fc4723b5279bb198dff04dd58921f969406b91739ff6524fa97e12d2e"
+  },
+  "schema_version": 1,
+  "test_source": {
+    "annotation_manifest_sha256": "c7b6970d0dc9f444dcbc200ecc65dbfd685d8be394f410f85951ba1cae3ab116",
+    "confirmed_annotations_sha256": "a2fdf1bcd557caf384fee517c746f182611420993cf30534caddfdfb983b0af4",
+    "dataset_revision": "d6b9f5bdff45621d190134e31ab63b7bf7002190",
+    "partition_name": "test",
+    "partition_sha256": "0af4b99c3d49cbf32a4d75a30cebe0412a93d3305c66263cb702aff9900dec66",
+    "reviewed_csv_sha256": "70a7bc94de0de0abd6df073a4044bb5a8fa4046237884991906dd49dbc543b43"
+  }
+}
