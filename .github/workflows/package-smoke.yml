@@ -44,9 +44,9 @@ jobs:
           uv run nl2bash-prepare-dataset --help >/dev/null
           uv run nl2bash-annotations --help >/dev/null
           uv run nl2bash-classifier --help >/dev/null
-          uv run nl2bash-entity-eval --help >/dev/null
+          uv run python -m nl2bash.entity_benchmark_cli --help >/dev/null
           python -m compileall -q src/nl2bash
-          echo "All package entry points import and expose help successfully."
+          echo "All declared package entry points and the entity evaluator module CLI expose help successfully."
 
       - name: Verify parse-only Bash validation and safety findings
         run: |
