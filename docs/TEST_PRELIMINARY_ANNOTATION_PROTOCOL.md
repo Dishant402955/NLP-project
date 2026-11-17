@@ -1,7 +1,7 @@
 # Final Test Annotation Review and Provenance
 
 **Date:** 2026-11-17  
-**Status:** Completed; evaluation remains pending.
+**Status:** Completed; one-time classifier test evaluation completed successfully.
 
 ## Test annotation outcome
 
@@ -29,23 +29,10 @@ The reviewed worksheet itself contains no reference commands or classifier predi
 
 The published annotation export contains 375 records, all marked confirmed, with 375 unique example IDs and all ten taxonomy labels represented. The request, reference command, and duplicate-group identity of each record were checked against the source test partition. The 22 `other_or_ambiguous` labels have reviewer notes. The reviewed CSV and JSONL SHA-256 values match the checksums in `test_confirmed_intents_manifest.json`.
 
-The files have been prepared to the schema enforced by the project validator. Run the CLI validator in the project environment before evaluating:
-
-```bash
-uv sync --locked
-uv run nl2bash-annotations validate --partition test
-```
-
-The repository-side construction and checksum checks do not substitute for that runtime validator invocation.
+The project validator passed in the clean Python 3.10 GitHub Actions environment on all 375 rows. The one-time classifier evaluation then completed successfully. The validator/evaluation workflow is recorded in GitHub Actions; do not rerun the final test evaluation.
 
 ## One-time classifier test evaluation
 
-After the annotation validator passes, run exactly once:
-
-```bash
-uv run nl2bash-classifier evaluate-test
-```
-
-The command uses the frozen development threshold and writes `artifacts/evaluation/test_report.json`. It also creates `artifacts/evaluation/test_evaluation.lock` to prevent an accidental second evaluation. Do not delete or reset that guard unless the evaluation process was inspected and confirmed to have failed before producing a report.
+The committed one-time evaluation used the frozen development threshold `0.1361115729921777`. Results: accuracy `0.6853`, macro-F1 `0.6400`, weighted-F1 `0.6793`, macro precision `0.7854`, macro recall `0.6186`, and coverage `0.9947` (373/375). The report is `artifacts/evaluation/test_report.json`; the completed guard is `artifacts/evaluation/test_evaluation.lock`. **Do not rerun this evaluation or reset its guard.**
 
 Report accuracy, macro/weighted and per-class precision/recall/F1, per-class support, confusion matrix, coverage, low-confidence count, model checksum, test partition checksum, annotation checksum, and the frozen threshold. Disclose the AI-assisted annotation provenance whenever reporting the test metrics.
