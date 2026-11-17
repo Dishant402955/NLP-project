@@ -43,7 +43,7 @@ jobs:
           curl --fail --location --retry 5 --retry-all-errors             "https://huggingface.co/Qwen/Qwen2.5-1.5B-Instruct-GGUF/resolve/91cad51170dc346986eccefdc2dd33a9da36ead9/qwen2.5-1.5b-instruct-q4_k_m.gguf"             --output "$RUNNER_TEMP/nl2bash-model/qwen2.5-1.5b-instruct-q4_k_m.gguf"
           echo "6a1a2eb6d15622bf3c96857206351ba97e1af16c30d7a74ee38970e434e9407e  $RUNNER_TEMP/nl2bash-model/qwen2.5-1.5b-instruct-q4_k_m.gguf" | sha256sum --check
 
-      - name: Verify the frozen classifier, prompt, model, threshold and pipeline hashes
+      - name: Verify all frozen classifier, prompt, model, threshold, pipeline and package hashes
         env:
           NL2BASH_MODEL: ${{ runner.temp }}/nl2bash-model/qwen2.5-1.5b-instruct-q4_k_m.gguf
         run: |
