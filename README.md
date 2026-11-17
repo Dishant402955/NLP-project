@@ -73,7 +73,8 @@ Detailed project documentation is maintained in the [docs](docs/) directory.
 - [Command-Generation Evaluation](docs/GENERATION_EVALUATION.md): development-only comparison of request-only and NLP-context generation, with limitations and frozen configuration.
 - [Final Test Review](docs/ANNOTATION_GUIDE.md#10-final-test-review-outcome): completed test annotation outcome, provenance, and validation/evaluation commands.
 - [Test Review Protocol](docs/TEST_PRELIMINARY_ANNOTATION_PROTOCOL.md): completed owner-approved test annotation, provenance, and one-time evaluation protocol.
-- [Human Review Attestation](docs/HUMAN_REVIEW_ATTESTATION.md): final human review of the AI-assisted training and development intent labels.
+- [Human Review Attestation](docs/HUMAN_REVIEW_ATTESTATION.md): project-owner review of the AI-assisted training and development intent labels.
+- [Final Remaining Work](docs/FINAL_REMAINING_WORK.md): current evaluation, engineering-audit, and academic-submission tasks.
 
 ## Quick start
 
