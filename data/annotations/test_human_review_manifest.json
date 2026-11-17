@@ -18,6 +18,19 @@
   ],
   "includes_reference_commands": false,
   "includes_ai_suggestions": false,
-  "review_status": "pending",
-  "instructions": "Complete every row in confirmed_intent, review_status, reviewer_note. Keep example_id and request unchanged. Only human decisions are merged into the canonical test worklist."
+  "review_status": "completed",
+  "instructions": "Completed: all rows were reviewed and accepted. Do not alter example_id or request. The canonical test worklist still requires import and validation before final test evaluation.",
+  "completed_date": "2026-11-17",
+  "confirmed_rows": 375,
+  "ambiguous_rows": 0,
+  "rejected_rows": 0,
+  "pending_rows": 0,
+  "human_review_summary": "Project owner reviewed all 375 request-only AI-proposed intent labels and accepted every suggestion without correction.",
+  "suggestion_source": {
+    "file": "data/annotations/test_ai_suggestions.csv",
+    "manifest": "data/annotations/test_ai_suggestions_manifest.json",
+    "review_mode": "request-only AI suggestions reviewed by project owner",
+    "corrections": 0,
+    "accepted_without_change": 375
+  }
 }
