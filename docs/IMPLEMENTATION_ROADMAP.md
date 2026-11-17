@@ -233,7 +233,7 @@ This stage is divided into three small implementation commits.
 
 **Verified current state:** The local pilot contains 500 rows, 50 suggested examples per taxonomy label, 500 unique duplicate groups, 500 pending statuses, and zero confirmed labels. The confirmed export is therefore empty until a reviewer completes and validates the worklist.
 
-**Completion note:** The annotation tooling is implemented. The project owner has reviewed all 500 training and 375 development annotations and reported zero further label corrections. The test review remains pending until the full application configuration is frozen.
+**Completion note:** The annotation tooling is implemented. The project owner reviewed all 500 training, 375 development, and 375 test intent annotations and reported zero further label corrections. The test intent export is committed, and the one-time frozen classifier test evaluation has completed successfully. Test-label provenance remains AI-assisted and owner-approved, not independently adjudicated.
 
 #### Step 3.3: TF-IDF and Logistic Regression baseline
 
