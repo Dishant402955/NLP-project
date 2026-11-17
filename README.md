@@ -6,11 +6,11 @@ The system displays the generated command, explains what it does, and checks its
 
 ## Project status
 
-The Python package foundation, reproducible dataset preparation, human-reviewed AI-assisted training/development intent annotations, TF-IDF plus Logistic Regression classifier, deterministic entity extractor, local Qwen command-generation adapter, Bash syntax/safety validation, and end-to-end CLI are implemented. The project owner reviewed all 875 training and development intent rows after the initial AI-assisted annotation and reported zero further corrections; the review attestation is recorded in [Human Review Attestation](docs/HUMAN_REVIEW_ATTESTATION.md). The intent classifier, confidence threshold, local generator, prompt, and validation configuration are frozen using development data. A blind, 375-row human test-review worksheet is prepared separately from the canonical test annotations. The development-only generation experiment and its prompt-version comparison are recorded under `artifacts/evaluation/`; neither uses the test partition. The entity extractor still lacks an independently adjudicated gold benchmark; its current evidence is functional verification, not a research performance claim.
+The Python package foundation, reproducible dataset preparation, intent classifier, deterministic entity extractor, local Qwen command-generation adapter, Bash syntax/safety validation, and end-to-end CLI are implemented. The project owner reviewed the 500 training and 375 development annotations after AI-assisted labelling and reported zero further corrections. The 375 test labels have also been approved without corrections from request-only AI proposals and are now present in the confirmed test export. This test annotation is AI-assisted and owner-approved, not independent ground truth; see [Annotation Review Status](docs/ANNOTATION_REVIEW_STATUS.md). The classifier, threshold, generator, prompt, and validation configuration are frozen from development work. The development generation comparison is recorded under `artifacts/evaluation/`. Final test classifier metrics, a reviewed entity benchmark, a larger generation evaluation with semantic ratings, and the final engineering audit remain outstanding.
 
 ## Versioned research artifacts
 
-The repository includes the licensed NL2Bash raw source files, reproducibly generated train/development/test partitions, intent annotation worklists and confirmed exports, the reviewed-data classifier, and its frozen development-threshold artifact. Their source revision, checksums, and annotation provenance are recorded in manifests, the [Annotation Review Status](docs/ANNOTATION_REVIEW_STATUS.md), and the [Intent Audit Log](docs/INTENT_AUDIT_LOG.md). The test partition is included, but its labels remain unconfirmed until the project owner completes the blind human review worksheet. The worksheet contains no reference commands or AI suggestions. Test scripts, temporary fixtures, caches, virtual environments, and secrets are not committed.
+The repository includes the licensed NL2Bash raw source files, reproducibly generated partitions, train/development/test annotation worklists and exports, the classifier, and its frozen development threshold. Source revisions, checksums, and annotation provenance are recorded in manifests, the [Annotation Review Status](docs/ANNOTATION_REVIEW_STATUS.md), and the [Intent Audit Log](docs/INTENT_AUDIT_LOG.md). The test decision worksheet contains no reference commands or classifier predictions; its separate AI proposal file is retained for transparency. The test export includes explicit AI-assisted, owner-approved provenance. Test scripts, temporary fixtures, caches, virtual environments, and secrets are not committed.
 
 ## Project objectives
 
@@ -66,13 +66,13 @@ Detailed project documentation is maintained in the [docs](docs/) directory.
 - [Intent Taxonomy](docs/INTENT_TAXONOMY.md): intent labels, definitions, boundary examples, and taxonomy rules.
 - [Annotation Guide](docs/ANNOTATION_GUIDE.md): commands and instructions for reviewing, confirming, and validating the training and held-out annotation worklists.
 - [Intent Classifier](docs/INTENT_CLASSIFIER.md): TF-IDF and Logistic Regression training, prediction, threshold selection, and one-time test evaluation commands.
-- [Annotation Review Status](docs/ANNOTATION_REVIEW_STATUS.md): human-review provenance, partition counts, development classifier metrics, and the sealed test-review status.
+- [Annotation Review Status](docs/ANNOTATION_REVIEW_STATUS.md): annotation provenance, partition counts, development metrics, approved test-label distribution, and remaining evaluation steps.
 - [Entity Extraction](docs/ENTITY_EXTRACTION.md): supported entity types, extraction rules, structured output, uncertainty findings, and exact-span evaluation.
 - [Implementation Roadmap](docs/IMPLEMENTATION_ROADMAP.md): ordered development steps, acceptance criteria, verification protocol, and commit strategy.
 - [Local Model Setup](docs/LOCAL_MODEL_SETUP.md): local GGUF model installation, runtime setup, and CLI usage.
 - [Command-Generation Evaluation](docs/GENERATION_EVALUATION.md): development-only comparison of request-only and NLP-context generation, with limitations and frozen configuration.
-- [Final Test Review](docs/ANNOTATION_GUIDE.md#10-final-test-review-handoff): blind human worksheet and safe decision-import procedure.
-- [Test Review Protocol](docs/TEST_PRELIMINARY_ANNOTATION_PROTOCOL.md): blind human worksheet and test-label review procedure.
+- [Final Test Review](docs/ANNOTATION_GUIDE.md#10-final-test-review-outcome): completed test annotation outcome, provenance, and validation/evaluation commands.
+- [Test Review Protocol](docs/TEST_PRELIMINARY_ANNOTATION_PROTOCOL.md): completed owner-approved test annotation, provenance, and one-time evaluation protocol.
 - [Human Review Attestation](docs/HUMAN_REVIEW_ATTESTATION.md): final human review of the AI-assisted training and development intent labels.
 
 ## Quick start
@@ -96,7 +96,7 @@ The CLI prints the proposed command, explanation, assumptions, syntax result, an
 
 ## Project evaluation
 
-The system will be evaluated at both component and end-to-end levels.
+The project has a development-only classifier and generation evaluation. The final test classifier evaluation, entity gold benchmark, and larger generation evaluation remain to be completed.
 
 - Intent classification: accuracy, precision, recall, and F1-score.
 - Entity extraction: precision, recall, and F1-score.
