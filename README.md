@@ -1,5 +1,8 @@
 # Natural Language to Bash Command Generator
 
+[![Open in Google Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Dishant402955/NLP-project/blob/main/notebooks/NL2Bash_Colab.ipynb)
+
+
 A hybrid NLP system that translates natural-language Linux requests into Bash command proposals. Traditional NLP predicts the requested operation and extracts explicit parameters; a local instruction-tuned language model generates a command; deterministic checks inspect syntax, selected constraints, and known risky patterns.
 
 **Safety boundary: generated commands are displayed only. The application does not execute them.**
@@ -97,6 +100,7 @@ Detailed reports and per-class/per-type metrics are committed under `artifacts/e
 
 ## Documentation map
 
+- [Google Colab Notebook](notebooks/NL2Bash_Colab.ipynb): runnable notebook for setup, classifier, entity extraction, safety validation, saved reports, and optional local Qwen generation.
 - [Reproducibility Guide](docs/REPRODUCIBILITY.md): clean clone, environment setup, model download, CLI, data preparation, annotation workflow, safe evaluation, artifacts, and CI.
 - [System Architecture](docs/ARCHITECTURE.md): end-to-end flow and source-module map.
 - [Technical Design](docs/TECHNICAL_DESIGN.md): module responsibilities, technology choices, runtime, and validation boundaries.
