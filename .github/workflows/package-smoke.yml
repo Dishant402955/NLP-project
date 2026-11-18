@@ -6,6 +6,7 @@ on:
     paths:
       - ".github/workflows/package-smoke.yml"
       - "pyproject.toml"
+      - "notebooks/**"
       - "uv.lock"
       - "src/nl2bash/**"
       - "data/annotations/entity_test_ai_suggestions.jsonl"
@@ -194,6 +195,43 @@ jobs:
 
           print("Entity sample provenance, owner-confirmed spans, one-time report, and guard integrity verified.")
           print(f"Rows: {len(suggestions)}; original candidate spans: {sum(counts.values())}; confirmed spans: {confirmed_count}; entity types proposed: {len(counts)}")
+          PY
+
+      - name: Verify Google Colab notebook structure and Python code cells
+        run: |
+          python - <<'PY'
+          import ast
+          import json
+          from pathlib import Path
+
+          path = Path("notebooks/NL2Bash_Colab.ipynb")
+          notebook = json.loads(path.read_text(encoding="utf-8"))
+          assert notebook["nbformat"] == 4
+          assert notebook["metadata"]["kernelspec"]["name"] == "python3"
+          cells = notebook["cells"]
+          assert len(cells) >= 10
+          ids = [cell.get("id") for cell in cells]
+          assert all(isinstance(cell_id, str) and cell_id for cell_id in ids)
+          assert len(set(ids)) == len(ids)
+
+          code_count = 0
+          for index, cell in enumerate(cells):
+              assert cell["cell_type"] in {"markdown", "code"}
+              source = cell["source"]
+              source_text = "".join(source) if isinstance(source, list) else source
+              if cell["cell_type"] == "code":
+                  ast.parse(source_text, filename=f"{path}:cell-{index}")
+                  code_count += 1
+
+          all_text = "\\n".join(
+              "".join(cell["source"]) if isinstance(cell["source"], list) else cell["source"]
+              for cell in cells
+          )
+          for required in ("ENABLE_LOCAL_LLM", "load_intent_classifier", "extract_entities",
+                           "validate_bash_command", "generation_dev_v7_report.json"):
+              assert required in all_text, f"missing notebook section: {required}"
+
+          print(f"Colab notebook verified: {len(cells)} cells, {code_count} syntactically valid Python cells.")
           PY
 
       - name: Verify v7 development report and blinded semantic review artifacts
