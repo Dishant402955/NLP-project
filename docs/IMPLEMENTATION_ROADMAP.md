@@ -354,7 +354,7 @@ The implementation is divided into small commits. See [Intent Classifier](INTENT
 - A completed test report cannot be silently overwritten or re-run for the same project evaluation.
 
 
-**Current state (2026-11-17):** Training and development contain 500 and 375 confirmed labels. The project owner reviewed all 875 AI-assisted annotations and reported zero further corrections. Test contains 375 request-only AI-proposed labels approved by the project owner without corrections. The clean Python 3.10 locked environment, test annotation validator, and one-time classifier evaluation completed successfully in GitHub Actions. Test results are accuracy 0.6853, macro-F1 0.6400, weighted-F1 0.6793, and prediction coverage 0.9947 (373/375), using the frozen development threshold 0.1361115729921777. Test annotation remains AI-assisted and owner-approved, not independently adjudicated. The one-time test evaluation is complete and must not be rerun. See [Annotation Review Status](ANNOTATION_REVIEW_STATUS.md), [Human Review Attestation](HUMAN_REVIEW_ATTESTATION.md), and [Intent Audit Log](INTENT_AUDIT_LOG.md).
+**Current state (2026-11-17):** Training and development contain 500 and 375 confirmed labels. The project owner reviewed all 875 AI-assisted annotations and reported zero further corrections. Test contains 375 request-only AI-proposed labels approved by the project owner without corrections. The clean Python 3.10 locked environment, test annotation validator, and one-time classifier evaluation completed successfully in GitHub Actions. The classifier report and one-time guard are retained as reproducibility artifacts; component-level classifier scores are not used as headline project results. Test annotation remains AI-assisted and owner-approved, not independently adjudicated. The one-time test evaluation is complete and must not be rerun. See [Annotation Review Status](ANNOTATION_REVIEW_STATUS.md), [Human Review Attestation](HUMAN_REVIEW_ATTESTATION.md), and [Intent Audit Log](INTENT_AUDIT_LOG.md).
 
 ### Step 4: Entity and parameter extraction
 
@@ -434,7 +434,7 @@ The implementation is divided into small commits. See [Intent Classifier](INTENT
 - Training/dev annotation checksums and source provenance revalidated.
 - A temporary retraining reproduced all 375 development predictions and probability arrays exactly.
 - Threshold reselection reproduced the frozen threshold exactly (0.1361115729921777).
-- The classifier report contains accuracy, macro/weighted F1, per-class metrics, coverage, and confusion matrix.
+- The one-time classifier component report and guard preserve its detailed audit trail; project-level headline results focus on the paired end-to-end system comparison.
 - A seeded development-only generation comparison has been implemented. It compares request-only generation with NLP-context generation and records exact match, syntax validity, selected constraint preservation, high-risk warnings, and latency. Reference commands are scoring-only.
 
 **Limitations:**
@@ -444,7 +444,7 @@ The implementation is divided into small commits. See [Intent Classifier](INTENT
 - The entity test sample is AI-assisted and owner-approved, targeted rather than prevalence-representative, and has sparse/zero support for some types.
 - The test partition and annotations are not read or used in these experiments.
 
-**Completed:** The ten-request v6 development experiment is recorded in `artifacts/evaluation/generation_dev_v6_report.json`. The context-aware condition achieved 10/10 selected explicit-constraint checks and 9/10 syntax-valid outputs; request-only achieved 8/10 constraint checks and 9/10 syntax-valid outputs. Neither condition exactly matched the reference command on this small sample. The prompt/model/runtime/validator setup is frozen in `artifacts/evaluation/frozen_generation_config.json`.
+**Completed:** An initial ten-request v6 development pilot is retained as a historical artifact and was superseded by the larger v7 paired comparison. It is not used as the headline project result. The prompt/model/runtime/validator setup is frozen in `artifacts/evaluation/frozen_generation_config.json`.
 
 **Completed:** The 40-request v7 development workflow committed its report and 80-row candidate worksheet. The 66-row entity review was approved without corrections and its guarded exact-span evaluation ran once. The project owner confirmed that all 80 v7 candidates received human semantic review; the attestation is data/annotations/generation_dev_v7_human_review_attestation.json. No per-candidate human rating values were supplied with the completion confirmation, so no human semantic aggregate is published. Do not rerun either one-time test evaluation or use held-out test labels/results to tune the frozen system.
 
