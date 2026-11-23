@@ -1,50 +1,48 @@
 # Command-Generation Development Evaluation
 
 **Evaluation date:** 2026-11-17  
-**Prompt version:** `qwen-bash-json-v6`  
+**Current comparison:** generation v7  
 **Model:** Qwen2.5-1.5B-Instruct Q4_K_M GGUF  
 **Runtime:** llama-cpp-python 0.3.37, CPU, four threads, 4,096-token context, temperature 0.0, 512-token output limit
 
 ## Method
 
-A seeded sample of 10 requests was selected from the confirmed development annotation partition, with one example per available intent label. Seed: `20261117`. Each request was evaluated under two conditions:
+A seeded sample of 40 requests was selected from the confirmed development annotation partition. Each request was evaluated under two conditions on the same input:
 
-1. **Request-only:** the generator receives only the original natural-language request.
-2. **NLP context:** the generator receives the original request, frozen intent prediction, and deterministic extracted entities and extraction issues.
+1. **Raw LLM baseline (request-only):** the generator receives only the original natural-language request.
+2. **Final system (NLP context):** the generator receives the original request, frozen intent prediction, and deterministic extracted entities and extraction issues.
 
-The paired reference Bash command is used only after generation to score exact string match. It is never passed into either generation prompt. No test partition, test request, or test label was loaded. The experiment records command-generation success, exact match, Bash syntax validity, selected explicit-constraint preservation, high-risk warnings, and latency.
+Paired reference Bash commands were used only after generation for scoring. They were never included in either generation prompt. No test partition, test request, or test label was used. The comparison produced 80 candidates.
 
-## Results
+## End-to-end results
 
-| Metric | Request-only | NLP context |
+| Automated metric | Raw LLM (request-only) | Final system (NLP context) |
 |---|---:|---:|
-| Generation success | 10 / 10 (100%) | 10 / 10 (100%) |
-| Bash syntax valid | 9 / 10 (90%) | 9 / 10 (90%) |
-| Selected explicit constraints preserved | 8 / 10 (80%) | 10 / 10 (100%) |
-| Exact reference-command match | 0 / 10 (0%) | 0 / 10 (0%) |
-| High-risk warnings | 1 | 1 |
-| Mean generation latency | 10.02 s | 11.22 s |
-| Median generation latency | 9.88 s | 12.22 s |
+| Generation success | 39/40 (97.5%) | 40/40 (100%) |
+| Bash syntax valid | 39/40 (97.5%) | 40/40 (100%) |
+| Selected explicit constraints passed | 33/40 (82.5%) | 34/40 (85.0%) |
+| Strict exact reference-command match | 2/40 (5.0%) | 2/40 (5.0%) |
+| High-risk warnings | 3 | 2 |
+| Mean latency | 5.52 s | 6.21 s |
+| Median latency | 4.57 s | 5.82 s |
 
-The observed sample suggests that supplying the intent/entity context improved the selected constraint checks on these ten requests, while syntax validity was equal. NLP context took about 2.3 seconds longer at the median. These small-sample results do not establish general superiority or semantic correctness.
+The final NLP-context system produced one additional successful generation and syntax-valid output, and one additional request passed the selected explicit-constraint checks. Strict exact matching was unchanged. The mean latency increased by approximately 0.69 seconds.
 
 ## Interpretation and limitations
 
-- Exact command matching was zero in both conditions. The generated commands are not textually identical to their references.
-- Bash syntax validity establishes only that Bash accepts the syntax; it does not establish that a command performs the requested task.
-- Entity grounding checks only selected explicit constraints. They are not a semantic-equivalence checker and can miss incorrect or incomplete behavior.
-- A high-risk count is based on heuristics. A zero warning count would not prove safety.
-- No human semantic-correctness ratings were collected.
-- The sample has only ten requests, one per intent category. It is an engineering comparison, not a population-level performance estimate.
-- The development annotations were initially AI-assisted and then reviewed by the project owner. They are not an inter-annotator agreement study.
+- This is a 40-request development comparison, not a held-out generation test estimate.
+- Exact string matching does not establish semantic equivalence; different commands can perform the same task.
+- Bash syntax validity establishes only that Bash accepts the syntax. It does not establish that the command performs the requested task.
+- Entity grounding checks selected explicit constraints only. They are not a semantic-equivalence checker.
+- High-risk warning counts are based on heuristics. A zero-warning result would not prove safety.
+- The project owner confirmed that all 80 candidates received human semantic review. The attestation records completion, but the completion confirmation did not include row-level ratings or comments. No human semantic score or A/B condition win rate is published.
+- The development annotations were AI-assisted and then reviewed by the project owner. They are not an inter-annotator agreement study.
 
-Representative errors include inaccurate process selection, incomplete `find -prune` expressions, and model-invented identifiers for operations that require a process ID or database credentials. Treat all output as a proposal that requires human inspection.
+The report records generation success, syntax validity, selected explicit-constraint checks, exact reference string matches, heuristic high-risk warnings, and latency. None of these measures establishes semantic correctness.
 
 ## Frozen generation configuration
 
-The selected CLI generation mode is NLP context because it preserved the selected explicit constraints on all ten sample requests, compared with eight of ten in request-only mode. This selection is a limited engineering choice, not a claim of semantic superiority.
-
-`artifacts/evaluation/frozen_generation_config.json` binds:
+The selected CLI generation mode is NLP context. The frozen configuration binds:
 
 - The local Qwen GGUF file SHA-256 and Hugging Face model revision.
 - llama-cpp-python version and CPU generation settings.
@@ -63,34 +61,17 @@ From the repository root, after installing the optional local model dependency a
 ```bash
 uv run nl2bash evaluate-generation-dev \
   --llm-model "$HOME/.cache/nl2bash/models/qwen2.5-1.5b-instruct-q4_k_m.gguf" \
-  --sample-size 10 \
+  --sample-size 40 \
   --seed 20261117 \
-  --output artifacts/evaluation/generation_dev_v6_report.json
+  --output /tmp/nl2bash-generation-dev-reproduction.json
 ```
 
-The CLI refuses to overwrite an existing report. The committed report is the recorded run; rerunning the experiment should use a new output path and be documented as a separate run.
+The CLI refuses to overwrite an existing report. Results may vary with hardware and native build settings. The committed report remains the canonical result of the recorded run. Keep the evaluation development-only and do not tune the frozen configuration against held-out test data.
 
+## Historical pilot and human-review record
 
-## v6 historical result and current status
+The earlier ten-request v6 pilot is retained as a historical artifact and superseded by the v7 comparison. It is not used as the headline project result.
 
-The ten-request v6 development comparison is retained as a historical baseline. It is superseded by the larger 40-request paired v7 development comparison below. The statement that no human semantic ratings were collected applies to v6 only.
+The v7 blinded worksheet is `data/annotations/generation_dev_v7_semantic_review.csv`; it contains 80 candidates, two for each of the 40 requests. The owner-completion attestation is `data/annotations/generation_dev_v7_human_review_attestation.json`. The original worksheet remains in its blinded A/B format. Its semantic-rating and reviewer-note fields remain blank because individual score values and comments were not included in the completion confirmation.
 
-The v7 development experiment is complete. The project owner also confirmed completion of human semantic review for all 80 v7 candidates. The completion record and the boundary on available row-level human scoring data are described below and in the companion attestation.
-
-The classifier, prompt, runtime, model, threshold, and validation configuration used for the recorded comparisons remain frozen. Any future improvement is a new development experiment and must not be tuned on held-out test data.
-
-## Frozen v7 development comparison
-
-The 40-request paired development comparison completed successfully on 2026-11-17. It verified the frozen classifier, prompt, model, threshold, generation pipeline, runtime and package hashes before inference. The experiment used the development partition only; test_data_used is false, and reference commands were not included in generation prompts.
-
-The full automated report is artifacts/evaluation/generation_dev_v7_report.json. The blinded worksheet is data/annotations/generation_dev_v7_semantic_review.csv and contains 80 candidates, two for each of the 40 requests. Both files were uploaded as the nl2bash-generation-dev-v7 workflow artifact and committed to the repository.
-
-The automated report records generation success, Bash syntax validity, selected explicit-constraint checks, exact reference string matches, heuristic high-risk warnings, and latency. None of these metrics establishes semantic correctness. The project owner has confirmed that all 80 candidates were reviewed; see data/annotations/generation_dev_v7_human_review_attestation.json. The original worksheet still has blank semantic-rating and reviewer-note fields because per-candidate values were not included in the completion confirmation. The review milestone is complete, but no human aggregate metric or condition comparison is published. The A/B labels remain in the candidate worksheet.
-
-This is a development experiment, not held-out test evaluation. Do not tune the frozen model, prompt, classifier, threshold, runtime, or safety rules using test data.
-
-## Assistant semantic review (A/B labels retained)
-
-A single assistant-only review pass rated all 80 v7 candidates using each request and candidate command. It did not consult reference commands or execute generated commands. The supplementary review is data/annotations/generation_dev_v7_assistant_semantic_review.csv, with rubric and limitations in [Generation v7 Assistant Semantic Review](GENERATION_V7_ASSISTANT_REVIEW.md).
-
-The preliminary rating counts are 11 correct as written, 25 partial / needing edits, and 44 incorrect or unsafe. The A and B candidate labels are retained in the summary. These are assistant-only ratings, not human gold ratings or independent adjudication, and they must not be substituted for the owner review. The owner review completion is recorded separately in data/annotations/generation_dev_v7_human_review_attestation.json. No per-candidate human scores or notes were included in the completion confirmation, so the original worksheet remains unchanged and no human metrics are reported. No model, prompt, or frozen pipeline files were modified.
+The supplementary assistant-only review in `data/annotations/generation_dev_v7_assistant_semantic_review.csv` is not human ground truth and is not substituted for the owner review.
