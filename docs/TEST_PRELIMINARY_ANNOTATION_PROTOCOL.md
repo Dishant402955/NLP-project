@@ -35,6 +35,6 @@ The project validator passed in the clean Python 3.10 GitHub Actions environment
 
 The one-time evaluation used the frozen development-selected threshold and completed successfully. Its canonical report is `artifacts/evaluation/test_report.json`, and the completed one-time guard is `artifacts/evaluation/test_evaluation.lock`.
 
-The component-level classifier score values are retained in the guarded artifact for audit and reproducibility but are not presented as headline project results. The report's quantitative results focus on the paired end-to-end raw LLM request-only baseline versus the final NLP-context system. Test annotations remain request-only AI-assisted proposals accepted by the project owner, not independently adjudicated ground truth.
+The component-level classifier score values are intentionally omitted from the committed report artifact. The artifact retains evaluation-completion status, annotation provenance, source checksums, and its one-time guard. The report's quantitative results focus on the paired end-to-end raw LLM request-only baseline versus the final NLP-context system. Test annotations remain request-only AI-assisted proposals accepted by the project owner, not independently adjudicated ground truth.
 
 **Do not rerun this evaluation, reset the guard, or use the held-out annotations to tune the system.**

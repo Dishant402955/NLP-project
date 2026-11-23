@@ -271,7 +271,7 @@ The workflows in `.github/workflows/` serve distinct purposes:
 |---|---|
 | `package-smoke.yml` | Locked package install, CLI/import checks, safe/high-risk/invalid Bash parse-only checks, entity annotation/report/guard integrity, and v7 human-review attestation |
 | `generation-development-evaluation.yml` | Optional pinned CPU Qwen setup, frozen configuration verification, and paired development generation evaluation |
-| `final-test-evaluation.yml` | Historical one-time classifier test validation/evaluation; do not manually dispatch again |
+| `final-test-evaluation.yml` | Read-only integrity check for the preserved one-time classifier record; it does not rerun the evaluation |
 
 The package smoke workflow runs on GitHub-hosted Ubuntu for relevant changes on `main` or by manual dispatch. It installs with `uv sync --locked` and runs inline Python/shell integrity checks. The repository intentionally does not contain a standalone `tests/` directory; ad hoc test scripts and fixtures are kept outside Git.
 

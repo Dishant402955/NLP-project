@@ -14,7 +14,7 @@ The training and development annotations were initially AI-assisted. A second-pa
 
 The test annotation suggestions were created from the 375 natural-language requests only. The suggestion pass did not use paired reference commands or classifier predictions. The project owner reviewed all 375 suggestions and accepted every suggestion without correction. The canonical test worklist and confirmed JSONL export now contain 375 confirmed labels. The annotation export manifest records this provenance and explicitly does not claim independent adjudication.
 
-**Interpretation caveat:** the test labels are AI-assisted and owner-approved, not independently annotated ground truth. The classifier test metrics will measure agreement with these labels. This is weaker evidence than a separately annotated or independently adjudicated test set and must be disclosed in the report.
+**Interpretation caveat:** the test labels are AI-assisted and owner-approved, not independently annotated ground truth. The one-time classifier component evaluation therefore represents agreement with this owner-approved annotation set, not independent gold-standard performance. This limitation remains part of the evaluation provenance.
 
 The test worklist and export passed the project CLI validator: all 375 IDs and duplicate-group IDs match, request and reference-command source pairs match, all labels belong to the ten-label taxonomy, all rows are confirmed, all 22 `other_or_ambiguous` rows have reviewer notes, and the reviewed-CSV/export SHA-256 values match their manifests. The clean Python 3.10 `uv sync --locked` run and one-time classifier evaluation succeeded in GitHub Actions.
 
@@ -34,7 +34,7 @@ The test worklist and export passed the project CLI validator: all 375 IDs and d
 | `text_search_processing` | 60 |
 | **Total** | **375** |
 
-The test partition is imbalanced. `file_discovery` has 125 examples while `process_job_management` has six. Per-class support and metrics must be shown alongside macro averages.
+The test partition is imbalanced. `file_discovery` has 125 examples while `process_job_management` has six. This class-support distribution is retained as annotation provenance; component-level classifier score values are not included in headline project results.
 
 ## Training and development label provenance
 

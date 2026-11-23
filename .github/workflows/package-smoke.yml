@@ -187,13 +187,13 @@ jobs:
           assert report["artifact_type"] == "entity_extraction_test_evaluation"
           assert report["evaluated_once"] is True
           assert report["sample_size"] == 66
-          assert report["metrics"]["total_gold"] == 113
-          assert report["metrics"]["total_correct"] == 73
+          assert "metrics" not in report
+          assert report["metrics_publication"]["status"] == "omitted"
           assert guard["status"] == "completed" and guard["sample_size"] == 66
           assert guard["review_csv_sha256"] == sha256(review_path)
           assert guard["report_sha256"] == hashlib.sha256(report_bytes).hexdigest()
 
-          print("Entity sample provenance, owner-confirmed spans, one-time report, and guard integrity verified.")
+          print("Entity sample provenance, owner-confirmed spans, metadata-only one-time report, and guard integrity verified.")
           print(f"Rows: {len(suggestions)}; original candidate spans: {sum(counts.values())}; confirmed spans: {confirmed_count}; entity types proposed: {len(counts)}")
           PY
 

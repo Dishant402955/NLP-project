@@ -15,7 +15,7 @@ The sample was selected to exercise explicit entity cues. It is not a prevalence
 
 A match requires the entity type, exact source value, start offset, and exclusive end offset all to agree. Partial overlaps receive no credit. The evaluator validates the review CSV against the test partition, source worklist and manifest checksums, example/group IDs, normalized request text, exact offsets, row status, reviewer notes, and owner-review provenance.
 
-The one-time guarded evaluation has been completed. Detailed component-level score values are retained in the canonical evaluation artifact for audit and reproducibility, but are intentionally not presented as headline project results. The project report and README focus on the paired end-to-end comparison between the raw LLM request-only baseline and the final NLP-context system.
+The one-time guarded evaluation has been completed. Component-level score values are intentionally omitted from the committed report artifact. The artifact retains the evaluation-completion status, sample metadata, annotation provenance, and source checksums for audit. The project report and README focus on the paired end-to-end comparison between the raw LLM request-only baseline and the final NLP-context system.
 
 ## Interpretation limits
 
