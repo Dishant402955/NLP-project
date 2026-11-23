@@ -113,7 +113,7 @@ The prediction command prints JSON with the public intent label, diagnostic top 
 
 ## Final test evaluation (completed)
 
-The one-time final evaluation ran successfully in the clean Python 3.10 GitHub Actions environment after the development threshold was frozen. It produced `artifacts/evaluation/test_report.json` and the completed one-time guard `artifacts/evaluation/test_evaluation.lock`. Results: accuracy 0.6853, macro-F1 0.6400, weighted-F1 0.6793, macro precision 0.7854, macro recall 0.6186, and prediction coverage 0.9947 (373/375) at threshold 0.1361115729921777. Test labels are AI-assisted and owner-approved, not independent ground truth.
+The one-time final evaluation ran successfully in the clean Python 3.10 GitHub Actions environment after the development threshold was frozen. It produced `artifacts/evaluation/test_report.json` and the completed one-time guard `artifacts/evaluation/test_evaluation.lock`. The underlying component report is retained as a reproducibility artifact, but its classifier scores are not presented as headline project results. Project-level quantitative results focus on the paired end-to-end comparison between the raw LLM request-only baseline and the final NLP-context system. Test labels are AI-assisted and owner-approved, not independent ground truth.
 
 **Do not run `nl2bash-classifier evaluate-test` again, delete/reset the guard, or overwrite the report.**
 
@@ -125,6 +125,8 @@ The project owner reports completing a final review of all 500 training and 375 
 
 A fresh model training run in a temporary directory reproduced all 375 development class predictions and probability values exactly compared with the committed model. Threshold reselection reproduced the committed threshold exactly. The existing model and threshold artifacts therefore remain valid for the current reviewed CSV and export checksums. The model manifest retains its training-artifact status field; the separate one-time test report and guard record the completed final evaluation. The classifier test evaluation has completed and must not be repeated.
 
-The current development diagnostics are 0.6880 accuracy, 0.6709 macro-F1, 0.6801 weighted-F1, and 0.9893 prediction coverage at threshold 0.1361115729921777. These are development metrics only. The class imbalance and AI-assisted annotation history must be disclosed; do not present these numbers as final test performance.
+Component-level development score values are intentionally excluded from headline project results. The fitted classifier, decision threshold, source checksums, and one-time report remain versioned for inspection and reproducibility.
+
+
 
 The end-to-end command-generation component and development-only request-versus-NLP-context experiment are documented separately. All 375 test labels are approved and exported. The one-time classifier test evaluation is complete: accuracy 0.6853, macro-F1 0.6400, weighted-F1 0.6793, and coverage 0.9947 (373/375) at the frozen development threshold 0.1361115729921777. These results measure agreement with AI-assisted, owner-approved labels, not independent gold-standard accuracy. Do not rerun the test evaluation or use its results to tune the evaluated system.
