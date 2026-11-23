@@ -33,6 +33,8 @@ The project validator passed in the clean Python 3.10 GitHub Actions environment
 
 ## One-time classifier test evaluation
 
-The committed one-time evaluation used the frozen development threshold `0.1361115729921777`. Results: accuracy `0.6853`, macro-F1 `0.6400`, weighted-F1 `0.6793`, macro precision `0.7854`, macro recall `0.6186`, and coverage `0.9947` (373/375). The report is `artifacts/evaluation/test_report.json`; the completed guard is `artifacts/evaluation/test_evaluation.lock`. **Do not rerun this evaluation or reset its guard.**
+The one-time evaluation used the frozen development-selected threshold and completed successfully. Its canonical report is `artifacts/evaluation/test_report.json`, and the completed one-time guard is `artifacts/evaluation/test_evaluation.lock`.
 
-Report accuracy, macro/weighted and per-class precision/recall/F1, per-class support, confusion matrix, coverage, low-confidence count, model checksum, test partition checksum, annotation checksum, and the frozen threshold. Disclose the AI-assisted annotation provenance whenever reporting the test metrics.
+The component-level classifier score values are retained in the guarded artifact for audit and reproducibility but are not presented as headline project results. The report's quantitative results focus on the paired end-to-end raw LLM request-only baseline versus the final NLP-context system. Test annotations remain request-only AI-assisted proposals accepted by the project owner, not independently adjudicated ground truth.
+
+**Do not rerun this evaluation, reset the guard, or use the held-out annotations to tune the system.**
