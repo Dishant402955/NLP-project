@@ -51,56 +51,9 @@ The test partition is imbalanced. `file_discovery` has 125 examples while `proce
 | `system_information` | 22 | 14 |
 | `text_search_processing` | 60 | 64 |
 
-## Development classifier diagnostics
+## Component evaluation status
 
-The classifier was fitted on the 500 confirmed training rows. Its confidence threshold was selected on the 375 confirmed development rows by maximizing macro-F1 subject to at least 80% prediction coverage. A fresh retraining in a temporary location reproduced every development prediction and every class probability exactly; reselecting the threshold returned the same value.
-
-| Metric | Development result |
-|---|---:|
-| Accuracy | 0.6880 |
-| Macro-F1 | 0.6709 |
-| Weighted-F1 | 0.6801 |
-| Prediction coverage | 0.9893 |
-| Low-confidence requests | 4 / 375 |
-| Frozen confidence threshold | 0.1361115729921777 |
-
-These are development-set results, not final test results. The model scores are uncalibrated probability estimates.
-
-## Final held-out classifier result
-
-<badge color="success">One-time evaluation completed</badge>
-
-The classifier was evaluated once on all 375 confirmed test examples using the frozen development-selected threshold of `0.1361115729921777`. The model and threshold checksums are recorded in `artifacts/evaluation/test_report.json`; the completed one-time guard is `artifacts/evaluation/test_evaluation.lock`.
-
-| Metric | Test result |
-|---|---:|
-| Accuracy | 0.6853 |
-| Macro precision | 0.7854 |
-| Macro recall | 0.6186 |
-| Macro-F1 | 0.6400 |
-| Weighted precision | 0.7285 |
-| Weighted recall | 0.6853 |
-| Weighted-F1 | 0.6793 |
-| Prediction coverage | 0.9947 |
-| Low-confidence requests | 2 / 375 |
-| Frozen threshold | 0.1361115729921777 |
-
-Per-class test F1:
-
-| Intent | Support | Precision | Recall | F1 |
-|---|---:|---:|---:|---:|
-| `archive_compression` | 14 | 1.0000 | 0.7143 | 0.8333 |
-| `file_directory_management` | 58 | 0.8214 | 0.7931 | 0.8070 |
-| `file_discovery` | 125 | 0.6577 | 0.7840 | 0.7153 |
-| `network_remote_operations` | 11 | 1.0000 | 0.8182 | 0.9000 |
-| `other_or_ambiguous` | 22 | 0.5385 | 0.3182 | 0.4000 |
-| `permissions_ownership` | 48 | 0.8235 | 0.5833 | 0.6829 |
-| `process_job_management` | 6 | 1.0000 | 0.5000 | 0.6667 |
-| `shell_environment_session` | 15 | 0.3514 | 0.8667 | 0.5000 |
-| `system_information` | 16 | 1.0000 | 0.1250 | 0.2222 |
-| `text_search_processing` | 60 | 0.6613 | 0.6833 | 0.6721 |
-
-**Interpretation:** macro-F1 is materially lower than the development macro-F1 (0.6709 vs 0.6400), with particularly weak recall for `system_information` and `other_or_ambiguous`. Supports are small for several classes. Because the 375 test labels were AI-proposed and then accepted by the project owner, these results are agreement with an AI-assisted owner-approved label set, not a fully independent gold-standard estimate. The one-time test guard is complete; do not rerun this evaluation.
+The classifier's development diagnostics and one-time held-out evaluation were completed and are retained in the canonical artifacts with their source and annotation checksums. Their component-level scores are not included in the report's headline results. The project-level quantitative comparison is the paired raw LLM request-only baseline versus the final NLP-context system, described in [Command-Generation Evaluation](GENERATION_EVALUATION.md).
 
 ## Frozen configuration and remaining evaluation
 
@@ -110,7 +63,7 @@ The classifier artifact, development-selected confidence threshold, local comman
 
 The project owner reviewed all 66 request-only AI-assisted entity proposals and requested no corrections. The canonical CSV records 66 confirmed rows, 113 exact spans, and eight approved empty rows, with per-row notes. The manifest records owner-review provenance and explicitly does not claim independent annotation.
 
-The guarded exact-span entity test evaluation ran once. It produced 0.8588 micro precision, 0.6460 micro recall, 0.7374 micro F1, and 0.7517 macro-F1 over nine entity types with gold support. Per-type results and support appear in [Entity Evaluation](ENTITY_EVALUATION.md). The sample is targeted rather than prevalence-representative; it has zero gold support for process_name and process_metric and only one port example. Do not rerun the evaluation or tune extraction rules on this held-out sample.
+The guarded exact-span entity evaluation ran once on this targeted sample. Its report and guard are retained as reproducibility artifacts, but component-level entity scores are not included in the headline project results. The sample is targeted rather than prevalence-representative; it has zero gold support for process_name and process_metric and only one port example. Do not rerun the evaluation or tune extraction rules on this held-out sample.
 
 ## Final review and completion status
 
