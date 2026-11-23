@@ -5,6 +5,8 @@
 
 A hybrid NLP system that translates natural-language Linux requests into Bash command proposals. Traditional NLP predicts the requested operation and extracts explicit parameters; a local instruction-tuned language model generates a command; deterministic checks inspect syntax, selected constraints, and known risky patterns.
 
+**Project repository:** [Dishant402955/NLP-project](https://github.com/Dishant402955/NLP-project)
+
 **Safety boundary: generated commands are displayed only. The application does not execute them.**
 
 ## Project status
@@ -24,6 +26,10 @@ The project owner has also approved the presentation. Any college-specific cover
 7. The CLI displays the command and all findings. It never invokes a shell to execute generated text.
 
 See [System Architecture](docs/ARCHITECTURE.md), [Technical Design](docs/TECHNICAL_DESIGN.md), and [Reproducibility Guide](docs/REPRODUCIBILITY.md).
+
+## Domain extensibility and design trade-off
+
+The pipeline pattern can be adapted to other CLI ecosystems such as Docker or AWS, but support is not plug-and-play. Each domain needs its own intent taxonomy and labelled examples, entity schema and extractor, generation prompt and command examples, and syntax, risk, and constraint validators. The shared preprocessing, orchestration, model adapter, and output contract can be reused. Domain-specific components are prepared and versioned as a coherent pipeline configuration rather than dynamically loading or hot-reloading a heavyweight stack for every request. This keeps the runtime lighter and more predictable while preserving domain-specific behaviour. Docker and AWS support are proposed extensions, not implemented or evaluated features.
 
 ## Technology
 
@@ -87,16 +93,23 @@ uv run nl2bash generate --request 'Find all Python files larger than 10 MB in th
 
 For full reproduction instructions, including safe data preparation and evaluation commands, see [Reproducibility Guide](docs/REPRODUCIBILITY.md).
 
-## Recorded results
+## Recorded end-to-end results
 
-| Component | Result | Interpretation |
-|---|---|---|
-| Intent classifier | 375-example one-time test: accuracy 0.6853, macro-F1 0.6400, weighted-F1 0.6793, coverage 0.9947 | Test labels were AI-assisted and owner-approved, not independently adjudicated |
-| Entity extraction | 66 targeted requests / 113 gold spans: micro precision 0.8588, recall 0.6460, F1 0.7374; macro-F1 0.7517 | Targeted sample, not prevalence-representative; some entity types have sparse or zero support |
-| Command generation | 40-request paired development comparison (80 candidates): request-only generated 39/40; NLP context 40/40; both had 2/40 exact string matches | Development-only experiment; automated syntax/constraint checks are not semantic accuracy |
-| Human semantic review | Owner confirmed all 80 v7 candidates reviewed | Completion is attested; no per-row ratings were provided for computing a human aggregate score |
+The project-level quantitative results are from the paired v7 development comparison: 40 requests evaluated in both conditions, producing 80 candidates. The raw LLM baseline receives only the natural-language request; the final system also receives the frozen intent prediction and deterministic entity context.
 
-Detailed reports and per-class/per-type metrics are committed under `artifacts/evaluation/`. The classifier and entity test evaluations are one-time guarded runs. **Do not rerun them, remove their guards, or use held-out test results for tuning.**
+| Automated metric | Raw LLM (request-only) | Final system (NLP context) |
+|---|---:|---:|
+| Generation success | 39/40 (97.5%) | 40/40 (100%) |
+| Bash syntax valid | 39/40 (97.5%) | 40/40 (100%) |
+| Selected explicit constraints passed | 33/40 (82.5%) | 34/40 (85.0%) |
+| Strict exact reference-command match | 2/40 (5.0%) | 2/40 (5.0%) |
+| High-risk warnings | 3 | 2 |
+| Mean latency | 5.52 s | 6.21 s |
+| Median latency | 4.57 s | 5.82 s |
+
+These are automated, development-only engineering diagnostics, not semantic-accuracy estimates. Syntax validity and selected-constraint preservation do not prove that a command is semantically correct or safe. Exact string matching can also penalise semantically equivalent commands.
+
+The project owner confirmed that all 80 candidates received human semantic review. The completion attestation did not include row-level ratings or reviewer notes, so no human semantic score or A/B win rate is claimed.
 
 ## Documentation map
 
