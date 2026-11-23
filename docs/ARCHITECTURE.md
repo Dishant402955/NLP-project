@@ -109,7 +109,11 @@ The validator checks the command syntax and applies configured safety and explic
 - Report uncertainty and missing information instead of silently inventing parameters.
 
 
-## 6. Source-module map
+## 6. Domain extensibility and design trade-off
+
+The architecture is reusable as a pipeline pattern, not as a plug-and-play multi-CLI product. Supporting another CLI family such as Docker or AWS requires a domain-specific intent taxonomy and labelled examples, entity schema and extraction rules, generation prompt and command examples, and syntax, risk, and constraint validators. Shared preprocessing, orchestration, local-model adapter, and output contract can remain common. The intended balance is to prepare and version a complete domain configuration, not to load or hot-reload a heavyweight collection of modules on every request. This keeps request-time execution predictable and avoids unnecessary runtime and compatibility overhead. Docker/AWS configurations are possible future extensions; they are not part of the implemented Bash system or its evaluation.
+
+## 7. Source-module map
 
 | Stage | Main source files | Responsibility |
 |---|---|---|
