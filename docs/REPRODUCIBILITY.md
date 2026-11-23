@@ -277,54 +277,23 @@ The package smoke workflow runs on GitHub-hosted Ubuntu for relevant changes on 
 
 The generation workflow performs a CPU build of the pinned runtime, downloads the model at the pinned revision, verifies its SHA-256, verifies the frozen component hashes, and evaluates 40 development requests. It is not the one-time classifier/entity test workflow.
 
-## 13. Recorded metrics
+## 13. Recorded end-to-end results
 
-### Intent classification
+The project-level quantitative results are from the paired v7 development comparison: 40 requests evaluated in both conditions, producing 80 candidates. The raw LLM baseline receives only the natural-language request; the final system also receives the frozen intent prediction and deterministic entity context.
 
-One-time held-out result over 375 requests:
-
-| Metric | Value |
-|---|---:|
-| Accuracy | 0.6853 |
-| Macro precision | 0.7854 |
-| Macro recall | 0.6186 |
-| Macro-F1 | 0.6400 |
-| Weighted-F1 | 0.6793 |
-| Prediction coverage | 0.9947 (373/375) |
-| Frozen confidence threshold | 0.1361115729921777 |
-
-The 375 test labels were proposed from request text with AI assistance and approved by the project owner. Classifier predictions and paired reference commands were not used to create suggestions. The labels are not independent gold-standard annotations.
-
-### Entity extraction
-
-One-time targeted exact-span result over 66 requests and 113 gold spans:
-
-| Metric | Value |
-|---|---:|
-| Predicted spans | 85 |
-| Exact matches | 73 |
-| Micro precision | 0.8588 |
-| Micro recall | 0.6460 |
-| Micro-F1 | 0.7374 |
-| Macro-F1 | 0.7517 across 9 supported types |
-
-The sample exercises explicit entity cues; it is not a random prevalence sample. Temporal phrase and filename recall are weak. Some entity types have zero gold support, and the port result has only one supported example.
-
-### Generation v7
-
-40 development requests and 80 candidates:
-
-| Metric | Request-only | NLP context |
+| Automated metric | Raw LLM (request-only) | Final system (NLP context) |
 |---|---:|---:|
 | Generation success | 39/40 (97.5%) | 40/40 (100%) |
 | Bash syntax valid | 39/40 (97.5%) | 40/40 (100%) |
 | Selected explicit constraints passed | 33/40 (82.5%) | 34/40 (85.0%) |
-| Exact reference string match | 2/40 (5.0%) | 2/40 (5.0%) |
+| Strict exact reference-command match | 2/40 (5.0%) | 2/40 (5.0%) |
 | High-risk warnings | 3 | 2 |
-| Mean latency | 5.5173 s | 6.2100 s |
-| Median latency | 4.5705 s | 5.8248 s |
+| Mean latency | 5.52 s | 6.21 s |
+| Median latency | 4.57 s | 5.82 s |
 
-These are automated development diagnostics, not semantic correctness metrics. String mismatch does not necessarily imply semantic mismatch, and a syntax-valid command can still do the wrong thing. The human review milestone is attested complete, but no structured human row-level score values were supplied, so no human semantic score is reported.
+These are automated, development-only engineering diagnostics, not semantic-accuracy estimates. Syntax validity and selected-constraint preservation do not prove that a command is semantically correct or safe. Exact string matching can also penalise semantically equivalent commands.
+
+The project owner confirmed that all 80 candidates received human semantic review. The completion attestation did not include row-level ratings or reviewer notes, so no human semantic score or A/B win rate is claimed.
 
 ## 14. Known limitations
 
