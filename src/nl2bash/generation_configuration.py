@@ -8,7 +8,8 @@ from pathlib import Path
 from typing import Any
 
 from nl2bash.command_generation import (
-    DEFAULT_BATCH_SIZE, DEFAULT_GPU_LAYERS, DEFAULT_MAX_TOKENS, DEFAULT_THREADS, PROMPT_VERSION,
+    DEFAULT_BATCH_SIZE, DEFAULT_CONTEXT_SIZE, DEFAULT_GPU_LAYERS, DEFAULT_MAX_TOKENS,
+    DEFAULT_THREADS, PROMPT_VERSION,
 )
 
 COMPONENT_FILES = (
@@ -51,6 +52,61 @@ def sha256_file_cached(path: str | Path) -> str:
     )
 
 
+
+def _model_file_identity(path: str | Path) -> dict[str, int]:
+    stat = Path(path).stat()
+    return {
+        "size_bytes": stat.st_size,
+        "mtime_ns": stat.st_mtime_ns,
+        "ctime_ns": stat.st_ctime_ns,
+        "inode": stat.st_ino,
+    }
+
+
+def _local_model_integrity_stamp_path(model_path: str | Path) -> Path:
+    selected = Path(model_path).expanduser().resolve()
+    return selected.with_name(selected.name + ".nl2bash-integrity.json")
+
+
+def _write_local_model_integrity_stamp(model_path: str | Path, model_sha256: str) -> None:
+    """Cache a successful full model hash against this machine's file identity."""
+    selected = Path(model_path).expanduser().resolve()
+    stamp_path = _local_model_integrity_stamp_path(selected)
+    stamp = {
+        "schema_version": 1,
+        "model_path": str(selected),
+        "model_sha256": model_sha256,
+        "file_identity": _model_file_identity(selected),
+    }
+    temporary = stamp_path.with_name(stamp_path.name + ".tmp")
+    try:
+        temporary.write_text(json.dumps(stamp, sort_keys=True) + "\n", encoding="utf-8")
+        temporary.replace(stamp_path)
+    except OSError:
+        # The stamp is only a speed optimization; a failed write must not undo
+        # the successful full SHA-256 verification that just took place.
+        try:
+            temporary.unlink(missing_ok=True)
+        except OSError:
+            pass
+
+
+def _has_valid_local_model_integrity_stamp(model_path: str | Path, expected_sha256: str) -> bool:
+    """Return true only when this local file still matches a previously hashed identity."""
+    selected = Path(model_path).expanduser().resolve()
+    stamp_path = _local_model_integrity_stamp_path(selected)
+    try:
+        stamp = json.loads(stamp_path.read_text(encoding="utf-8"))
+        return (
+            isinstance(stamp, dict)
+            and stamp.get("schema_version") == 1
+            and stamp.get("model_path") == str(selected)
+            and stamp.get("model_sha256") == expected_sha256
+            and stamp.get("file_identity") == _model_file_identity(selected)
+        )
+    except (OSError, json.JSONDecodeError, TypeError, ValueError):
+        return False
+
 def freeze_generation_configuration(
     *, model_path: str | Path,
     development_report_path: str | Path,
@@ -58,7 +114,7 @@ def freeze_generation_configuration(
     classifier_manifest_path: str | Path = "models/intent_classifier_manifest.json",
     frozen_threshold_path: str | Path = "artifacts/evaluation/frozen_dev_threshold.json",
     output_path: str | Path = "artifacts/evaluation/frozen_generation_config.json",
-    context_size: int = 4096, threads: int = DEFAULT_THREADS, batch_size: int = DEFAULT_BATCH_SIZE,
+    context_size: int = 1024, threads: int = DEFAULT_THREADS, batch_size: int = DEFAULT_BATCH_SIZE,
     gpu_layers: int = DEFAULT_GPU_LAYERS, max_tokens: int = DEFAULT_MAX_TOKENS,
 ) -> dict[str, Any]:
     """Create a configuration manifest after the development experiment is reviewed."""
@@ -81,6 +137,7 @@ def freeze_generation_configuration(
     model_sha = sha256_file(model_path)
     if generator.get("model_sha256") != model_sha:
         raise GenerationConfigurationError("development report model checksum differs from the supplied model")
+    _write_local_model_integrity_stamp(model_path, model_sha)
     try:
         runtime = __import__("llama_cpp")
         runtime_version = runtime.__version__
@@ -154,13 +211,20 @@ def verify_frozen_generation_configuration(
     classifier_model_path: str | Path,
     classifier_manifest_path: str | Path,
     frozen_threshold_path: str | Path,
-    context_size: int = 4096,
+    context_size: int = DEFAULT_CONTEXT_SIZE,
     threads: int | None = None,
     batch_size: int = DEFAULT_BATCH_SIZE,
     gpu_layers: int = DEFAULT_GPU_LAYERS,
     max_tokens: int = DEFAULT_MAX_TOKENS,
+    verify_model_hash: bool = True,
 ) -> str:
-    """Fail closed if the model, prompt, dependencies, threshold, or validators drift."""
+    """Fail closed if the model, prompt, dependencies, threshold, or validators drift.
+
+    A portable frozen SHA-256 identifies the model across machines. After a full
+    verification, a local sidecar caches that successful hash against the current
+    file identity (size, mtime, ctime, inode). Normal CLI startup checks the sidecar;
+    a missing/stale sidecar triggers a full hash once and is then refreshed.
+    """
     config_path = Path(config_path)
     try:
         config = json.loads(config_path.read_text(encoding="utf-8"))
@@ -174,8 +238,19 @@ def verify_frozen_generation_configuration(
         raise GenerationConfigurationError("unexpected generation configuration artifact type")
 
     model = config.get("model", {})
-    if model.get("sha256") != sha256_file_cached(model_path):
-        raise GenerationConfigurationError("local language-model file does not match the frozen configuration")
+    model_path = Path(model_path)
+    try:
+        model_path.stat()
+    except OSError as exc:
+        raise GenerationConfigurationError(f"cannot stat local language-model file: {exc}") from exc
+    expected_model_sha256 = model.get("sha256")
+    if not isinstance(expected_model_sha256, str) or len(expected_model_sha256) != 64:
+        raise GenerationConfigurationError("frozen configuration has no valid local model SHA-256")
+    if verify_model_hash or not _has_valid_local_model_integrity_stamp(model_path, expected_model_sha256):
+        actual_model_sha256 = sha256_file_cached(model_path)
+        if expected_model_sha256 != actual_model_sha256:
+            raise GenerationConfigurationError("local language-model file does not match the frozen configuration")
+        _write_local_model_integrity_stamp(model_path, actual_model_sha256)
     classifier = config.get("classifier", {})
     if classifier.get("sha256") != sha256_file_cached(classifier_model_path):
         raise GenerationConfigurationError("intent classifier does not match the frozen generation configuration")

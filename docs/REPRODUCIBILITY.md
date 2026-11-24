@@ -110,7 +110,7 @@ echo "6a1a2eb6d15622bf3c96857206351ba97e1af16c30d7a74ee38970e434e9407e  $HOME/.c
 
 Do not continue if the checksum fails or the download is incomplete. Normal generation uses local inference and does not send prompts to a hosted inference API. Downloading packages and the model requires network access.
 
-The CLI accepts an explicit model path through `--llm-model`. The default model path is under the user cache. The frozen generation configuration also verifies the model, classifier, manifest, threshold, prompt, source files, and selected runtime settings before inference. The optimized default for the tested 2-core CPU is 2 threads, batch size 512, context size 4096, GPU layers 0, and a 256-token output ceiling. These are local runtime settings, not remote services. The SHA-256 verifier caches each successful file hash by resolved path, inode, size, and change/modification timestamps during the process; a new process verifies the files again.
+The CLI accepts an explicit model path through `--llm-model`. The default model path is under the user cache. The frozen generation configuration also verifies the model, classifier, manifest, threshold, prompt, source files, and selected runtime settings before inference. The current default for the tested 2-core CPU is 2 threads, batch size 128, context size 1024, GPU layers 0, and a 48-token output ceiling. The prompt returns one Bash command only. Common patterns are handled by deterministic templates; the local Qwen model is loaded only when a request needs the fallback. These are local runtime settings, not remote services. The frozen manifest stores a portable model SHA-256. After a successful full hash, a machine-local sidecar next to the GGUF caches that hash against the local file identity (size, mtime, ctime, inode). Normal CLI startup checks the local sidecar; a missing or stale sidecar triggers one full hash and is refreshed.
 
 ## 5. Run the end-to-end application
 
@@ -137,7 +137,7 @@ For multiple requests in one session, keep the local model and classifier loaded
 uv run nl2bash generate --interactive --timings
 ```
 
-Enter one task per line and type `exit` or `quit` to stop. The startup costs (including model loading and frozen-file verification) are paid once for that session. Per-request timing output separates intent prediction, entity extraction, prompt construction, llama.cpp prompt evaluation, token generation, and validation. `--json` emits one JSON result per request; errors go to standard error.
+Enter one task per line and type `exit` or `quit` to stop. The classifier/configuration are loaded once; the language model is loaded on demand after the first deterministic-template miss and reused thereafter. Per-request timing output separates intent prediction, entity extraction, template or LLM generation, prompt evaluation, token generation, and validation. `--json` emits one JSON result per request; errors go to standard error.
 
 ## 6. Reproduce the dataset preparation
 
@@ -248,13 +248,17 @@ The CLI refuses to overwrite an existing report. Results may vary with hardware 
 
 ### 9.1 Optimized offline runtime
 
-The current local runtime defaults are 2 CPU threads, `n_batch=512`, `n_ctx=4096`, `n_gpu_layers=0`, and `max_tokens=256` on the tested 2-core / 4-logical-CPU Intel machine. GPU offload remains disabled because no supported CUDA accelerator was available in that environment. Thread and batch values remain configurable for other machines.
+The frozen local runtime uses 2 CPU threads, `n_batch=128`, `n_ubatch=128`, `n_ctx=1024`, `n_gpu_layers=0`, and `max_tokens=48` on the tested Intel Core i3-1005G1 (2 physical cores / 4 logical CPUs). The Qwen2.5-1.5B-Instruct Q4_K_M model remains local. A Qwen3-0.6B experiment was rejected because faster decoding did not produce acceptable command quality on the sampled tasks.
 
-The optimized generation prompt removes unused character spans and intent confidence, drops one of the two examples, and shortens repeated output instructions. On the representative filename-search prompt, the measured prompt size fell from 698 tokens to 437 tokens (about 37% fewer). The system prompt explicitly retains case-sensitive filename matching by default and the rolling 24-hour `-mmin -1440` rule.
+The prompt now requests one Bash command only, rather than a JSON object with an explanation and assumptions. Unused spans and redundant metadata are omitted. A deterministic template router handles common, well-specified tasks, including common file discovery, basic system/network inspection, size filters, simple archive operations, and selected text-processing patterns. Requests outside those patterns use the local Qwen fallback. The model is loaded lazily, so template-handled requests avoid model initialization entirely.
 
-A small same-machine comparison on two representative requests measured 54.51 seconds total with the previous 4-thread / 256-batch settings and 41.98 seconds with 2 threads / 512 batch, about 23% lower combined model-call time. This is an exploratory two-request tuning run, not a statistically meaningful benchmark or a guarantee for other hardware. The historical v7 40-request report remains unchanged and must not be presented as a measurement of the optimized prompt/runtime.
+The v17 development-only sample contains 20 requests. With NLP context, generation succeeded on 20/20, Bash syntax passed on 20/20, and selected explicit-constraint checks passed on 19/20. Seven requests used deterministic templates and thirteen used the local Qwen fallback. Mean latency was 0.729 seconds, median 0.802 seconds, and maximum 1.919 seconds. These per-request evaluator timings reuse an already-loaded model and do not include one-shot startup.
 
-The one-shot `generate` command remains available. Use `nl2bash generate --interactive --timings` to reuse one loaded local model across multiple requests. The application performs no hosted inference calls and no network calls during generation.
+Cold one-shot CLI wall-clock checks including process startup, with the local integrity sidecar present, measured 0.98 seconds for a deterministic request, 1.02 seconds for a filename-sort request, 0.98 seconds for a primary-interface lookup, and 3.35 seconds for a local LLM fallback. After simulating a fresh install by deleting the sidecar, the first LLM fallback also performed the one-time full model SHA-256 check and completed in 4.32 seconds. These representative runs met the target on the tested host, but do not create a universal hard latency guarantee. Unsupported requests can still hit the 48-token cap and fail closed; no hard wall-clock timeout is currently enforced.
+
+The portable frozen configuration stores the model SHA-256, not machine-specific file metadata. After a successful full hash, a local sidecar next to the GGUF records that hash together with the local size, mtime, ctime, and inode. Ordinary CLI startup checks this sidecar rather than rereading the full 1.1 GB file. A missing or stale sidecar causes one full SHA-256 verification before the stamp is refreshed. This allows the same frozen configuration to work on another machine without trusting the original host's inode or timestamps. Source-code, classifier, manifest, threshold, dependency, and runtime checks remain part of normal configuration verification.
+
+Current report: `artifacts/evaluation/generation_dev_v17_report.json`. Current frozen settings: `artifacts/evaluation/frozen_generation_config.json`. The historical v7 40-request report and old runtime settings remain unchanged and must not be presented as measurements of this hybrid runtime.
 
 ## 10. Completed evaluations and safeguards
 
@@ -263,7 +267,9 @@ The one-shot `generate` command remains available. Use `nl2bash generate --inter
 | Intent classifier held-out test, 375 examples | `artifacts/evaluation/test_report.json` | `test_evaluation.lock`; complete, do not rerun |
 | Entity exact-span held-out test, 66 targeted requests | `artifacts/evaluation/entity_test_report.json` | `entity_test_evaluation.lock`; complete, do not rerun |
 | Generation v7 development comparison, 40 requests | `artifacts/evaluation/generation_dev_v7_report.json` | Historical baseline; unchanged |
-| Optimized offline prompt/runtime smoke check | `artifacts/evaluation/generation_dev_v8_smoke_report.json` | New small development-only check; not a quality estimate |
+| Optimized offline prompt/runtime smoke check | `artifacts/evaluation/generation_dev_v8_smoke_report.json` | Historical implementation checkpoint |
+| Hybrid latency and generation check, v17, 20 requests | `artifacts/evaluation/generation_dev_v17_report.json` | Current development-only sample; not held-out quality evidence |
+| Current frozen hybrid configuration | `artifacts/evaluation/frozen_generation_config.json` | Binds the portable model SHA-256, source hashes, prompt, and runtime settings |
 
 **Do not run the one-time classifier test evaluation or entity test benchmark again on the canonical checkout.** Do not delete, reset, or bypass their guards. For these test evaluations, reproducibility means inspecting committed reports, source manifests, checksums, and CI integrity assertions, not generating a second test result.
 
@@ -289,12 +295,12 @@ The workflows in `.github/workflows/` serve distinct purposes:
 | Workflow | Purpose |
 |---|---|
 | `package-smoke.yml` | Locked package install, CLI/import checks, safe/high-risk/invalid Bash parse-only checks, entity annotation/report/guard integrity, and v7 human-review attestation |
-| `generation-development-evaluation.yml` | Optional pinned CPU Qwen setup, frozen configuration verification, and paired development generation evaluation |
+| `generation-development-evaluation.yml` | Optional pinned CPU Qwen setup, current hybrid frozen-configuration verification, and a separate 20-request development-only report uploaded as a workflow artifact |
 | `final-test-evaluation.yml` | Read-only integrity check for the preserved one-time classifier record; it does not rerun the evaluation |
 
 The package smoke workflow runs on GitHub-hosted Ubuntu for relevant changes on `main` or by manual dispatch. It installs with `uv sync --locked` and runs inline Python/shell integrity checks. The repository intentionally does not contain a standalone `tests/` directory; ad hoc test scripts and fixtures are kept outside Git.
 
-The generation workflow performs a CPU build of the pinned runtime, downloads the model at the pinned revision, verifies its SHA-256, verifies the frozen component hashes, and evaluates 40 development requests. It is not the one-time classifier/entity test workflow.
+The hybrid generation workflow performs a CPU build of the pinned runtime, downloads the model at the pinned revision, verifies its SHA-256, verifies the current frozen configuration, and evaluates a separate 20-request development sample. It uploads the report as a workflow artifact and does not overwrite the historical v7 report or semantic-review worksheet. It is not the one-time classifier/entity test workflow.
 
 ## 13. Recorded end-to-end results
 
@@ -314,14 +320,33 @@ These are automated, development-only engineering diagnostics, not semantic-accu
 
 The project owner confirmed that all 80 candidates received human semantic review. The completion attestation did not include row-level ratings or reviewer notes, so no human semantic score or A/B win rate is claimed.
 
+### 13.1 Current hybrid latency check (v17)
+
+The separate 20-request v17 development sample uses deterministic templates for common patterns and the local Qwen model for requests outside that template set.
+
+| NLP-context metric | v17 result |
+|---|---:|
+| Generation success | 20/20 (100%) |
+| Bash syntax valid | 20/20 (100%) |
+| Selected explicit constraints passed | 19/20 (95%) |
+| Strict exact reference-command match | 1/20 (5%) |
+| High-risk warnings | 2 |
+| Deterministic template / local LLM paths | 7 / 13 |
+| Mean / median latency | 0.729 s / 0.802 s |
+| Maximum latency | 1.919 s |
+
+Request-only generation in the same sample had a mean latency of 1.477 seconds and median 1.451 seconds, with 19/20 successful generations. The new hybrid latency result is a different 20-request development sample and a different architecture, so it is not a like-for-like replacement for the historical v7 metrics.
+
+Separate cold one-shot process timings were 1.03 seconds for a deterministic request, 1.07 seconds for a filename-sort template, and 3.34 seconds for an LLM fallback request on the tested machine. These measured examples met the under-five-second target. They do not establish a hard guarantee for all possible commands or other hardware.
+
 ## 14. Known limitations
 
-- The 1.5B-parameter generator is a small model chosen for local CPU inference, not production-grade command reliability.
+- The 1.5B-parameter local model is used as an offline fallback, not production-grade command reliability. Deterministic templates cover only a selected subset of common tasks.
 - Syntax parsing does not establish semantic correctness or safety.
 - Safety checks are heuristic, can miss dangerous behaviour, and can flag legitimate commands.
 - Entity grounding checks selected explicit constraints only; it does not prove semantic equivalence or cover every utility-specific syntax.
 - Known gaps include some unrequested case-insensitive filters, concrete invented process IDs, omitted date/time constraints, and incomplete checks of comparison, ownership, depth, interface-selection, and utility-specific semantics.
-- Local inference is synchronous and does not currently enforce a hard per-request wall-clock timeout.
+- Local inference is synchronous and does not currently enforce a hard per-request wall-clock timeout. Requests outside deterministic templates can still exceed the target on other hardware or reach the 48-token output cap.
 - NL2Bash covers a subset of Bash syntax; it does not represent every shell construct or arbitrary scripts.
 - AI-assisted owner-approved annotation provenance and the targeted entity sample constrain interpretation of the classifier/entity metrics.
 

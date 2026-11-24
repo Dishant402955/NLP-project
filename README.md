@@ -3,7 +3,7 @@
 [![Open in Google Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Dishant402955/NLP-project/blob/main/notebooks/NL2Bash_Colab.ipynb)
 
 
-A hybrid NLP system that translates natural-language Linux requests into Bash command proposals. Traditional NLP predicts the requested operation and extracts explicit parameters; a local instruction-tuned language model generates a command; deterministic checks inspect syntax, selected constraints, and known risky patterns.
+A hybrid NLP system that translates natural-language Linux requests into Bash command proposals. Traditional NLP predicts the requested operation and extracts explicit parameters. Common, well-specified patterns use deterministic Bash templates; other requests use a local instruction-tuned language model. Deterministic checks inspect syntax, selected constraints, and known risky patterns.
 
 **Project repository:** [Dishant402955/NLP-project](https://github.com/Dishant402955/NLP-project)
 
@@ -21,7 +21,7 @@ The project owner has also approved the presentation. Any college-specific cover
 2. Preprocessing validates the request and trims surrounding whitespace only.
 3. A Scikit-learn TF-IDF + Logistic Regression model predicts an intent category and confidence.
 4. A deterministic rule-based extractor finds supported parameters such as extensions, paths, file names, sizes, ports, process names, dates, comparison conditions, programming languages, and case-sensitivity requirements. It preserves exact values and source spans, and reports incomplete or conflicting cues.
-5. The generation adapter sends a compact request and structured NLP context to a local Qwen2.5-1.5B-Instruct model. The model returns structured JSON containing a Bash command, explanation, and assumptions. Inference is offline and local.
+5. The generator first checks a conservative set of deterministic templates for common Linux tasks. If no template matches, it loads the local Qwen2.5-1.5B-Instruct model on demand and asks it for one Bash command only. Both paths work offline.
 6. The validator runs Bash syntax parsing in parse-only mode, applies heuristic risk checks, and checks selected explicit constraints against the generated text.
 7. The CLI displays the command and all findings. It never invokes a shell to execute generated text.
 
@@ -40,11 +40,11 @@ The pipeline pattern can be adapted to other CLI ecosystems such as Docker or AW
 | Intent classification | Scikit-learn TF-IDF word unigrams/bigrams + Logistic Regression |
 | Entity extraction | Deterministic Python rules and regular expressions |
 | Generation | Qwen2.5-1.5B-Instruct Q4_K_M GGUF |
-| Inference | llama-cpp-python 0.3.37, local CPU inference (2 threads, batch 512 by default on the tested 2-core CPU) |
+| Inference | llama-cpp-python 0.3.37, local CPU inference (2 threads, batch 128, context 1,024, 48-token output cap) |
 | Bash parsing | `bash -n` parse-only mode and bashlex AST analysis |
 | Interfaces | `nl2bash`, `nl2bash-classifier`, `nl2bash-annotations`, `nl2bash-prepare-dataset` CLIs |
 
-The base package works without the optional LLM runtime. The model binary is installed separately, not committed to Git, and verified using a pinned SHA-256. After the model and dependencies are present locally, normal generation makes no network requests and uses no hosted inference service. Setup instructions are in [Local Model Setup](docs/LOCAL_MODEL_SETUP.md).
+The base package works without the optional LLM runtime. The model binary is installed separately, not committed to Git, and pinned by SHA-256. Deterministic routes do not load the model; unsupported requests use the local Qwen fallback. After the model and dependencies are present locally, normal generation makes no network requests and uses no hosted inference service. Setup instructions are in [Local Model Setup](docs/LOCAL_MODEL_SETUP.md).
 
 ## Quick start
 
@@ -97,9 +97,19 @@ For repeated requests, keep one local model instance in memory with the interact
 uv run nl2bash generate --interactive --timings
 ```
 
-The timing output separates startup, classifier, entity extraction, prompt evaluation, token generation, and validation. The runtime can be tuned with `--threads`, `--batch-size`, `--context-size`, `--gpu-layers`, and `--max-tokens`; the frozen configuration accepts only its recorded settings unless it is deliberately re-evaluated and re-frozen.
+The timing output separates startup, classifier, entity extraction, prompt evaluation, token generation, and validation. The model is loaded only when a request needs the LLM fallback. The runtime can be tuned with `--threads`, `--batch-size`, `--context-size`, `--gpu-layers`, and `--max-tokens`; the frozen configuration accepts only its recorded settings unless it is deliberately re-evaluated and re-frozen.
 
 For full reproduction instructions, including safe data preparation and evaluation commands, see [Reproducibility Guide](docs/REPRODUCIBILITY.md).
+
+## Latency optimization results (2026-11-24)
+
+The current hybrid path was measured on the tested Intel Core i3-1005G1 (2 physical cores / 4 logical CPUs) using a 20-request development sample. With NLP context, mean generation-plus-validation latency was **0.73s**, median **0.80s**, and maximum **1.92s**. All 20 requests generated a command and passed Bash syntax checks; 19/20 passed the selected explicit-constraint checks. Seven requests used deterministic templates and thirteen used the local LLM fallback. This is a development-only sample, not a universal latency guarantee or semantic-accuracy estimate.
+
+Cold one-shot CLI runs, including Python process startup and with the local integrity sidecar present, were measured at **0.98s** for a deterministic request, **1.02s** for a filename-sort template, **0.98s** for a primary-interface lookup template, and **3.35s** for a local LLM fallback. After simulating a fresh model install by deleting the sidecar, the first LLM fallback also performed the one-time full SHA-256 check and completed in **4.32s**. These representative runs met the 5-second target. Arbitrary unsupported requests and other hardware are not guaranteed to meet a hard 5-second deadline; the LLM has a 48-token cap and fails closed when it reaches that cap.
+
+The previous 0.6B model experiment was not adopted because its speed did not come with acceptable command quality on the sampled requests. The stronger 1.5B local model remains the fallback while deterministic templates handle common patterns.
+
+The detailed current report is [generation_dev_v17_report.json](artifacts/evaluation/generation_dev_v17_report.json). The frozen runtime configuration is `artifacts/evaluation/frozen_generation_config.json`.
 
 ## Recorded end-to-end results
 
@@ -133,7 +143,7 @@ The project owner confirmed that all 80 candidates received human semantic revie
 - [Intent Classifier](docs/INTENT_CLASSIFIER.md): TF-IDF, Logistic Regression, training, prediction, threshold selection, and test evaluation.
 - [Entity Extraction](docs/ENTITY_EXTRACTION.md): entity types, rules, exact spans, normalized values, and limitations.
 - [Entity Evaluation](docs/ENTITY_EVALUATION.md): targeted sample, exact-span metrics, per-type support, and caveats.
-- [Command-Generation Evaluation](docs/GENERATION_EVALUATION.md): v6/v7 development comparisons and semantic-review status.
+- [Command-Generation Evaluation](docs/GENERATION_EVALUATION.md): historical v7 comparison, current hybrid latency results, and semantic-review status.
 - [Owner Review Attestation](data/annotations/generation_dev_v7_human_review_attestation.json): completion record for all 80 v7 candidates.
 - [Assistant Semantic Review](docs/GENERATION_V7_ASSISTANT_REVIEW.md): separate preliminary assistant assessment, not human labels.
 - [Engineering Audit](docs/ENGINEERING_AUDIT.md): clean-install, adversarial, grounding, checksum, and parse-only checks; known gaps.
@@ -151,7 +161,7 @@ The project owner confirmed that all 80 candidates received human semantic revie
 - `models/`: committed classifier and manifest.
 - `artifacts/evaluation/`: frozen configuration/threshold, reports, and one-time guards.
 - `docs/`: project, methodology, implementation, evaluation, audit, and reproducibility documentation.
-- `tests/`: offline regression tests for prompt, runtime configuration, caching, and interactive mode.
+- `tests/`: offline regression tests for prompt, deterministic templates, lazy model loading, runtime configuration, and interactive mode.
 - `.github/workflows/`: package smoke and experiment workflows.
 
 Temporary test fixtures, caches, virtual environments, model binaries, and secrets are not committed. Regression tests use Python's standard `unittest` framework and require no network access.

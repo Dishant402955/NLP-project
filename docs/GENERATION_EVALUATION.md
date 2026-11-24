@@ -1,13 +1,35 @@
 # Command-Generation Development Evaluation
 
-**Evaluation date:** 2026-11-17  
-**Current comparison:** generation v7  
+**Latest optimization check:** generation v17, 2026-11-24
 **Model:** Qwen2.5-1.5B-Instruct Q4_K_M GGUF  
-**Historical v7 runtime:** llama-cpp-python 0.3.37, CPU, four threads, 4,096-token context, temperature 0.0, 512-token output limit. This describes the preserved v7 comparison, not the newer optimized CLI defaults.
+**Historical v7 runtime:** llama-cpp-python 0.3.37, CPU, four threads, 4,096-token context, temperature 0.0, 512-token output limit. This describes the preserved v7 comparison only.
 
 ## Current offline runtime defaults
 
-The optimized local CLI uses a compact v7 prompt, a 256-token output ceiling, 2 CPU threads, `n_batch=512`, a 4,096-token context, and zero GPU layers on the tested 2-core CPU. The `--interactive` mode keeps one model instance loaded for repeated requests. Its stage timings include llama.cpp prompt-evaluation and token-generation counters. A separate small smoke report is recorded as `artifacts/evaluation/generation_dev_v8_smoke_report.json`; it is not a replacement for the 40-request v7 quality comparison and is not a quality estimate.
+The current local CLI uses command-only generation, `max_tokens=48`, 2 CPU threads, `n_batch=128`, `n_ubatch=128`, a 1,024-token context, and zero GPU layers on the tested 2-core CPU. Deterministic templates handle common, explicit patterns; other requests use the local Qwen fallback. The LLM is loaded only after a template miss and is reused in interactive mode. Stage timings include llama.cpp prompt-evaluation and token-generation counters. The older v8 smoke report is retained as a historical implementation checkpoint.
+
+## Current hybrid optimization result (v17)
+
+A seeded sample of 20 requests from the confirmed development partition was run in both request-only and NLP-context conditions. No test partition or test labels were used.
+
+| Automated metric | Request-only LLM | Hybrid system with NLP context |
+|---|---:|---:|
+| Generation success | 19/20 (95%) | 20/20 (100%) |
+| Bash syntax valid | 19/20 (95%) | 20/20 (100%) |
+| Selected explicit constraints passed | 17/20 (85%) | 19/20 (95%) |
+| Strict exact reference-command match | 1/20 (5%) | 1/20 (5%) |
+| High-risk warnings | 0 | 2 |
+| Mean request latency | 1.477 s | 0.729 s |
+| Median request latency | 1.451 s | 0.802 s |
+| Maximum request latency | not used as a frozen statistic | 1.919 s |
+
+The NLP-context path used deterministic templates for 7 requests and the local Qwen model for 13. All 20 NLP-context requests completed below 5 seconds; the sample maximum was 1.919 seconds. These per-request evaluation timings reuse an already-loaded evaluator model, so they do not include one-shot process/model startup.
+
+Cold one-shot CLI wall-clock checks, including Python process startup and with the local integrity sidecar present, measured 0.98 seconds for a deterministic request, 1.02 seconds for a filename-sort request, 0.98 seconds for a primary-interface lookup, and 3.35 seconds for an LLM fallback. After simulating a fresh install by deleting the sidecar, the first LLM fallback performed the one-time full model SHA-256 check and completed in 4.32 seconds. These are representative measured runs, not a guarantee for every arbitrary Linux task or machine.
+
+The Qwen3-0.6B Q4_0 experiment was not adopted: although it decoded faster, command correctness and formatting were not acceptable on the sampled tasks. The 1.5B model remains the offline fallback while templates handle common patterns.
+
+The latest report is `artifacts/evaluation/generation_dev_v17_report.json`. The runtime is frozen in `artifacts/evaluation/frozen_generation_config.json` (versioned snapshot: `artifacts/evaluation/frozen_generation_config_v13.json`). The optional GitHub workflow verifies this configuration and writes a separate artifact; it does not overwrite v7 records.
 
 ## Method
 
@@ -46,9 +68,9 @@ The report records generation success, syntax validity, selected explicit-constr
 
 ## Frozen generation configuration
 
-The selected CLI generation mode is NLP context. The frozen configuration binds:
+The selected CLI generation mode is the hybrid NLP-context path. The frozen configuration binds:
 
-- The local Qwen GGUF file SHA-256 and Hugging Face model revision.
+- The portable local Qwen GGUF SHA-256 and Hugging Face model revision. A separate machine-local sidecar caches successful verification against that machine's file identity.
 - llama-cpp-python version and CPU generation settings.
 - Prompt version and prompt source checksum.
 - Intent classifier artifact and manifest checksums.
@@ -56,7 +78,7 @@ The selected CLI generation mode is NLP context. The frozen configuration binds:
 - Checksums of the pipeline, extractor, grounding checker, validator, CLI, evaluation code, package configuration, and lockfile.
 - The development report checksum and the fact that no test data was used.
 
-The end-to-end CLI verifies these values before generation and fails closed if a frozen component, model, threshold, or runtime setting changes. The model file itself is stored outside Git; its checksum and retrieval instructions are versioned.
+Normal CLI startup checks a machine-local integrity sidecar rather than rereading the full 1.1 GB model. A missing or stale sidecar triggers full SHA-256 verification and refresh. The portable frozen configuration can therefore be used on other machines without depending on the original host's inode or timestamps. Other frozen component and classifier/threshold checks are performed at startup. The model and its local sidecar are stored outside Git.
 
 ## Reproduction
 

@@ -1,16 +1,17 @@
-name: Frozen command-generation development evaluation
+name: Hybrid command-generation development evaluation
 
 on:
   push:
+    branches: [main]
     paths:
       - ".github/workflows/generation-development-evaluation.yml"
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 concurrency:
-  group: nl2bash-generation-v7
+  group: nl2bash-generation-hybrid
   cancel-in-progress: false
 
 jobs:
@@ -18,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 60
     steps:
-      - name: Check out frozen project
+      - name: Check out project
         uses: actions/checkout@v4
 
       - name: Set up uv and Python
@@ -27,7 +28,7 @@ jobs:
           python-version: "3.10"
           enable-cache: true
 
-      - name: Install exact locked base dependencies
+      - name: Install locked base dependencies
         run: uv sync --locked
 
       - name: Build and install the pinned CPU inference runtime
@@ -37,13 +38,15 @@ jobs:
           FORCE_CMAKE: "1"
         run: uv pip install --python .venv/bin/python llama-cpp-python==0.3.37
 
-      - name: Download the frozen Qwen GGUF model
+      - name: Download and verify the local Qwen GGUF model
         run: |
           mkdir -p "$RUNNER_TEMP/nl2bash-model"
-          curl --fail --location --retry 5 --retry-all-errors             "https://huggingface.co/Qwen/Qwen2.5-1.5B-Instruct-GGUF/resolve/91cad51170dc346986eccefdc2dd33a9da36ead9/qwen2.5-1.5b-instruct-q4_k_m.gguf"             --output "$RUNNER_TEMP/nl2bash-model/qwen2.5-1.5b-instruct-q4_k_m.gguf"
+          curl --fail --location --retry 5 --retry-all-errors \
+            "https://huggingface.co/Qwen/Qwen2.5-1.5B-Instruct-GGUF/resolve/91cad51170dc346986eccefdc2dd33a9da36ead9/qwen2.5-1.5b-instruct-q4_k_m.gguf" \
+            --output "$RUNNER_TEMP/nl2bash-model/qwen2.5-1.5b-instruct-q4_k_m.gguf"
           echo "6a1a2eb6d15622bf3c96857206351ba97e1af16c30d7a74ee38970e434e9407e  $RUNNER_TEMP/nl2bash-model/qwen2.5-1.5b-instruct-q4_k_m.gguf" | sha256sum --check
 
-      - name: Verify all frozen classifier, prompt, model, threshold, pipeline and package hashes
+      - name: Verify the frozen hybrid configuration
         env:
           NL2BASH_MODEL: ${{ runner.temp }}/nl2bash-model/qwen2.5-1.5b-instruct-q4_k_m.gguf
         run: |
@@ -57,107 +60,52 @@ jobs:
               classifier_model_path="models/intent_classifier.joblib",
               classifier_manifest_path="models/intent_classifier_manifest.json",
               frozen_threshold_path="artifacts/evaluation/frozen_dev_threshold.json",
-              context_size=4096,
-              threads=4,
-              max_tokens=512,
+              context_size=1024,
+              threads=2,
+              batch_size=128,
+              gpu_layers=0,
+              max_tokens=48,
           )
-          print(f"Frozen generation configuration verified: {digest}")
+          print(f"Frozen hybrid configuration verified: {digest}")
           PY
 
-      - name: Run 40-request paired development evaluation
+      - name: Run a separate 20-request development-only comparison
         env:
           NL2BASH_MODEL: ${{ runner.temp }}/nl2bash-model/qwen2.5-1.5b-instruct-q4_k_m.gguf
         run: |
-          uv run nl2bash evaluate-generation-dev             --llm-model "$NL2BASH_MODEL"             --sample-size 40             --seed 20261117             --output artifacts/evaluation/generation_dev_v7_report.json
+          uv run nl2bash evaluate-generation-dev \
+            --llm-model "$NL2BASH_MODEL" \
+            --sample-size 20 \
+            --seed 20261127 \
+            --threads 2 \
+            --context-size 1024 \
+            --batch-size 128 \
+            --gpu-layers 0 \
+            --max-tokens 48 \
+            --output "$RUNNER_TEMP/nl2bash-generation-hybrid-ci.json"
 
-      - name: Create condition-masked semantic review worksheet
+      - name: Verify evaluation isolation and retain report
         run: |
           python - <<'PY'
-          import csv
           import json
+          import os
           from pathlib import Path
 
-          report = json.loads(Path("artifacts/evaluation/generation_dev_v7_report.json").read_text())
+          path = Path(os.environ["RUNNER_TEMP"]) / "nl2bash-generation-hybrid-ci.json"
+          report = json.loads(path.read_text(encoding="utf-8"))
           assert report["evaluation_type"] == "development_generation_comparison"
-          assert report["sample_size"] == 40
+          assert report["sample_size"] == 20
           assert report["test_data_used"] is False
           assert report["reference_commands_in_generation_prompts"] is False
-
-          rows = []
-          for index, item in enumerate(report["examples"], start=1):
-              for variant in ("request_only", "nlp_context"):
-                  command = item.get(f"{variant}_command")
-                  rows.append({
-                      "review_item_id": f"semantic-{index:03d}-{('A' if variant == 'request_only' else 'B')}",
-                      "example_id": item["example_id"],
-                      "request": item["request"],
-                      "candidate_command": command or "",
-                      "generation_succeeded": str(bool(item.get(f"{variant}_success"))).lower(),
-                      "semantic_rating": "",
-                      "reviewer_note": "",
-                  })
-
-          output = Path("data/annotations/generation_dev_v7_semantic_review.csv")
-          output.parent.mkdir(parents=True, exist_ok=True)
-          with output.open("w", encoding="utf-8", newline="") as stream:
-              writer = csv.DictWriter(
-                  stream,
-                  fieldnames=[
-                      "review_item_id", "example_id", "request",
-                      "candidate_command", "generation_succeeded",
-                      "semantic_rating", "reviewer_note",
-                  ],
-                  lineterminator="\n",
-              )
-              writer.writeheader()
-              writer.writerows(rows)
-          assert len(rows) == 80
-          print(f"Created {len(rows)} condition-masked semantic review rows: {output}")
-          PY
-
-      - name: Verify output artifacts
-        run: |
-          python - <<'PY'
-          import json
-          from pathlib import Path
-          import csv
-
-          report = json.loads(Path("artifacts/evaluation/generation_dev_v7_report.json").read_text())
-          with Path("data/annotations/generation_dev_v7_semantic_review.csv").open(newline="", encoding="utf-8") as stream:
-              rows = list(csv.DictReader(stream))
-          assert report["sample_size"] == 40
-          assert len(rows) == 80
-          assert all(not row["semantic_rating"] for row in rows)
-          assert all("request_only" not in row and "nlp_context" not in row for row in rows)
+          assert len(report["examples"]) == 20
           print(json.dumps(report["metrics"], indent=2))
-          print(f"Condition-masked semantic review rows: {len(rows)}")
+          print("Development-only hybrid evaluation verified; historical v7 reports and review worksheets were not modified.")
           PY
 
-      - name: Preserve generation report and blind worksheet
+      - name: Upload hybrid development report
         uses: actions/upload-artifact@v4
         with:
-          name: nl2bash-generation-dev-v7
-          path: |
-            artifacts/evaluation/generation_dev_v7_report.json
-            data/annotations/generation_dev_v7_semantic_review.csv
+          name: nl2bash-generation-hybrid-development
+          path: ${{ runner.temp }}/nl2bash-generation-hybrid-ci.json
           if-no-files-found: error
           retention-days: 30
-
-      - name: Commit development experiment and review worksheet
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add artifacts/evaluation/generation_dev_v7_report.json data/annotations/generation_dev_v7_semantic_review.csv
-          git diff --cached --check
-          git commit -m "Record 40-request frozen command-generation evaluation"
-          for attempt in 1 2 3; do
-            git fetch origin main
-            git rebase origin/main
-            if git push origin HEAD:main; then
-              echo "Generation report and blind worksheet published to main."
-              exit 0
-            fi
-            echo "Main advanced during publish attempt $attempt; retrying after fetch/rebase."
-          done
-          echo "Unable to publish generation artifacts after three fetch/rebase attempts." >&2
-          exit 1

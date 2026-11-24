@@ -1,0 +1,59 @@
+{
+  "artifact_type": "frozen_nl2bash_generation_configuration",
+  "classifier": {
+    "file": "models/intent_classifier.joblib",
+    "manifest_file": "models/intent_classifier_manifest.json",
+    "manifest_sha256": "1b52a8263ed3215634670dfc9c105aef7ed4f8554093df0fda702daade5f01ab",
+    "sha256": "b2c4c64fc4723b5279bb198dff04dd58921f969406b91739ff6524fa97e12d2e"
+  },
+  "development_evidence": {
+    "report_file": "artifacts/evaluation/generation_dev_v17_report.json",
+    "report_sha256": "314e7e779d0b7ebb717b77f9f289d42fd9693f4c8edf3a80d7d7a70a4fbba8c5",
+    "sample_size": 20,
+    "test_data_used": false
+  },
+  "frozen": true,
+  "frozen_intent_threshold": {
+    "file": "artifacts/evaluation/frozen_dev_threshold.json",
+    "sha256": "a0ac257309d234e0266d8fd1ca3ad6a0cbf2160d4c4786e87c126a356975a647",
+    "value": 0.1361115729921777
+  },
+  "model": {
+    "default_path": "~/.cache/nl2bash/models/qwen2.5-1.5b-instruct-q4_k_m.gguf",
+    "format": "GGUF",
+    "license": "Apache-2.0",
+    "name": "Qwen2.5-1.5B-Instruct-Q4_K_M",
+    "sha256": "6a1a2eb6d15622bf3c96857206351ba97e1af16c30d7a74ee38970e434e9407e",
+    "source_revision": "91cad51170dc346986eccefdc2dd33a9da36ead9"
+  },
+  "prompt": {
+    "sha256": "2c6236cb89026baa14fd5155cff24de4856eb30faffc48077ab2ffd16ef53d68",
+    "source_file": "src/nl2bash/command_generation.py",
+    "version": "qwen-bash-command-v8"
+  },
+  "runtime": {
+    "batch_size": 128,
+    "context_size": 1024,
+    "device": "CPU",
+    "gpu_layers": 0,
+    "max_tokens": 48,
+    "name": "llama-cpp-python",
+    "seed": 42,
+    "temperature": 0.0,
+    "threads": 2,
+    "top_p": 0.9,
+    "version": "0.3.37"
+  },
+  "schema_version": 1,
+  "validation_and_pipeline_components": {
+    "pyproject.toml": "9b1a6d5eaecedd95cbbb190350f6dcffa040b5b6be55cdc4dce1347728989b49",
+    "src/nl2bash/bash_validation.py": "940f22a4e8948aa88dbc52381c36e3ed147dcedc87626d24af2ac150906be563",
+    "src/nl2bash/cli.py": "f3df64daf65668385239058ced8f285f397d84f76ba2a5937f0053419c6eea44",
+    "src/nl2bash/command_generation.py": "2c6236cb89026baa14fd5155cff24de4856eb30faffc48077ab2ffd16ef53d68",
+    "src/nl2bash/entity_extraction.py": "f803d527abd41eee5cc6d324f3db018e7830e69d0555599544bc3253561ec4a5",
+    "src/nl2bash/entity_validation.py": "d95dddefb548555252be503b470019f81a895cfd202e43e87aee8db43a12cb86",
+    "src/nl2bash/generation_configuration.py": "7a6364e07a51905a223a33fec552691f1c0b3423020e7185a54fb3ee58cd89a3",
+    "src/nl2bash/generation_evaluation.py": "cc1517acd0c93a5f94113f0e4b77d86cdb62e37ace9dbb4d58fc762d9d191548",
+    "uv.lock": "0ccd05b8678876c4c8d2ea95fe05bea96ddbc5785885d2da52801c4ddc33f800"
+  }
+}

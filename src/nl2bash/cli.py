@@ -12,7 +12,8 @@ from typing import Any, Sequence
 from nl2bash.bash_validation import validate_bash_command
 from nl2bash.command_generation import (
     DEFAULT_BATCH_SIZE, DEFAULT_CONTEXT_SIZE, DEFAULT_GPU_LAYERS, DEFAULT_MAX_TOKENS,
-    DEFAULT_MODEL_PATH, CommandGenerationError, generate_bash_command, load_local_generator,
+    DEFAULT_MODEL_PATH, CommandGenerationError, LocalGeneratorRequired,
+    generate_bash_command, load_local_generator,
 )
 from nl2bash.entity_extraction import extract_entities
 from nl2bash.entity_validation import validate_entity_grounding
@@ -36,7 +37,7 @@ class LoadedRuntime:
     threshold: float
     threshold_sha256: str
     generation_config_sha256: str
-    generator: Any
+    generator: Any | None
     startup_timings: dict[str, float]
 
 
@@ -106,17 +107,16 @@ def _load_runtime(args: argparse.Namespace) -> LoadedRuntime:
         batch_size=args.batch_size,
         gpu_layers=args.gpu_layers,
         max_tokens=args.max_tokens,
+        verify_model_hash=False,
     )
     timings["configuration_verification_seconds"] = round(time.perf_counter() - stage, 6)
 
-    stage = time.perf_counter()
-    generator = load_local_generator(
-        args.llm_model, context_size=args.context_size, threads=args.threads,
-        batch_size=args.batch_size, gpu_layers=args.gpu_layers,
-    )
-    timings["llm_model_load_seconds"] = round(time.perf_counter() - stage, 6)
+    # Keep the LLM unloaded until a request actually needs fallback generation.
+    # This avoids paying model initialization on common deterministic routes.
+    timings["llm_model_load_seconds"] = 0.0
+    timings["llm_model_loaded_on_demand"] = 1.0
     timings["total_startup_seconds"] = round(time.perf_counter() - started, 6)
-    return LoadedRuntime(model, threshold, threshold_sha256, generation_config_sha256, generator, timings)
+    return LoadedRuntime(model, threshold, threshold_sha256, generation_config_sha256, None, timings)
 
 
 def _generate_one(request_text: str, args: argparse.Namespace, runtime: LoadedRuntime) -> dict[str, Any]:
@@ -136,9 +136,43 @@ def _generate_one(request_text: str, args: argparse.Namespace, runtime: LoadedRu
     timings["entity_extraction_seconds"] = round(time.perf_counter() - stage, 6)
 
     stage = time.perf_counter()
-    generated = generate_bash_command(
-        request, prediction, extraction, generator=runtime.generator, max_tokens=args.max_tokens,
-    )
+    try:
+        generated = generate_bash_command(
+            request, prediction, extraction, generator=runtime.generator, max_tokens=args.max_tokens,
+        )
+    except LocalGeneratorRequired:
+        if runtime.generator is None:
+            integrity_started = time.perf_counter()
+            verify_frozen_generation_configuration(
+                args.generation_config,
+                model_path=args.llm_model,
+                classifier_model_path=args.intent_model,
+                classifier_manifest_path=args.intent_manifest,
+                frozen_threshold_path=args.frozen_threshold,
+                context_size=args.context_size,
+                threads=args.threads,
+                batch_size=args.batch_size,
+                gpu_layers=args.gpu_layers,
+                max_tokens=args.max_tokens,
+                verify_model_hash=False,
+            )
+            runtime.startup_timings["model_integrity_verification_seconds"] = round(
+                time.perf_counter() - integrity_started, 6,
+            )
+            load_started = time.perf_counter()
+            runtime.generator = load_local_generator(
+                args.llm_model, context_size=args.context_size, threads=args.threads,
+                batch_size=args.batch_size, gpu_layers=args.gpu_layers,
+            )
+            load_seconds = time.perf_counter() - load_started
+            runtime.startup_timings["llm_model_load_seconds"] = round(load_seconds, 6)
+            runtime.startup_timings["llm_model_loaded_on_demand"] = 1.0
+            runtime.startup_timings["total_startup_with_llm_seconds"] = round(
+                runtime.startup_timings["total_startup_seconds"] + load_seconds, 6,
+            )
+        generated = generate_bash_command(
+            request, prediction, extraction, generator=runtime.generator, max_tokens=args.max_tokens,
+        )
     timings["generation_total_seconds"] = round(time.perf_counter() - stage, 6)
 
     stage = time.perf_counter()

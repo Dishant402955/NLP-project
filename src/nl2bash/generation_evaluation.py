@@ -47,6 +47,10 @@ def _summarize(items: list[dict[str, Any]], prefix: str) -> dict[str, Any]:
     grounded = sum(item[f"{prefix}_constraints_passed"] for item in items)
     unsafe = sum(item[f"{prefix}_high_risk"] for item in items)
     latencies = [item[f"{prefix}_latency_seconds"] for item in items]
+    generation_paths = Counter(
+        item.get(f"{prefix}_inference_metrics", {}).get("generation_path", "local_llm")
+        for item in items if item.get(f"{prefix}_success")
+    )
     return {
         "example_count": count,
         "generation_success_count": sum(item[f"{prefix}_success"] for item in items),
@@ -59,6 +63,7 @@ def _summarize(items: list[dict[str, Any]], prefix: str) -> dict[str, Any]:
         "explicit_constraint_pass_count": grounded,
         "explicit_constraint_pass_rate": grounded / count if count else 0.0,
         "high_risk_warning_count": unsafe,
+        "generation_path_counts": dict(generation_paths),
         "mean_latency_seconds": statistics.fmean(latencies) if latencies else 0.0,
         "median_latency_seconds": statistics.median(latencies) if latencies else 0.0,
     }
@@ -77,8 +82,8 @@ def evaluate_generation_on_development(
     sample_size: int = 10,
     seed: int = 20261117,
     output_path: str | Path = "artifacts/evaluation/generation_dev_report.json",
-    context_size: int = 4096, threads: int | None = None, batch_size: int = 256,
-    gpu_layers: int = 0, max_tokens: int = 256,
+    context_size: int = 1024, threads: int | None = None, batch_size: int = 128,
+    gpu_layers: int = 0, max_tokens: int = 48,
 ) -> dict[str, Any]:
     """Evaluate the two prompt conditions on a seeded, label-stratified dev sample.
 
@@ -213,7 +218,9 @@ def evaluate_generation_on_development(
             "confidence_threshold": confidence_threshold,
         },
         "generator": {
-            "model": "Qwen2.5-1.5B-Instruct-Q4_K_M",
+            "model": "Hybrid deterministic templates with Qwen2.5-1.5B-Instruct-Q4_K_M local fallback",
+            "fallback_model": "Qwen2.5-1.5B-Instruct-Q4_K_M",
+            "generation_architecture": "deterministic common-command templates plus offline local LLM fallback",
             "model_file": str(model_path),
             "model_sha256": _sha256(model_path),
             "prompt_version": PROMPT_VERSION,

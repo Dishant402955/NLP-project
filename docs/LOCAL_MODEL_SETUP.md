@@ -2,9 +2,9 @@
 
 ## Runtime choice
 
-The generation adapter uses `llama-cpp-python` with the Qwen2.5-1.5B-Instruct GGUF model. This is a local CPU inference path and makes no outbound inference API calls. The model is not committed to Git because it is a large third-party binary.
+The generation adapter uses `llama-cpp-python` with the Qwen2.5-1.5B-Instruct GGUF model as an offline fallback. Common, well-specified requests use deterministic command templates and do not load the language model. The model is not committed to Git because it is a large third-party binary.
 
-The tested agent host is Ubuntu-based x86-64 Linux with an Intel Core i3-1005G1 (2 physical cores / 4 logical CPUs), about 7.5 GiB RAM, and no detected NVIDIA/CUDA accelerator. The selected Q4_K_M quantization is approximately 1.12 GB. The current tuned defaults are a 4,096-token context, 2 CPU threads, `n_batch=512`, `n_gpu_layers=0`, and a 256-token output ceiling. These settings are configurable and may not be optimal on other CPUs.
+The tested agent host is Ubuntu-based x86-64 Linux with an Intel Core i3-1005G1 (2 physical cores / 4 logical CPUs), about 7.5 GiB RAM, and no supported CUDA accelerator. The selected Q4_K_M quantization is approximately 1.12 GB. The current tuned defaults are a 1,024-token context, 2 CPU threads, `n_batch=128`, `n_ubatch=128`, `n_gpu_layers=0`, and a 48-token output ceiling. The prompt asks for one Bash command only, not a JSON explanation. These settings are configurable and may not be optimal on other CPUs.
 
 ## Install the Python runtime
 
@@ -56,14 +56,14 @@ For several requests in one session, reuse the loaded model:
 uv run nl2bash generate --interactive --timings
 ```
 
-Enter one request per line; type `exit` or `quit` to stop. The model, classifier, and frozen configuration are loaded/verified once per interactive session. Per-request timing data separates prompt evaluation and token generation using llama.cpp runtime counters when available.
+Enter one request per line; type `exit` or `quit` to stop. The classifier and frozen configuration are loaded once. The language model is loaded lazily when the first request misses the deterministic templates, then reused. Per-request timing data separates deterministic-template time or LLM prompt evaluation, token generation, and validation.
 
-The one-shot command loads the checksum-verified intent classifier and the development-frozen confidence threshold before it loads the local language model. It then extracts entities, generates one command, checks Bash syntax, and applies safety heuristics. No generated command is executed.
+The one-shot command loads the classifier and frozen threshold, checks source/configuration hashes, and tries deterministic generation first. Only an LLM fallback performs a model load. The frozen configuration stores the portable model SHA-256. After a successful full hash, a machine-local sidecar named `<model>.nl2bash-integrity.json` records the hash and local file identity. Regular CLI startup checks this sidecar instead of rereading the full 1.1 GB model. On a fresh machine, or after the model file changes, the first request performs a full SHA-256 verification and refreshes the sidecar. The CLI then checks Bash syntax and applies safety heuristics. No generated command is executed.
 
 ## Resource and safety notes
 
-- CPU inference is slower than GPU inference. The default 1.5B model is a practical small-model choice, not a claim of production-grade command accuracy.
-- The model can misunderstand requests or produce incorrect commands. Review the request, assumptions, generated command, and warnings before using it.
+- CPU inference is slower than GPU inference. The default 1.5B model is a practical fallback for this 2-core machine, not a claim of production-grade command accuracy.
+- The model can misunderstand requests or produce incorrect commands. Unsupported long requests may hit the 48-token output cap and fail closed. Review the request, assumptions, generated command, and warnings before using it.
 - The syntax checker uses `bash -n` in parse-only mode and `bashlex` for supplementary AST analysis. It does not execute command text.
 - Safety rules are conservative pattern checks. They can miss risky behaviour and can flag legitimate administration tasks. No clean result is a guarantee that a command is safe.
 - Inference is local. Model installation/download requires network access, but normal generation does not call a hosted model API.

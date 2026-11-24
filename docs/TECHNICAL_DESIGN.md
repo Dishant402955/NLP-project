@@ -10,7 +10,7 @@
 | Intent classifier | Scikit-learn Logistic Regression | Predict the requested operation category |
 | Parameter extraction | Python rules and regular expressions | Extract paths, extensions, file names, sizes, ports, process names, dates, and comparison conditions |
 | Language model | Qwen2.5-1.5B-Instruct Q4_K_M GGUF | Local command generation |
-| Model runtime | llama-cpp-python | Offline CPU inference from the local GGUF file; 2 threads / batch 512 by default on the tested 2-core CPU |
+| Model runtime | llama-cpp-python | Offline CPU inference from the local GGUF file; 2 threads, batch 128, context 1,024, 48-token cap on the tested 2-core CPU |
 | Bash syntax | `bash -n` plus bashlex | Parse-only syntax check and supplementary AST analysis |
 | Constraint check | Deterministic entity grounding | Flag selected explicit request constraints missing from generated command text |
 
@@ -33,9 +33,9 @@ The implementation is organized around the following responsibilities:
 
 ## 3. Model interaction
 
-The generation component sends the original request and, in the context-aware condition, a compact predicted intent and structured entity context to a local Qwen GGUF model through llama-cpp-python. A second request-only condition is retained for development experiments. The prompt avoids unused character offsets and redundant metadata; output is capped at 256 tokens by default. The model must return a JSON object containing a Bash command, explanation, and assumptions. The adapter validates the schema and never invokes a shell. No hosted inference endpoint is used.
+The generation component first checks conservative deterministic templates for common, well-specified Linux tasks. If none matches, it sends the original request and, in the context-aware condition, compact predicted intent and extracted entity facts to a local Qwen GGUF model through llama-cpp-python. A second request-only condition is retained for development experiments. The prompt avoids unused character offsets and redundant metadata; output is capped at 48 tokens by default and contains one Bash command only. The adapter validates the command text and never invokes a shell. No hosted inference endpoint is used.
 
-The application handles unavailable local models, malformed structured responses, empty output, and invalid generation settings. Local inference runs synchronously; a hard per-request wall-clock timeout is not currently enforced. The one-shot CLI loads the model for one request; `nl2bash generate --interactive` reuses one local model and classifier for multiple requests. Optional timing output separates startup, NLP stages, prompt evaluation, token generation, and validation. Frozen-file hashes are cached by path and file stat during a process.
+The application handles unavailable local models, malformed output, empty output, and invalid generation settings. Local inference runs synchronously; a hard per-request wall-clock timeout is not currently enforced. The one-shot CLI loads the model only when the request needs the LLM fallback; `nl2bash generate --interactive` reuses one loaded model for subsequent fallbacks. Optional timing output separates startup, NLP stages, deterministic-template time, prompt evaluation, token generation, and validation. Normal CLI startup verifies source/configuration checksums and a machine-local model-integrity sidecar. The portable frozen manifest stores the model SHA-256; if the sidecar is missing or stale, the CLI hashes the model once and refreshes the sidecar. This avoids binding the repository manifest to host-specific inode and timestamp values.
 
 The rule-based entity extractor preserves exact values and source spans and reports incomplete or contradictory parameters; see [Entity Extraction](ENTITY_EXTRACTION.md).
 
@@ -52,7 +52,7 @@ The validator is not a sandbox and does not establish that a command is harmless
 
 ## 5. Runtime and configuration
 
-The target is a local Linux environment with Python. The base package does not require a model runtime; install the optional `local-llm` dependency to enable generation. The GGUF model is stored outside the repository under `~/.cache/nl2bash/models/` by default. Context length, CPU thread count, and model path are configurable. See [Local Model Setup](LOCAL_MODEL_SETUP.md).
+The target is a local Linux environment with Python. The base package does not require a model runtime; install the optional `local-llm` dependency to enable generation. The GGUF model is stored outside the repository under `~/.cache/nl2bash/models/` by default. Context length, CPU thread count, and model path are configurable. The frozen tested defaults are 1,024 context tokens, 2 CPU threads, batch 128, no GPU layers, and 48 output tokens. See [Local Model Setup](LOCAL_MODEL_SETUP.md).
 
 ## 6. Implementation constraints
 
