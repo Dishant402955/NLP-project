@@ -351,3 +351,26 @@ Separate cold one-shot process timings were 1.03 seconds for a deterministic req
 - AI-assisted owner-approved annotation provenance and the targeted entity sample constrain interpretation of the classifier/entity metrics.
 
 Any post-freeze model, prompt, classifier, threshold, extractor, or validator change is a new development configuration. Evaluate changes on separate development/challenge data. Do not tune using the one-time held-out classifier/entity test results. Generated commands remain proposals and must never be executed automatically.
+
+
+## 15. Final-source hybrid verification (24 November 2026)
+
+The latest final-source model-backed development run is [GitHub Actions run 45366673492](https://github.com/Dishant402955/NLP-project/actions/runs/45366673492), on commit `4067d01ba18f7f174754763fa11bd0f940794946`. It verifies the frozen configuration and evaluates a paired sample of 20 development requests. The run confirms `test_data_used=false` and `reference_commands_in_generation_prompts=false`. Its uploaded report is [artifact 14908375296](https://github.com/Dishant402955/NLP-project/actions/runs/45366673492/artifacts/14908375296).
+
+| Automated metric | Request-only local LLM | Final hybrid pipeline |
+|---|---:|---:|
+| Generation success | 20/20 (100%) | 20/20 (100%) |
+| Bash syntax valid | 20/20 (100%) | 20/20 (100%) |
+| Selected explicit constraints passed | 18/20 (90%) | 18/20 (90%) |
+| Strict exact reference-command match | 1/20 (5%) | 1/20 (5%) |
+| High-risk warnings | 0 | 1 |
+| Mean latency | 1.249595 s | 0.595200 s |
+| Median latency | 1.188471 s | 0.618001 s |
+| Minimum / maximum latency | 0.479235 / 3.566361 s | 0.002487 / 1.543935 s |
+| p90 / p95 latency | 1.624674 / 1.903935 s | 1.178148 / 1.302335 s |
+
+The hybrid route used deterministic templates on seven requests and local Qwen fallback on thirteen. One request-only generation retried; no hybrid request required a retry in this sample. These figures are development-only automated diagnostics, not semantic accuracy, held-out test performance, or a universal latency guarantee. Exact reference matching is lexical, selected-constraint checks cover only selected requirements, and syntax validity does not establish task correctness.
+
+This is the current final-source result. Older v7/v17 results in earlier sections are retained as historical records. Do not rerun the protected generation v1 held-out test, the one-time intent test, or the one-time entity test. A new untouched generation holdout is required before making a new final semantic-accuracy claim.
+
+The final-source package-smoke workflow [45366673886](https://github.com/Dishant402955/NLP-project/actions/runs/45366673886) also passed, including all 26 unit tests, compile checks, package-entry-point checks, and parse-only Bash safety checks.
