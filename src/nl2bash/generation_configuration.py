@@ -9,7 +9,7 @@ from typing import Any
 
 from nl2bash.command_generation import (
     DEFAULT_BATCH_SIZE, DEFAULT_CONTEXT_SIZE, DEFAULT_GPU_LAYERS, DEFAULT_MAX_TOKENS,
-    DEFAULT_THREADS, PROMPT_VERSION,
+    DEFAULT_RETRY_MAX_TOKENS, DEFAULT_THREADS, PROMPT_VERSION,
 )
 
 COMPONENT_FILES = (
@@ -172,6 +172,7 @@ def freeze_generation_configuration(
             "top_p": 0.9,
             "seed": 42,
             "max_tokens": max_tokens,
+            "retry_max_tokens": DEFAULT_RETRY_MAX_TOKENS,
         },
         "prompt": {
             "version": PROMPT_VERSION,
@@ -287,4 +288,6 @@ def verify_frozen_generation_configuration(
         raise GenerationConfigurationError("GPU layer setting differs from the frozen generation configuration")
     if runtime.get("max_tokens") != max_tokens:
         raise GenerationConfigurationError("maximum generation tokens differ from the frozen configuration")
+    if runtime.get("retry_max_tokens") != DEFAULT_RETRY_MAX_TOKENS:
+        raise GenerationConfigurationError("retry token budget differs from the frozen generation configuration")
     return sha256_file_cached(config_path)

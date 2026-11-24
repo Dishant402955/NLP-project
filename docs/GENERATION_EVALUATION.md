@@ -108,3 +108,10 @@ The supplementary assistant-only review in `data/annotations/generation_dev_v7_a
 A conservative request-coverage gate now sits between deterministic template matching and returning a command. The gate checks extracted paths, all explicitly named file extensions, home-directory scope, supported time/size filters, file-versus-directory scope, and selected action verbs such as convert, append, move, copy, delete, archive, extract, permission change, count, and sort. It also checks explicit content-search, case-insensitive, and recursive requirements. If a check shows that a candidate omits a request requirement, the candidate is discarded and the request falls through to the local LLM.
 
 This is a fail-closed guard for known, mechanically checkable omissions, not a semantic-equivalence proof. It deliberately trades some template speed for a lower chance of returning a command that obviously omits the requested operation. The consumed v1 held-out partition was not used for implementation or tuning.
+
+
+## Post-v1 bounded generation retry (2026-11-24)
+
+The initial generation budget remains 48 tokens to preserve the common-path latency profile. When llama.cpp explicitly reports `finish_reason=length`, generation retries once with a 96-token ceiling using the same request and prompt. A second length cutoff is a failure; no truncated command is returned. Successful results record the initial/retry call durations, retry count, initial/retry token ceilings, and aggregate API-reported token usage. The development evaluator includes retry counts in its summary.
+
+The retry behavior is covered with deterministic fake-model tests for successful retry, second-attempt truncation, and no retry on a normal first-pass completion. It is a bounded recovery, not a guarantee that all commands fit in 96 tokens. The 879-request v1 benchmark measured the earlier single-pass 48-token behavior and must not be used to claim the retry's accuracy or latency.

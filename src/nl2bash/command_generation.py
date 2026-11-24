@@ -16,6 +16,7 @@ from nl2bash.intent_prediction import IntentPrediction
 DEFAULT_MODEL_PATH = Path.home() / ".cache/nl2bash/models/qwen2.5-1.5b-instruct-q4_k_m.gguf"
 DEFAULT_CONTEXT_SIZE = 1024
 DEFAULT_MAX_TOKENS = 48
+DEFAULT_RETRY_MAX_TOKENS = 96
 DEFAULT_THREADS = 2
 DEFAULT_BATCH_SIZE = 128
 DEFAULT_GPU_LAYERS = 0
@@ -554,13 +555,27 @@ def generate_bash_command(
             messages=messages, temperature=0.0, top_p=0.9, seed=42,
             max_tokens=max_tokens,
         )
-        inference_seconds = time.perf_counter() - inference_started
+        initial_inference_seconds = time.perf_counter() - inference_started
+        retry_inference_seconds = 0.0
+        retry_count = 0
+        response_history = [response]
         choice = response["choices"][0]
         if choice.get("finish_reason") == "length":
-            raise CommandGenerationError(
-                f"command generation reached the configured {max_tokens}-token latency budget before completion; "
-                "simplify the request or use a supported command pattern"
+            retry_started = time.perf_counter()
+            response = generator.create_chat_completion(
+                messages=messages, temperature=0.0, top_p=0.9, seed=42,
+                max_tokens=DEFAULT_RETRY_MAX_TOKENS,
             )
+            retry_inference_seconds = time.perf_counter() - retry_started
+            retry_count = 1
+            response_history.append(response)
+            choice = response["choices"][0]
+            if choice.get("finish_reason") == "length":
+                raise CommandGenerationError(
+                    "command generation remained incomplete after the bounded token-budget retry "
+                    f"({max_tokens} tokens, then {DEFAULT_RETRY_MAX_TOKENS} tokens); "
+                    "no partial command was returned"
+                )
         content = choice.get("message", {}).get("content")
         generated = _validate_command_text(content, model_name)
     except CommandGenerationError:
@@ -573,15 +588,25 @@ def generate_bash_command(
     inference_metrics: dict[str, float | int | str] = {
         "generation_path": "local_llm",
         "prompt_build_seconds": round(prompt_build_seconds, 6),
-        "model_call_seconds": round(inference_seconds, 6),
+        "initial_model_call_seconds": round(initial_inference_seconds, 6),
+        "retry_model_call_seconds": round(retry_inference_seconds, 6),
+        "model_call_seconds": round(initial_inference_seconds + retry_inference_seconds, 6),
+        "retry_count": retry_count,
+        "initial_max_tokens": max_tokens,
+        "retry_max_tokens": DEFAULT_RETRY_MAX_TOKENS,
+        "max_tokens_used": DEFAULT_RETRY_MAX_TOKENS if retry_count else max_tokens,
     }
-    usage = response.get("usage", {}) if isinstance(response, dict) else {}
-    if isinstance(usage, dict):
-        for source, target in (("prompt_tokens", "prompt_tokens"), ("completion_tokens", "completion_tokens"),
-                               ("total_tokens", "total_tokens")):
-            value = usage.get(source)
-            if isinstance(value, int) and not isinstance(value, bool):
-                inference_metrics[target] = value
+    usage_totals = {"prompt_tokens": 0, "completion_tokens": 0, "total_tokens": 0}
+    for attempt in response_history:
+        usage = attempt.get("usage", {}) if isinstance(attempt, dict) else {}
+        if isinstance(usage, dict):
+            for key in usage_totals:
+                value = usage.get(key)
+                if isinstance(value, int) and not isinstance(value, bool):
+                    usage_totals[key] += value
+    for key, value in usage_totals.items():
+        if value:
+            inference_metrics[key] = value
     if context_handle is not None and callable(perf_context):
         try:
             perf = perf_context(context_handle)

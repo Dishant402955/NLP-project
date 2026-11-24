@@ -12,7 +12,9 @@ from typing import Any
 
 from nl2bash.bash_validation import validate_bash_command
 from nl2bash.classifier_data import load_confirmed_evaluation_data
-from nl2bash.command_generation import CommandGenerationError, PROMPT_VERSION, generate_bash_command
+from nl2bash.command_generation import (
+    DEFAULT_RETRY_MAX_TOKENS, CommandGenerationError, PROMPT_VERSION, generate_bash_command,
+)
 from nl2bash.entity_extraction import extract_entities
 from nl2bash.entity_validation import validate_entity_grounding
 from nl2bash.evaluation import load_frozen_development_threshold
@@ -64,6 +66,14 @@ def _summarize(items: list[dict[str, Any]], prefix: str) -> dict[str, Any]:
         "explicit_constraint_pass_rate": grounded / count if count else 0.0,
         "high_risk_warning_count": unsafe,
         "generation_path_counts": dict(generation_paths),
+        "retry_attempt_count": sum(
+            item.get(f"{prefix}_inference_metrics", {}).get("retry_count", 0)
+            for item in items
+        ),
+        "requests_retried": sum(
+            item.get(f"{prefix}_inference_metrics", {}).get("retry_count", 0) > 0
+            for item in items
+        ),
         "mean_latency_seconds": statistics.fmean(latencies) if latencies else 0.0,
         "median_latency_seconds": statistics.median(latencies) if latencies else 0.0,
     }
@@ -226,6 +236,7 @@ def evaluate_generation_on_development(
             "prompt_version": PROMPT_VERSION,
             "temperature": 0.0,
             "max_tokens": max_tokens,
+            "retry_max_tokens": DEFAULT_RETRY_MAX_TOKENS,
             "context_size": context_size,
             "threads": effective_threads,
             "batch_size": batch_size,

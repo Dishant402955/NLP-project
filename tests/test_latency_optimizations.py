@@ -17,6 +17,7 @@ from nl2bash.command_generation import (
     DEFAULT_CONTEXT_SIZE,
     DEFAULT_GPU_LAYERS,
     DEFAULT_MAX_TOKENS,
+    DEFAULT_RETRY_MAX_TOKENS,
     DEFAULT_THREADS,
     PROMPT_VERSION,
     _prompt,
@@ -41,9 +42,11 @@ from nl2bash.preprocessing import normalize_request
 class FakeGenerator:
     def __init__(self) -> None:
         self.kwargs = None
+        self.calls = []
 
     def create_chat_completion(self, **kwargs):
         self.kwargs = kwargs
+        self.calls.append(kwargs)
         return {
             "choices": [{
                 "finish_reason": "stop",
@@ -75,6 +78,7 @@ class LatencyOptimizationTests(unittest.TestCase):
         self.assertEqual(DEFAULT_BATCH_SIZE, 128)
         self.assertEqual(DEFAULT_GPU_LAYERS, 0)
         self.assertEqual(DEFAULT_MAX_TOKENS, 48)
+        self.assertEqual(DEFAULT_RETRY_MAX_TOKENS, 96)
         self.assertEqual(PROMPT_VERSION, "qwen-bash-command-v8")
 
     def test_prompt_is_compact_and_preserves_critical_filename_rules(self) -> None:
@@ -111,6 +115,79 @@ class LatencyOptimizationTests(unittest.TestCase):
         self.assertIn("prompt_build_seconds", result.inference_metrics)
         self.assertIn("model_call_seconds", result.inference_metrics)
 
+
+
+    def test_token_ceiling_triggers_one_bounded_retry_and_records_metrics(self) -> None:
+        request = "Explain which mounted filesystems are active."
+        intent = IntentPrediction(
+            request=request, intent_label="system_information", raw_top_label="system_information",
+            confidence=0.8, low_confidence=False, confidence_threshold=0.13,
+        )
+
+        class RetryingGenerator:
+            def __init__(self) -> None:
+                self.calls = []
+
+            def create_chat_completion(self, **kwargs):
+                self.calls.append(kwargs)
+                if len(self.calls) == 1:
+                    return {
+                        "choices": [{"finish_reason": "length", "message": {"content": "findmnt -"}}],
+                        "usage": {"prompt_tokens": 70, "completion_tokens": 48, "total_tokens": 118},
+                    }
+                return {
+                    "choices": [{"finish_reason": "stop", "message": {"content": "findmnt -rn -o TARGET,SOURCE,FSTYPE,OPTIONS"}}],
+                    "usage": {"prompt_tokens": 70, "completion_tokens": 22, "total_tokens": 92},
+                }
+
+        generator = RetryingGenerator()
+        result = generate_bash_command(request, intent, extract_entities(request), generator=generator)
+        self.assertEqual([call["max_tokens"] for call in generator.calls], [48, 96])
+        self.assertEqual(result.command, "findmnt -rn -o TARGET,SOURCE,FSTYPE,OPTIONS")
+        self.assertEqual(result.inference_metrics["retry_count"], 1)
+        self.assertEqual(result.inference_metrics["initial_max_tokens"], 48)
+        self.assertEqual(result.inference_metrics["retry_max_tokens"], 96)
+        self.assertEqual(result.inference_metrics["max_tokens_used"], 96)
+        self.assertEqual(result.inference_metrics["prompt_tokens"], 140)
+        self.assertEqual(result.inference_metrics["completion_tokens"], 70)
+        self.assertEqual(result.inference_metrics["total_tokens"], 210)
+        self.assertGreaterEqual(result.inference_metrics["retry_model_call_seconds"], 0.0)
+
+    def test_second_token_ceiling_returns_error_not_partial_command(self) -> None:
+        request = "Explain which mounted filesystems are active."
+        intent = IntentPrediction(
+            request=request, intent_label="system_information", raw_top_label="system_information",
+            confidence=0.8, low_confidence=False, confidence_threshold=0.13,
+        )
+
+        class AlwaysTruncatingGenerator:
+            def __init__(self) -> None:
+                self.calls = []
+
+            def create_chat_completion(self, **kwargs):
+                self.calls.append(kwargs)
+                return {
+                    "choices": [{"finish_reason": "length", "message": {"content": "partial output"}}],
+                    "usage": {"prompt_tokens": 70, "completion_tokens": kwargs["max_tokens"]},
+                }
+
+        generator = AlwaysTruncatingGenerator()
+        with self.assertRaisesRegex(CommandGenerationError, "bounded token-budget retry"):
+            generate_bash_command(request, intent, extract_entities(request), generator=generator)
+        self.assertEqual([call["max_tokens"] for call in generator.calls], [48, 96])
+
+    def test_successful_first_attempt_does_not_pay_for_retry(self) -> None:
+        request = "Explain which mounted filesystems are active."
+        intent = IntentPrediction(
+            request=request, intent_label="system_information", raw_top_label="system_information",
+            confidence=0.8, low_confidence=False, confidence_threshold=0.13,
+        )
+        generator = FakeGenerator()
+        result = generate_bash_command(request, intent, extract_entities(request), generator=generator)
+        self.assertEqual(len(generator.calls), 1)
+        self.assertEqual(generator.calls[0]["max_tokens"], 48)
+        self.assertEqual(result.inference_metrics["retry_count"], 0)
+        self.assertEqual(result.inference_metrics["max_tokens_used"], 48)
 
     def test_common_requests_use_subsecond_deterministic_templates(self) -> None:
         cases = {

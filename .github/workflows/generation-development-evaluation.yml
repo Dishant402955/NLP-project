@@ -5,6 +5,15 @@ on:
     branches: [main]
     paths:
       - ".github/workflows/generation-development-evaluation.yml"
+      - "src/nl2bash/command_generation.py"
+      - "src/nl2bash/generation_configuration.py"
+      - "src/nl2bash/generation_evaluation.py"
+      - "tests/**"
+      - "artifacts/evaluation/frozen_generation_config.json"
+      - "data/processed/nl2bash/dev.jsonl"
+      - "data/processed/nl2bash/manifest.json"
+      - "data/annotations/dev_confirmed_intents.jsonl"
+      - "data/annotations/dev_confirmed_intents_manifest.json"
   workflow_dispatch:
 
 permissions:

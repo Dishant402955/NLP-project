@@ -75,3 +75,16 @@ The engineering follow-up is generation hardening:
 - [ ] Verify CI results and update the final engineering handoff.
 
 The 879-request generation v1 test, classifier test, and entity test remain protected and must not be rerun or used for tuning.
+
+
+## Update — 2026-11-24 (generation hardening)
+
+The project owner confirmed that the v1 semantic review is complete; it is no longer pending. No new numerical semantic-accuracy result is claimed here.
+
+- [x] Stage 1: reject deterministic templates that omit mechanically checkable request requirements and fall back to local LLM.
+- [x] Stage 2: retain the 48-token first pass and retry once at 96 tokens only after an explicit length cutoff; fail clearly if the retry also truncates.
+- [x] Stage 2: version the active frozen configuration as v15 while preserving v14 unchanged and keeping integrity checks enabled.
+- [x] Stage 3: add offline regression tests for template coverage, fallback integration, retry success/failure, and no-retry normal behavior.
+- [ ] Verify the package-smoke and development-only model evaluation workflows; update the engineering handoff with their observed outcomes.
+
+The consumed v1 generation test set and one-time classifier/entity test evaluations remain untouched.

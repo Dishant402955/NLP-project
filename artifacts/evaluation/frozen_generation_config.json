@@ -27,7 +27,7 @@
     "source_revision": "91cad51170dc346986eccefdc2dd33a9da36ead9"
   },
   "prompt": {
-    "sha256": "2c6236cb89026baa14fd5155cff24de4856eb30faffc48077ab2ffd16ef53d68",
+    "sha256": "ac3119bc93049477b6da6000edef8d1ad1a62e88f9860fab6b87fef124ba38c4",
     "source_file": "src/nl2bash/command_generation.py",
     "version": "qwen-bash-command-v8"
   },
@@ -39,21 +39,22 @@
     "max_tokens": 48,
     "name": "llama-cpp-python",
     "seed": 42,
-    "temperature": 0.0,
+    "temperature": 0,
     "threads": 2,
     "top_p": 0.9,
-    "version": "0.3.37"
+    "version": "0.3.37",
+    "retry_max_tokens": 96
   },
   "schema_version": 1,
   "validation_and_pipeline_components": {
     "pyproject.toml": "11c8435e30a2892bfd1b264081cc7dfda1901f49fd054c0ae2db8210e5a77e72",
     "src/nl2bash/bash_validation.py": "940f22a4e8948aa88dbc52381c36e3ed147dcedc87626d24af2ac150906be563",
     "src/nl2bash/cli.py": "f3df64daf65668385239058ced8f285f397d84f76ba2a5937f0053419c6eea44",
-    "src/nl2bash/command_generation.py": "2c6236cb89026baa14fd5155cff24de4856eb30faffc48077ab2ffd16ef53d68",
+    "src/nl2bash/command_generation.py": "ac3119bc93049477b6da6000edef8d1ad1a62e88f9860fab6b87fef124ba38c4",
     "src/nl2bash/entity_extraction.py": "f803d527abd41eee5cc6d324f3db018e7830e69d0555599544bc3253561ec4a5",
     "src/nl2bash/entity_validation.py": "d95dddefb548555252be503b470019f81a895cfd202e43e87aee8db43a12cb86",
-    "src/nl2bash/generation_configuration.py": "7a6364e07a51905a223a33fec552691f1c0b3423020e7185a54fb3ee58cd89a3",
-    "src/nl2bash/generation_evaluation.py": "cc1517acd0c93a5f94113f0e4b77d86cdb62e37ace9dbb4d58fc762d9d191548",
+    "src/nl2bash/generation_configuration.py": "b5ed0f95f4e638e35cc9b099a17493d96b3532cfe3f53de610288eae9c061a65",
+    "src/nl2bash/generation_evaluation.py": "4a8a59e7a95b1ab01d513446aee7798ca5c8fc11dde78072ce756f78935901e9",
     "uv.lock": "d77197f8a4f83533720ecdf5f1d7c3aa4440592c57bb43b5fad939540463badd"
   }
 }

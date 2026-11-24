@@ -44,3 +44,20 @@ This gate is conservative, not a semantic-equivalence proof. It may increase loc
 The v1 held-out benchmark measured 879 unique requests: warm mean 1.429445 s, median 1.348127 s, maximum 4.885406 s, with 879/879 under five seconds on the recorded Intel i3-1005G1 host. There were 24 generation failures at the 48-token ceiling. Strict reference match was 7.74%; shell-token match was 8.87%. These are lexical reference proxies, not human semantic accuracy.
 
 No new held-out accuracy/latency claim is made for the hardened implementation until an untouched evaluation is run.
+
+
+## Stage 2 — Bounded local-LLM retry (current implementation)
+
+- Initial token budget remains 48; one retry at 96 tokens occurs only for an explicit `finish_reason == "length"`.
+- A second length cutoff raises a clear generation error; partial output is never returned.
+- Metrics record retry count, initial/retry call durations, effective token ceilings, and aggregate API usage from both attempts.
+- The development report summarizes retry count and records the retry ceiling.
+- Active frozen config now includes the retry ceiling and refreshed hashes. `frozen_generation_config_v14.json` is preserved; a new `frozen_generation_config_v15.json` snapshot is added.
+- Retry tests cover success after truncation, repeat truncation failure, and no retry for a normal first-pass completion.
+- Stage-1 package-smoke run 45365481368 completed successfully.
+
+## Stage 2/3 verification still to perform
+
+- Confirm package-smoke for the retry implementation commit.
+- Run the 20-request development-only model evaluation to observe actual retry frequency, correctness proxies and latency. It does not use the v1 test partition.
+- Update this handoff with final commit SHA and workflow outcomes.
