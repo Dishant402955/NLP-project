@@ -144,6 +144,7 @@ The project owner confirmed that all 80 candidates received human semantic revie
 - [Entity Extraction](docs/ENTITY_EXTRACTION.md): entity types, rules, exact spans, normalized values, and limitations.
 - [Entity Evaluation](docs/ENTITY_EVALUATION.md): targeted sample, exact-span metrics, per-type support, and caveats.
 - [Command-Generation Evaluation](docs/GENERATION_EVALUATION.md): historical v7 comparison, current hybrid latency results, and semantic-review status.
+- [Held-Out Generation Benchmark](docs/GENERATION_TEST_BENCHMARK.md): full held-out correctness and latency protocol, reproducible runner, metrics, and semantic-review worksheet.
 - [Owner Review Attestation](data/annotations/generation_dev_v7_human_review_attestation.json): completion record for all 80 v7 candidates.
 - [Assistant Semantic Review](docs/GENERATION_V7_ASSISTANT_REVIEW.md): separate preliminary assistant assessment, not human labels.
 - [Engineering Audit](docs/ENGINEERING_AUDIT.md): clean-install, adversarial, grounding, checksum, and parse-only checks; known gaps.

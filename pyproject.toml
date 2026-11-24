@@ -10,7 +10,7 @@ readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
     "scikit-learn>=1.7,<1.8",
-    "numpy>=1.24",
+    "numpy==2.2.6",
     "joblib>=1.2",
     "bashlex>=0.18,<0.19",
 ]

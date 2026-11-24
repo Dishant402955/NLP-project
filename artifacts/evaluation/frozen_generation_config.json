@@ -46,7 +46,7 @@
   },
   "schema_version": 1,
   "validation_and_pipeline_components": {
-    "pyproject.toml": "9b1a6d5eaecedd95cbbb190350f6dcffa040b5b6be55cdc4dce1347728989b49",
+    "pyproject.toml": "11c8435e30a2892bfd1b264081cc7dfda1901f49fd054c0ae2db8210e5a77e72",
     "src/nl2bash/bash_validation.py": "940f22a4e8948aa88dbc52381c36e3ed147dcedc87626d24af2ac150906be563",
     "src/nl2bash/cli.py": "f3df64daf65668385239058ced8f285f397d84f76ba2a5937f0053419c6eea44",
     "src/nl2bash/command_generation.py": "2c6236cb89026baa14fd5155cff24de4856eb30faffc48077ab2ffd16ef53d68",
@@ -54,6 +54,6 @@
     "src/nl2bash/entity_validation.py": "d95dddefb548555252be503b470019f81a895cfd202e43e87aee8db43a12cb86",
     "src/nl2bash/generation_configuration.py": "7a6364e07a51905a223a33fec552691f1c0b3423020e7185a54fb3ee58cd89a3",
     "src/nl2bash/generation_evaluation.py": "cc1517acd0c93a5f94113f0e4b77d86cdb62e37ace9dbb4d58fc762d9d191548",
-    "uv.lock": "0ccd05b8678876c4c8d2ea95fe05bea96ddbc5785885d2da52801c4ddc33f800"
+    "uv.lock": "d77197f8a4f83533720ecdf5f1d7c3aa4440592c57bb43b5fad939540463badd"
   }
 }

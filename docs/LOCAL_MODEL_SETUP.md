@@ -8,7 +8,7 @@ The tested agent host is Ubuntu-based x86-64 Linux with an Intel Core i3-1005G1 
 
 ## Install the Python runtime
 
-The base dependencies, including the Bash parser, are installed from the locked project environment. The C++ inference binding is installed separately because it may compile native code and is not needed by the classifier or syntax validator:
+The base dependencies, including the Bash parser, are installed from the locked project environment. NumPy is pinned to 2.2.6 because the serialized intent classifier was built with that exact version and the model loader checks it. The C++ inference binding is installed separately because it may compile native code and is not needed by the classifier or syntax validator:
 
 ```bash
 uv sync --locked
