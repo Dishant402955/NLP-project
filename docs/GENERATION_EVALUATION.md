@@ -142,3 +142,35 @@ A GitHub Actions run on implementation commit `d1659f2c9e3a10bee6470c73a1268802b
 Interpretation: the retry completed one request that hit the initial ceiling in the request-only condition; none of the 20 hybrid requests needed retry. The hybrid path was faster on this small sample partly because seven requests used deterministic templates and did not load the LLM. This does not establish semantic accuracy: exact match is only a lexical reference metric, and selected-constraint checks are not a semantic-equivalence proof.
 
 **Revision note:** this model-backed report was produced on `d1659f2`, before the final Python escape/test-import cleanup in `4067d01`. The final source commit passed package-smoke independently. A second model-backed run was triggered for `4067d01` (run 45366673492); its outcome is not included here until it completes. These results are development evidence, not a new held-out test result and not comparable as a guarantee to the 879-request benchmark on the Intel i3 host.
+
+
+## Final-source verification after template hardening and bounded recovery — 24 November 2026
+
+The final-source workflow completed successfully on commit `4067d01ba18f7f174754763fa11bd0f940794946`: [workflow run 45366673492](https://github.com/Dishant402955/NLP-project/actions/runs/45366673492). The workflow verified the frozen hybrid configuration, ran a separate paired development-only comparison, verified evaluation isolation, and uploaded [artifact 14908375296](https://github.com/Dishant402955/NLP-project/actions/runs/45366673492/artifacts/14908375296).
+
+The sample contains 20 requests from the development partition. Both conditions used the same requests. The reference commands were not included in generation prompts, and `test_data_used=false`.
+
+| Automated metric | Request-only local LLM | Final hybrid pipeline |
+|---|---:|---:|
+| Generation success | 20/20 (100%) | 20/20 (100%) |
+| Bash syntax valid | 20/20 (100%) | 20/20 (100%) |
+| Selected explicit constraints passed | 18/20 (90%) | 18/20 (90%) |
+| Strict exact reference-command match | 1/20 (5%) | 1/20 (5%) |
+| High-risk warnings | 0 | 1 |
+| Requests that retried | 1 | 0 |
+| Retry attempts | 1 | 0 |
+| Generation routes | 20 local-model | 7 deterministic templates, 13 local-model fallback |
+| Mean latency | 1.249595 s | 0.595200 s |
+| Median latency | 1.188471 s | 0.618001 s |
+| Minimum latency | 0.479235 s | 0.002487 s |
+| p90 latency | 1.624674 s | 1.178148 s |
+| p95 latency | 1.903935 s | 1.302335 s |
+| Maximum latency | 3.566361 s | 1.543935 s |
+
+The final-source hybrid pipeline generated all sampled requests and passed Bash syntax checks on all of them. The selected explicit-constraint checks passed on 18 requests. One output exactly matched a reference command. These checks are automated correctness proxies only: exact matching is lexical, selected-constraint validation covers only chosen explicit requirements, and valid Bash syntax does not prove task semantics. No human semantic-accuracy percentage is claimed.
+
+The hybrid route used templates for seven requests and local-model fallback for thirteen. Its mean latency was 0.595200 s, median 0.618001 s, p90 1.178148 s, p95 1.302335 s, and maximum 1.543935 s. Request-only generation had mean 1.249595 s, median 1.188471 s, p90 1.624674 s, p95 1.903935 s, and maximum 3.566361 s. These figures are from a 20-request development sample, not a universal performance guarantee or held-out quality estimate.
+
+This run supersedes the earlier duplicate-run-pending note and is the latest final-source model-backed development evidence. The earlier run on `d1659f2` remains recorded as historical engineering evidence. The separate package-smoke verification on final source passed as workflow [45366673886](https://github.com/Dishant402955/NLP-project/actions/runs/45366673886), with all 26 unit tests passing.
+
+The consumed 879-request generation v1 holdout and the one-time classifier/entity test evaluations remain untouched. A newly frozen, independently held-out generation set and structured human semantic ratings are required before claiming final semantic accuracy.
