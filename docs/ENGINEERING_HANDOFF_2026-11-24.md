@@ -66,3 +66,14 @@ No new held-out accuracy/latency claim is made for the hardened implementation u
 ## CI correction iteration — 2026-11-24
 
 The first Stage 2 package-smoke run (45366209377) caught a missing `CommandGenerationError` test import. The runtime retry-success test, template coverage tests, and other unit tests passed; one failure was isolated to the test module import. The import has been added. An invalid Python escape in the new home-path guard and legacy parenthesis escape warnings were also corrected. The active and v15 frozen config command-source hashes were refreshed for the final source bytes. Rerun package-smoke before marking this stage verified.
+
+
+## Corrected package-smoke verification — 2026-11-24
+
+The corrected implementation commit `4067d01ba18f7f174754763fa11bd0f940794946` passed GitHub Actions package-smoke run **45366673886**:
+- Python compilation and all package entry-point checks passed.
+- **26 unit tests passed** (including template-coverage and bounded-retry tests).
+- Bash syntax/risk safety checks passed.
+- Existing annotation, classifier/entity evaluation provenance and v7 review-artifact integrity checks passed.
+
+The earlier failed run `45366209377` was caused by a missing test import and is superseded by the successful corrected run. The development-only model evaluation is still running/building; no measured retry frequency or post-change model latency is claimed until that run completes.

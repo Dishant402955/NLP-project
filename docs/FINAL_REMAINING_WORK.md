@@ -93,3 +93,9 @@ The consumed v1 generation test set and one-time classifier/entity test evaluati
 ### CI iteration note — 2026-11-24
 
 The first package-smoke run for the retry implementation exposed a missing exception import in the new regression test (runtime code was not the cause). The test import and source escape warnings have been corrected; CI is being rerun. Do not mark verification complete until the rerun passes.
+
+
+### Verification update — 2026-11-24
+
+- [x] Corrected package-smoke workflow: success (run 45366673886); all 26 unit tests passed.
+- [ ] Complete the real-model development-only comparison to measure retry incidence and the latency/correctness trade-off. This remains development-only, not a new held-out test.
