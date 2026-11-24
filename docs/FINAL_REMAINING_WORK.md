@@ -57,11 +57,14 @@ These are automated development-only diagnostics. Exact reference matching is le
 
 A new, independently curated and untouched held-out generation set is required before making a new final semantic-accuracy claim. This is not a blocker for accurately presenting the current development diagnostics.
 
-## Remaining administrative checks
+## Final closure checks
 
-No core engineering, regression-test, final-source CI, development evaluation, report-editing, presentation-editing, or repository-documentation task remains.
+- [x] College-specific submission requirements checked and completed, as confirmed by the project owner.
+- [x] Fresh, untouched generation evaluation completed, as confirmed by the project owner.
 
-Before institutional submission, check only the college-specific requirements that were not supplied with the project files: college and department naming, supervisor details, declaration/certificate pages, required signatures, and the department's final report/presentation rubric. Do not invent these fields. The current report is an NLP project report for Natural Language Processing (CS 702), with the two student names and roll numbers retained from the supplied source.
+The fresh evaluation is owner-confirmed as complete. Its detailed report and row-level results have not been added to this repository in this update, so this checklist does not introduce or claim any new semantic-accuracy percentage. The already-published final-source development comparison remains clearly labelled as development-only. Any future publication of the new evaluation's metrics should cite its actual report and preserve its methodology.
+
+All core engineering, regression testing, CI verification, model-backed development evaluation, report/presentation editing, documentation, and the two final closure checks are now marked complete.
 
 ## Canonical references
 
@@ -70,3 +73,6 @@ Before institutional submission, check only the college-specific requirements th
 - Reproduction guide: [REPRODUCIBILITY.md](REPRODUCIBILITY.md)
 - Final-source model workflow: [run 45366673492](https://github.com/Dishant402955/NLP-project/actions/runs/45366673492)
 - Final-source package-smoke workflow: [run 45366673886](https://github.com/Dishant402955/NLP-project/actions/runs/45366673886)
+
+
+**Final status:** All project tasks and the two final closure checks have been marked complete per the project owner's confirmation. No open tasks remain in this checklist.
