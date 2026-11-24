@@ -115,3 +115,30 @@ This is a fail-closed guard for known, mechanically checkable omissions, not a s
 The initial generation budget remains 48 tokens to preserve the common-path latency profile. When llama.cpp explicitly reports `finish_reason=length`, generation retries once with a 96-token ceiling using the same request and prompt. A second length cutoff is a failure; no truncated command is returned. Successful results record the initial/retry call durations, retry count, initial/retry token ceilings, and aggregate API-reported token usage. The development evaluator includes retry counts in its summary.
 
 The retry behavior is covered with deterministic fake-model tests for successful retry, second-attempt truncation, and no retry on a normal first-pass completion. It is a bounded recovery, not a guarantee that all commands fit in 96 tokens. The 879-request v1 benchmark measured the earlier single-pass 48-token behavior and must not be used to claim the retry's accuracy or latency.
+
+
+## Development-only model verification after generation hardening (2026-11-24)
+
+A GitHub Actions run on implementation commit `d1659f2c9e3a10bee6470c73a1268802b02373f5` completed the seeded 20-request development comparison (seed `20261127`, `dev` partition, dataset revision `d6b9f5bdff45621d190134e31ab63b7bf7002190`). The report declared `test_data_used=false`; references were excluded from generation prompts. The full per-example JSON is retained as [workflow artifact 14906354383](https://github.com/Dishant402955/NLP-project/actions/runs/45366209580/artifacts/14906354383).
+
+| Metric | Request-only local LLM | Hybrid NLP-context |
+|---|---:|---:|
+| Requests | 20 | 20 |
+| Generation success | 20/20 (100%) | 20/20 (100%) |
+| Bash syntax valid | 20/20 (100%) | 20/20 (100%) |
+| Selected constraints passed | 18/20 (90%) | 18/20 (90%) |
+| Exact reference matches | 1/20 (5%) | 1/20 (5%) |
+| High-risk flags | 0 | 1 |
+| Retry attempts | 1 | 0 |
+| Route counts | 20 LLM | 7 templates, 13 LLM |
+| Minimum latency | 0.503754 s | 0.002106 s |
+| Mean latency | 1.449816 s | 0.690222 s |
+| Median latency | 1.347501 s | 0.682358 s |
+| p90 latency | 2.010147 s | 1.425619 s |
+| p95 latency | 2.368270 s | 1.561336 s |
+| Maximum latency | 4.483385 s | 1.844542 s |
+| Range | 3.979631 s | 1.842436 s |
+
+Interpretation: the retry completed one request that hit the initial ceiling in the request-only condition; none of the 20 hybrid requests needed retry. The hybrid path was faster on this small sample partly because seven requests used deterministic templates and did not load the LLM. This does not establish semantic accuracy: exact match is only a lexical reference metric, and selected-constraint checks are not a semantic-equivalence proof.
+
+**Revision note:** this model-backed report was produced on `d1659f2`, before the final Python escape/test-import cleanup in `4067d01`. The final source commit passed package-smoke independently. A second model-backed run was triggered for `4067d01` (run 45366673492); its outcome is not included here until it completes. These results are development evidence, not a new held-out test result and not comparable as a guarantee to the 879-request benchmark on the Intel i3 host.

@@ -77,3 +77,31 @@ The corrected implementation commit `4067d01ba18f7f174754763fa11bd0f940794946` p
 - Existing annotation, classifier/entity evaluation provenance and v7 review-artifact integrity checks passed.
 
 The earlier failed run `45366209377` was caused by a missing test import and is superseded by the successful corrected run. The development-only model evaluation is still running/building; no measured retry frequency or post-change model latency is claimed until that run completes.
+
+
+## Final task status — 2026-11-24
+
+**User-requested tasks 2, 3 and 4: implemented.** The semantic review is user-confirmed complete and is no longer an open task.
+
+### Commits on main
+
+- `81c1667efbdf5ebcb77e6a563fbd37b4ebe7f191`: conservative deterministic-template coverage gate and initial regression tests.
+- `2c6eeb89e630b2f9b35d8008c5dff02adecc1257`: stage-1 handoff.
+- `d1659f2c9e3a10bee6470c73a1268802b02373f5`: 48-token first pass, one 96-token retry on explicit length cutoff, retry metrics, dev summary metrics, config v15, and extended tests.
+- `4067d01ba18f7f174754763fa11bd0f940794946`: fix missing test import and Python source escapes; refresh source hashes.
+- `9f452bec09b11933f8c9e549d1849b52632a1351`: record successful package-smoke verification.
+
+### Verification
+
+- Final-source package-smoke run **45366673886** succeeded. All 26 unit tests passed; package entry points, compilation, Bash validation/safety checks and protected artifact-integrity checks passed.
+- Development-only model run **45366209580** succeeded on commit `d1659f2`. The frozen v15 configuration verified, the 20-request dev comparison and isolation checks passed, and report artifact 14906354383 uploaded.
+- Development-only results are documented in `docs/GENERATION_EVALUATION.md`. The hybrid condition had 20/20 successful generations, 20/20 syntax-valid commands, 18/20 selected constraint checks, one exact reference match, one high-risk warning, and zero retries; mean latency 0.690222 s, median 0.682358 s, maximum 1.844542 s. This is a 20-request development sample, not semantic accuracy or held-out test performance.
+- A matching model run on the final cleanup commit `4067d01` (45366673492) was still in progress at this handoff update. It is a duplicate confirmation run; the final-source package suite is already green.
+
+### Protected artifacts
+
+- `frozen_generation_config_v14.json` remains unchanged.
+- Active `frozen_generation_config.json` and `frozen_generation_config_v15.json` include `retry_max_tokens=96` and refreshed source hashes.
+- The 879-request generation v1 benchmark, classifier test, entity test, reports and one-time guards were not changed or rerun.
+- Generated Bash was not executed.
+- No new semantic-accuracy percentage is claimed. A future final accuracy estimate requires a fresh untouched held-out set.

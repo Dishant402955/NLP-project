@@ -99,3 +99,18 @@ The first package-smoke run for the retry implementation exposed a missing excep
 
 - [x] Corrected package-smoke workflow: success (run 45366673886); all 26 unit tests passed.
 - [ ] Complete the real-model development-only comparison to measure retry incidence and the latency/correctness trade-off. This remains development-only, not a new held-out test.
+
+
+## Final engineering status — 2026-11-24
+
+The three requested engineering tasks are implemented:
+- [x] Template route guard rejects candidates that omit mechanically checkable request requirements and falls back to local Qwen.
+- [x] Bounded recovery retries once at 96 tokens only after a 48-token `finish_reason=length`; a second truncation returns an error rather than a partial command.
+- [x] Regression coverage covers template omissions/fallback, retry success, repeated truncation, and normal no-retry completion.
+
+Verification:
+- [x] Final-source package-smoke run 45366673886 succeeded; all 26 unit tests passed.
+- [x] Development-only 20-request model comparison completed successfully on implementation commit d1659f2; results are recorded in `docs/GENERATION_EVALUATION.md`.
+- [ ] A duplicate development run on the final cleanup commit 4067d01 (run 45366673492) was still in progress at this documentation update.
+
+The v1 879-request held-out test and one-time classifier/entity evaluations were not rerun or tuned. A fresh untouched holdout is still required before making any new final accuracy claim.
