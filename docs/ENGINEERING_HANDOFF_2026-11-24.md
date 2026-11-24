@@ -95,8 +95,10 @@ The report has been rendered and visually inspected after editing. The PowerPoin
 - The 879-request generation v1 held-out benchmark, the one-time intent test, the one-time entity test, their guards/checksums/review worksheets, and the historical v7 human-review worksheet were not used for tuning and were not modified.
 - Generated Bash was never executed.
 
-## Remaining work
+## Final closure status
 
-There is no remaining core engineering or documentation task from the requested scope. Before institutional submission, check college-specific formatting and metadata requirements that were not supplied (college/department, supervisor, declaration/certificate, signatures, and official rubric).
+The project owner confirms that the college-specific submission checks have been completed and that a fresh, untouched generation evaluation has also been completed. Both are marked complete in `docs/FINAL_REMAINING_WORK.md`.
 
-A fresh untouched generation holdout with structured human semantic scoring is needed only before making a new final semantic-accuracy claim. The current 20-request development comparison is reported as development evidence only.
+The detailed output of the newly completed evaluation was not attached to this handoff update. Accordingly, no additional accuracy percentage or result is asserted here. The previously recorded 20-request final-source comparison remains development-only evidence. The new evaluation's actual report should be cited before its metrics are added to the academic report or presentation.
+
+**Handoff status: complete. No remaining tasks are recorded.**
