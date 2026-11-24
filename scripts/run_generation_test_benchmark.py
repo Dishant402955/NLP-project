@@ -254,6 +254,7 @@ def cold_process_probe(request: str, index: int) -> dict[str, Any]:
 def run_benchmark(*, seed: int = 20261124, warmup_count: int = 5,
                   cold_probe_count: int = 3, resume: bool = False) -> dict[str, Any]:
     run_started_at = datetime.now(timezone.utc).isoformat()
+    segment_started_clock = time.perf_counter()
     for path in (REPORT_PATH, EXAMPLES_PATH, REVIEW_PATH):
         if path.exists():
             raise BenchmarkError(f"refusing to overwrite existing benchmark artifact: {path}")
@@ -431,7 +432,8 @@ def run_benchmark(*, seed: int = 20261124, warmup_count: int = 5,
             example_results.append(row)
             if index % 25 == 0 or index == len(cases):
                 print(f"benchmark progress: {index}/{len(cases)} (completed: {len(example_results)})", flush=True)
-    total_wall = sum(row["wall_latency_seconds"] for row in example_results)
+    aggregate_request_time = sum(row["wall_latency_seconds"] for row in example_results)
+    resume_segment_wall_clock = time.perf_counter() - segment_started_clock
     with EXAMPLES_PATH.open("x", encoding="utf-8") as stream:
         for row in example_results:
             stream.write(json.dumps(row, ensure_ascii=False, sort_keys=True) + "\n")
@@ -502,7 +504,8 @@ def run_benchmark(*, seed: int = 20261124, warmup_count: int = 5,
     report = {
         "schema_version": 1, "benchmark_version": VERSION,
         "benchmark_type": "frozen_held_out_generation_correctness_and_latency",
-        "started_at_utc": run_started_at,
+        "final_resume_segment_started_at_utc": run_started_at,
+        "original_benchmark_started_at_utc": run_started_at if not resume else None,
         "completed_at_utc": datetime.now(timezone.utc).isoformat(),
         "git_commit": subprocess.run(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True,
                                      capture_output=True, check=True).stdout.strip(),
@@ -560,10 +563,13 @@ def run_benchmark(*, seed: int = 20261124, warmup_count: int = 5,
             "cold_process_wall_latency": latency_summary([row["process_wall_seconds"] for row in cold_probes]),
             "cold_probe_count": len(cold_probes), "warmup_count": len(warmup_rows),
             "warm_test_wall_latency": latency_summary(all_latencies),
-            "test_loop_wall_seconds": round(total_wall, 6),
+            "aggregate_request_latency_seconds": round(aggregate_request_time, 6),
+            "aggregate_request_rate_per_second": round(len(example_results) / aggregate_request_time, 4) if aggregate_request_time else None,
+            "final_resume_segment_wall_clock_seconds": round(resume_segment_wall_clock, 6),
+            "full_benchmark_elapsed_wall_clock_seconds": None if resume else round(resume_segment_wall_clock, 6),
+            "elapsed_wall_clock_note": "The run resumed from a checkpoint after interruption. Total elapsed wall-clock time across the original and resumed process is not available; aggregate_request_latency_seconds is the sum of measured request latencies, not full benchmark wall time.",
             "resumed_from_checkpoint": resume,
             "checkpoint_completed_before_this_run": len(completed_by_id),
-            "test_requests_per_second": round(len(example_results) / total_wall, 4) if total_wall else None,
             "requests_under_5_seconds": sum(value < 5.0 for value in all_latencies),
             "under_5_seconds_rate": round(sum(value < 5.0 for value in all_latencies) / len(all_latencies), 6) if all_latencies else 0.0,
         },

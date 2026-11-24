@@ -68,3 +68,11 @@ The runner refuses to overwrite a report or any companion artifact with the same
 ## Interpretation limits
 
 The NL2Bash task is a benchmark of concise Linux command translation, not arbitrary multi-line scripts, interactive shell state, or every distribution-specific command. A command can be syntactically valid but perform the wrong operation. Reference commands may not enumerate every semantically valid solution. Exact and token matches therefore provide conservative reproducible signals, not a complete semantic judgement. Results apply to the recorded Intel i3-1005G1 CPU-only environment and this local quantized model; latency on other hardware will differ.
+
+## v1 measured results (2026-11-24)
+
+The v1 run evaluated all 879 unique requests in the 1,261-row held-out partition. The complete figures, route split, cold-start measurements, hardware, hashes, and limitations are in [`generation-test-benchmark-v1_report.json`](../artifacts/evaluation/generation-test-benchmark-v1_report.json); a concise interpretation is in [`generation-test-benchmark-v1_summary.md`](../artifacts/evaluation/generation-test-benchmark-v1_summary.md).
+
+Key results: warm latency min/mean/median/p95/max = 0.0028/1.4294/1.3481/2.9983/4.8854 seconds; all 879 requests completed below five seconds on the recorded host. Generation succeeded on 855/879 (97.27%); strict reference match was 68/879 (7.74%), shell-token match 78/879 (8.87%), Bash syntax validity 848/879 (96.47%), and extracted-constraint pass 782/879 (88.96%). Twenty-four requests reached the 48-token generation ceiling. Thirty-five outputs were statically flagged high risk, and 131 required review. Human semantic accuracy remains unscored; 801 mismatches/failures are in the review CSV.
+
+**Interpretation:** the latency objective was met empirically, but correctness remains weak or unverified. In particular, the 77 deterministic-template outputs produced zero exact or shell-token reference matches, and spot checks found template routes omitting requested actions or paths. Do not treat syntax validity as semantic accuracy or execute generated output automatically. This v1 test partition is now consumed and must not be used to tune a later version; use development data for fixes and a fresh held-out set for the next final evaluation.

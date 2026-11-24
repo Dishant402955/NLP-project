@@ -1,0 +1,506 @@
+{
+  "artifacts": {
+    "per_example_jsonl": "artifacts/evaluation/generation-test-benchmark-v1_examples.jsonl",
+    "per_example_jsonl_sha256": "5877b2c17112b027e39c4f9221a2cce753528a99cf6be90f778d0a551b61b93f",
+    "report_json": "artifacts/evaluation/generation-test-benchmark-v1_report.json",
+    "semantic_review_csv": "artifacts/evaluation/generation-test-benchmark-v1_semantic_review.csv",
+    "semantic_review_csv_sha256": "a5dc67ffff7bb1867b569a53ee4e02c5b0128e348921b851ad2b295351daefd7",
+    "semantic_review_row_count": 801
+  },
+  "benchmark_interpretation": {
+    "deterministic_template_lexical_reference_match_rate": 0.0,
+    "deterministic_template_lexical_reference_matches": 0,
+    "human_semantic_review_completed": false,
+    "measured_under_five_seconds": true,
+    "strict_reference_match_is_not_semantic_accuracy": true,
+    "under_five_seconds_is_not_a_hard_timeout": true
+  },
+  "benchmark_type": "frozen_held_out_generation_correctness_and_latency",
+  "benchmark_version": "generation-test-benchmark-v1",
+  "completed_at_utc": "2026-11-24T09:03:19.042340+00:00",
+  "correctness": {
+    "bash_syntax_valid_count": 848,
+    "bash_syntax_valid_rate": 0.964733,
+    "explicit_entity_constraint_pass_count": 782,
+    "explicit_entity_constraint_pass_rate": 0.889647,
+    "generation_error_count": 24,
+    "generation_failure_count": 24,
+    "generation_success_count": 855,
+    "generation_success_rate": 0.972696,
+    "high_risk_static_flag_count": 35,
+    "human_semantic_review_status": "pending; accompanying CSV contains all non-matching outputs",
+    "non_matching_generated_output_count": 777,
+    "predicted_intent_metrics": {
+      "archive_compression": {
+        "count": 18,
+        "exact_match_rate": 0.0,
+        "syntax_valid_rate": 1.0
+      },
+      "file_directory_management": {
+        "count": 108,
+        "exact_match_rate": 0.111111,
+        "syntax_valid_rate": 0.981481
+      },
+      "file_discovery": {
+        "count": 403,
+        "exact_match_rate": 0.074442,
+        "syntax_valid_rate": 0.992556
+      },
+      "network_remote_operations": {
+        "count": 12,
+        "exact_match_rate": 0.0,
+        "syntax_valid_rate": 0.833333
+      },
+      "other_or_ambiguous": {
+        "count": 38,
+        "exact_match_rate": 0.157895,
+        "syntax_valid_rate": 1.0
+      },
+      "permissions_ownership": {
+        "count": 84,
+        "exact_match_rate": 0.083333,
+        "syntax_valid_rate": 1.0
+      },
+      "process_job_management": {
+        "count": 5,
+        "exact_match_rate": 0.0,
+        "syntax_valid_rate": 1.0
+      },
+      "shell_environment_session": {
+        "count": 63,
+        "exact_match_rate": 0.126984,
+        "syntax_valid_rate": 1.0
+      },
+      "system_information": {
+        "count": 4,
+        "exact_match_rate": 0.0,
+        "syntax_valid_rate": 1.0
+      },
+      "text_search_processing": {
+        "count": 120,
+        "exact_match_rate": 0.041667,
+        "syntax_valid_rate": 1.0
+      },
+      "unavailable": {
+        "count": 24,
+        "exact_match_rate": 0.0,
+        "syntax_valid_rate": 0.0
+      }
+    },
+    "request_count": 879,
+    "review_required_count": 131,
+    "route_metrics": {
+      "deterministic_template": {
+        "constraint_pass_count": 65,
+        "count": 77,
+        "exact_match_count": 0,
+        "exact_match_rate": 0.0,
+        "generation_success_count": 77,
+        "latency": {
+          "coefficient_of_variation": 0.455914,
+          "count": 77,
+          "interquartile_range_seconds": 0.000612,
+          "max_seconds": 0.016127,
+          "mean_seconds": 0.003593,
+          "median_seconds": 0.003162,
+          "min_seconds": 0.0028,
+          "p90_seconds": 0.004327,
+          "p95_seconds": 0.004868,
+          "p99_seconds": 0.010043,
+          "population_stddev_seconds": 0.001638,
+          "population_variance_seconds_squared": 2.68e-06,
+          "q1_seconds": 0.003006,
+          "q3_seconds": 0.003618,
+          "range_seconds": 0.013327
+        },
+        "syntax_valid_count": 77
+      },
+      "generation_error": {
+        "constraint_pass_count": 0,
+        "count": 24,
+        "exact_match_count": 0,
+        "exact_match_rate": 0.0,
+        "generation_success_count": 0,
+        "latency": {
+          "coefficient_of_variation": 0.081358,
+          "count": 24,
+          "interquartile_range_seconds": 0.218163,
+          "max_seconds": 4.885406,
+          "mean_seconds": 3.828258,
+          "median_seconds": 3.701047,
+          "min_seconds": 3.531111,
+          "p90_seconds": 4.287679,
+          "p95_seconds": 4.369348,
+          "p99_seconds": 4.767079,
+          "population_stddev_seconds": 0.311458,
+          "population_variance_seconds_squared": 0.09700629,
+          "q1_seconds": 3.659346,
+          "q3_seconds": 3.877509,
+          "range_seconds": 1.354295
+        },
+        "syntax_valid_count": 0
+      },
+      "local_llm": {
+        "constraint_pass_count": 717,
+        "count": 778,
+        "exact_match_count": 68,
+        "exact_match_rate": 0.087404,
+        "generation_success_count": 778,
+        "latency": {
+          "coefficient_of_variation": 0.427406,
+          "count": 778,
+          "interquartile_range_seconds": 0.811701,
+          "max_seconds": 4.301492,
+          "mean_seconds": 1.496564,
+          "median_seconds": 1.397884,
+          "min_seconds": 0.298164,
+          "p90_seconds": 2.324129,
+          "p95_seconds": 2.73592,
+          "p99_seconds": 3.258241,
+          "population_stddev_seconds": 0.639641,
+          "population_variance_seconds_squared": 0.40914028,
+          "q1_seconds": 1.04798,
+          "q3_seconds": 1.859681,
+          "range_seconds": 4.003328
+        },
+        "syntax_valid_count": 771
+      }
+    },
+    "shell_token_match_count": 78,
+    "shell_token_match_rate": 0.088737,
+    "strict_reference_exact_match_count": 68,
+    "strict_reference_exact_match_rate": 0.077361,
+    "token_budget_or_truncation_error_count": 24,
+    "whitespace_normalized_match_count": 68,
+    "whitespace_normalized_match_rate": 0.077361
+  },
+  "dataset": {
+    "duplicate_handling": "One generation per distinct natural-language request; all gold commands paired to that exact request are acceptable references.",
+    "license": "MIT (data/raw/nl2bash/LICENSE)",
+    "name": "NL2Bash",
+    "raw_record_count": 12607,
+    "raw_request_file_sha256_verified": "1db0c529c350b463919624550b8f5882a97c42ad5051c7d49fbc496bc4e8b770",
+    "source_citation": "Lin et al., LREC 2018, NL2Bash corpus",
+    "source_command_sha256": "3a72eaced7fa14a0938354cefc42b2dcafb2d47297102f1279086e18c3abe57e",
+    "source_request_sha256": "1db0c529c350b463919624550b8f5882a97c42ad5051c7d49fbc496bc4e8b770",
+    "source_revision": "d6b9f5bdff45621d190134e31ab63b7bf7002190",
+    "split": {
+      "algorithm": "seeded_greedy_largest_group_first_normalized_squared_error",
+      "ratios": {
+        "dev": 0.1,
+        "test": 0.1,
+        "train": 0.8
+      },
+      "seed": 42
+    },
+    "test_partition_record_count": 1261,
+    "test_partition_sha256": "0af4b99c3d49cbf32a4d75a30cebe0412a93d3305c66263cb702aff9900dec66",
+    "unique_reference_command_count": 722,
+    "unique_test_request_count": 879
+  },
+  "execution_note": "The benchmark was resumed from a verified checkpoint after an interruption. The full end-to-end wall-clock duration across original and resumed processes was not recorded.",
+  "final_resume_segment_started_at_utc": "2026-11-24T09:01:50.889668+00:00",
+  "generator": {
+    "classifier_sha256": "b2c4c64fc4723b5279bb198dff04dd58921f969406b91739ff6524fa97e12d2e",
+    "generation_architecture": "deterministic common-command templates plus local Qwen fallback",
+    "generation_config_sha256": "cc2e809a6c61fa6e5e62b64b6cfd24f142c8e22ec36eb728d90505c795ab3fd0",
+    "model": "Qwen2.5-1.5B-Instruct-Q4_K_M",
+    "model_license": "Apache-2.0",
+    "model_sha256": "6a1a2eb6d15622bf3c96857206351ba97e1af16c30d7a74ee38970e434e9407e",
+    "offline_inference": true,
+    "prompt_version": "qwen-bash-command-v8",
+    "runtime": {
+      "batch_size": 128,
+      "context_size": 1024,
+      "device": "CPU",
+      "gpu_layers": 0,
+      "max_tokens": 48,
+      "name": "llama-cpp-python",
+      "seed": 42,
+      "temperature": 0.0,
+      "threads": 2,
+      "top_p": 0.9,
+      "version": "0.3.37"
+    }
+  },
+  "git_commit": "9dc10dd3d9ba5dccf283d9cd0d6f2fdfe340f936",
+  "integrity_checks": {
+    "command_overlap_across_partitions": 0,
+    "generated_commands_executed": false,
+    "manifest_command_overlap_claim": 0,
+    "manifest_request_overlap_claim": 0,
+    "model_or_prompt_tuned_on_test_run": false,
+    "per_example_count_matches_dataset_population": true,
+    "reference_commands_in_generation_prompts": false,
+    "reference_commands_read_only_for_scoring": true,
+    "request_overlap_across_partitions": 0,
+    "semantic_review_rows_match_report_count": true,
+    "test_checksum_matches_manifest": true,
+    "test_requests_disjoint_from_train_and_dev": true
+  },
+  "latency": {
+    "cold_fresh_process_seconds": {
+      "coefficient_of_variation": 0.001028,
+      "count": 3,
+      "interquartile_range_seconds": 0.004028,
+      "max_seconds": 3.631776,
+      "mean_seconds": 3.626509,
+      "median_seconds": 3.624032,
+      "min_seconds": 3.62372,
+      "p90_seconds": 3.630227,
+      "p95_seconds": 3.631002,
+      "p99_seconds": 3.631621,
+      "population_stddev_seconds": 0.003726,
+      "population_variance_seconds_squared": 1.389e-05,
+      "q1_seconds": 3.623876,
+      "q3_seconds": 3.627904,
+      "range_seconds": 0.008056
+    },
+    "llm_model_call_seconds": {
+      "coefficient_of_variation": 0.428313,
+      "count": 778,
+      "interquartile_range_seconds": 0.81175,
+      "max_seconds": 4.297139,
+      "mean_seconds": 1.492962,
+      "median_seconds": 1.394232,
+      "min_seconds": 0.295135,
+      "p90_seconds": 2.32054,
+      "p95_seconds": 2.732618,
+      "p99_seconds": 3.254755,
+      "population_stddev_seconds": 0.639456,
+      "population_variance_seconds_squared": 0.40890355,
+      "q1_seconds": 1.044687,
+      "q3_seconds": 1.856437,
+      "range_seconds": 4.002004
+    },
+    "warm_end_to_end_wall_seconds": {
+      "coefficient_of_variation": 0.586963,
+      "count": 879,
+      "interquartile_range_seconds": 0.926565,
+      "max_seconds": 4.885406,
+      "mean_seconds": 1.429445,
+      "median_seconds": 1.348127,
+      "min_seconds": 0.0028,
+      "p90_seconds": 2.481937,
+      "p95_seconds": 2.998305,
+      "p99_seconds": 3.766946,
+      "population_stddev_seconds": 0.839031,
+      "population_variance_seconds_squared": 0.70397374,
+      "q1_seconds": 0.930613,
+      "q3_seconds": 1.857179,
+      "range_seconds": 4.882606
+    },
+    "warm_request_pipeline_seconds": {
+      "coefficient_of_variation": 0.54696,
+      "count": 855,
+      "interquartile_range_seconds": 0.909106,
+      "max_seconds": 4.301318,
+      "mean_seconds": 1.361966,
+      "median_seconds": 1.327775,
+      "min_seconds": 0.002673,
+      "p90_seconds": 2.250521,
+      "p95_seconds": 2.712954,
+      "p99_seconds": 3.235165,
+      "population_stddev_seconds": 0.744941,
+      "population_variance_seconds_squared": 0.55493771,
+      "q1_seconds": 0.915794,
+      "q3_seconds": 1.8249,
+      "range_seconds": 4.298645
+    }
+  },
+  "limitations": [
+    "The benchmark covers the NL2Bash one-line command domain, not arbitrary Bash scripts.",
+    "The 1,261 source rows contain repeated prompts; results count 879 unique prompts once, accepting all paired references per exact prompt.",
+    "Exact match penalizes semantically equivalent commands; shell-token match is a lexical proxy, not semantic equivalence.",
+    "Entity-constraint checks cover only values detected by project extraction rules, not complete intent correctness.",
+    "Syntax validity does not prove a command accomplishes the task or is safe to execute.",
+    "Human semantic review is pending for every generated output with no shell-token reference match.",
+    "Fresh-process cold probes do not force the OS file cache cold.",
+    "Latency applies to this Intel i3-1005G1, CPU-only host and local Q4_K_M model; other machines will differ."
+  ],
+  "methodology": {
+    "accuracy_population": "All unique requests in the committed held-out test partition; no random sample.",
+    "cold_start": "Three fresh CLI processes using the same fixed development-only LLM-fallback request. Process wall time includes Python startup, classifier/config initialization, model loading, generation and validation. OS page-cache state is not forced cold.",
+    "latency_percentiles": "Linear interpolation over sorted latencies; standard deviation and variance are population statistics.",
+    "latency_population": "The same unique requests, after development-only model warm-up.",
+    "reproducibility_seed": 20261124,
+    "safety": "Bash syntax and static risk heuristics only. Commands are never executed; clean static checks do not prove safety.",
+    "semantic_correctness": "Not automatically claimed. Exact reference and shell-token matches are proxies; non-matching outputs are exported for human review.",
+    "warm_latency_definition": "In-process wall time around the request pipeline (normalization, intent prediction, entity extraction, generation and static validation); excludes one-time process/model loading and output serialization.",
+    "warm_up": "Five distinct development-partition LLM-fallback requests; excluded from test metrics."
+  },
+  "original_benchmark_started_at_utc": null,
+  "runtime_measurements": {
+    "aggregate_request_latency_seconds": 1256.481835,
+    "aggregate_request_rate_per_second": 0.6996,
+    "checkpoint_completed_before_this_run": 829,
+    "cold_probe_count": 3,
+    "cold_process_probes": [
+      {
+        "exit_code": 0,
+        "generation_path": "local_llm",
+        "generation_success": true,
+        "model_load_seconds": 0.863702,
+        "probe": 1,
+        "process_wall_seconds": 3.62372,
+        "request_total_seconds": 2.23236,
+        "risk_level": "none",
+        "startup_timings": {
+          "classifier_load_seconds": 0.02194,
+          "configuration_verification_seconds": 0.072384,
+          "llm_model_load_seconds": 0.863702,
+          "llm_model_loaded_on_demand": 1.0,
+          "model_integrity_verification_seconds": 0.000688,
+          "threshold_load_seconds": 0.00111,
+          "total_startup_seconds": 0.095454,
+          "total_startup_with_llm_seconds": 0.959156
+        },
+        "syntax_valid": true
+      },
+      {
+        "exit_code": 0,
+        "generation_path": "local_llm",
+        "generation_success": true,
+        "model_load_seconds": 0.891551,
+        "probe": 2,
+        "process_wall_seconds": 3.624032,
+        "request_total_seconds": 2.236978,
+        "risk_level": "none",
+        "startup_timings": {
+          "classifier_load_seconds": 0.022623,
+          "configuration_verification_seconds": 0.071393,
+          "llm_model_load_seconds": 0.891551,
+          "llm_model_loaded_on_demand": 1.0,
+          "model_integrity_verification_seconds": 0.000631,
+          "threshold_load_seconds": 0.00117,
+          "total_startup_seconds": 0.095205,
+          "total_startup_with_llm_seconds": 0.986756
+        },
+        "syntax_valid": true
+      },
+      {
+        "exit_code": 0,
+        "generation_path": "local_llm",
+        "generation_success": true,
+        "model_load_seconds": 0.879962,
+        "probe": 3,
+        "process_wall_seconds": 3.631776,
+        "request_total_seconds": 2.271327,
+        "risk_level": "none",
+        "startup_timings": {
+          "classifier_load_seconds": 0.019646,
+          "configuration_verification_seconds": 0.064734,
+          "llm_model_load_seconds": 0.879962,
+          "llm_model_loaded_on_demand": 1.0,
+          "model_integrity_verification_seconds": 0.000618,
+          "threshold_load_seconds": 0.001119,
+          "total_startup_seconds": 0.085518,
+          "total_startup_with_llm_seconds": 0.96548
+        },
+        "syntax_valid": true
+      }
+    ],
+    "cold_process_wall_latency": {
+      "coefficient_of_variation": 0.001028,
+      "count": 3,
+      "interquartile_range_seconds": 0.004028,
+      "max_seconds": 3.631776,
+      "mean_seconds": 3.626509,
+      "median_seconds": 3.624032,
+      "min_seconds": 3.62372,
+      "p90_seconds": 3.630227,
+      "p95_seconds": 3.631002,
+      "p99_seconds": 3.631621,
+      "population_stddev_seconds": 0.003726,
+      "population_variance_seconds_squared": 1.389e-05,
+      "q1_seconds": 3.623876,
+      "q3_seconds": 3.627904,
+      "range_seconds": 0.008056
+    },
+    "development_warmup": [
+      {
+        "elapsed_seconds": 2.925922,
+        "generation_path": "local_llm",
+        "index": 1,
+        "success": true
+      },
+      {
+        "elapsed_seconds": 0.836065,
+        "generation_path": "local_llm",
+        "index": 2,
+        "success": true
+      },
+      {
+        "elapsed_seconds": 1.101639,
+        "generation_path": "local_llm",
+        "index": 3,
+        "success": true
+      },
+      {
+        "elapsed_seconds": 0.933282,
+        "generation_path": "local_llm",
+        "index": 4,
+        "success": true
+      },
+      {
+        "elapsed_seconds": 0.593853,
+        "generation_path": "local_llm",
+        "index": 5,
+        "success": true
+      }
+    ],
+    "elapsed_wall_clock_note": "The run resumed from a checkpoint after interruption. Total elapsed wall-clock time across the original and resumed process is unavailable. aggregate_request_latency_seconds is the sum of per-request measured latencies, not full benchmark wall time.",
+    "final_resume_segment_wall_clock_seconds": null,
+    "full_benchmark_elapsed_wall_clock_seconds": null,
+    "main_process_runtime_initialization_seconds": 0.060554,
+    "main_process_startup_timings": {
+      "classifier_load_seconds": 0.021923,
+      "configuration_verification_seconds": 0.037562,
+      "llm_model_load_seconds": 0.858082,
+      "llm_model_loaded_on_demand": 1.0,
+      "model_integrity_verification_seconds": 0.000821,
+      "threshold_load_seconds": 0.001041,
+      "total_startup_seconds": 0.060543,
+      "total_startup_with_llm_seconds": 0.918625
+    },
+    "requests_under_5_seconds": 879,
+    "resumed_from_checkpoint": true,
+    "under_5_seconds_rate": 1.0,
+    "warm_test_wall_latency": {
+      "coefficient_of_variation": 0.586963,
+      "count": 879,
+      "interquartile_range_seconds": 0.926565,
+      "max_seconds": 4.885406,
+      "mean_seconds": 1.429445,
+      "median_seconds": 1.348127,
+      "min_seconds": 0.0028,
+      "p90_seconds": 2.481937,
+      "p95_seconds": 2.998305,
+      "p99_seconds": 3.766946,
+      "population_stddev_seconds": 0.839031,
+      "population_variance_seconds_squared": 0.70397374,
+      "q1_seconds": 0.930613,
+      "q3_seconds": 1.857179,
+      "range_seconds": 4.882606
+    },
+    "warmup_count": 5
+  },
+  "schema_version": 1,
+  "system": {
+    "cpu_model": "Intel(R) Core(TM) i3-1005G1 CPU @ 1.20GHz",
+    "kernel_release": "6.8.0-149-generic",
+    "logical_cpu_count": 4,
+    "machine": "x86_64",
+    "packages": {
+      "bashlex": "0.18",
+      "joblib": "1.6.0",
+      "llama-cpp-python": "0.3.37",
+      "numpy": "2.2.6",
+      "scikit-learn": "1.7.2"
+    },
+    "physical_memory_bytes": 8085524480,
+    "platform": "Linux-6.8.0-149-generic-x86_64-with-glibc2.35",
+    "python_version": "3.12.16 (main, Oct 26 2026, 14:08:45) [Clang 23.1.3 ]",
+    "system": "Linux"
+  }
+}
