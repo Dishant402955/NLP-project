@@ -3,7 +3,7 @@
 **Repository:** https://github.com/Dishant402955/NLP-project  
 **Branch:** `main`  
 **Final source commit:** `4067d01ba18f7f174754763fa11bd0f940794946`  
-**Latest documentation commit before this handoff update:** `cadf2c0b5e6cd4c4588d18a9adae4a1da8c931c4`
+**Documentation:** README, generation evaluation, reproducibility guide, and completion status are synced on `main`.
 
 ## Status
 
@@ -76,9 +76,7 @@ Interpretation:
 
 ## Academic deliverables updated
 
-The supplied source report and presentation were updated in place as new final files:
-- `submission/NLP_Project_Report_Final.docx`
-- `submission/NLP_Project_Presentation_Final.pptx`
+The supplied source DOCX and PPTX were updated and delivered as final downloadable files in this conversation. The binary deliverables are not stored in GitHub; the repository documentation records the final architecture, evaluation results, caveats, and handoff.
 
 Editorial constraints applied to both:
 - Report end-to-end pipeline diagnostics and latency only.
