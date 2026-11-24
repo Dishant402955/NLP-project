@@ -252,13 +252,13 @@ The frozen local runtime uses 2 CPU threads, `n_batch=128`, `n_ubatch=128`, `n_c
 
 The prompt now requests one Bash command only, rather than a JSON object with an explanation and assumptions. Unused spans and redundant metadata are omitted. A deterministic template router handles common, well-specified tasks, including common file discovery, basic system/network inspection, size filters, simple archive operations, and selected text-processing patterns. Requests outside those patterns use the local Qwen fallback. The model is loaded lazily, so template-handled requests avoid model initialization entirely.
 
-The v17 development-only sample contains 20 requests. With NLP context, generation succeeded on 20/20, Bash syntax passed on 20/20, and selected explicit-constraint checks passed on 19/20. Seven requests used deterministic templates and thirteen used the local Qwen fallback. Mean latency was 0.729 seconds, median 0.802 seconds, and maximum 1.919 seconds. These per-request evaluator timings reuse an already-loaded model and do not include one-shot startup.
+The earlier v17 development-only sample (historical) contains 20 requests. With NLP context, generation succeeded on 20/20, Bash syntax passed on 20/20, and selected explicit-constraint checks passed on 19/20. Seven requests used deterministic templates and thirteen used the local Qwen fallback. Mean latency was 0.729 seconds, median 0.802 seconds, and maximum 1.919 seconds. These per-request evaluator timings reuse an already-loaded model and do not include one-shot startup.
 
 Cold one-shot CLI wall-clock checks including process startup, with the local integrity sidecar present, measured 0.98 seconds for a deterministic request, 1.02 seconds for a filename-sort request, 0.98 seconds for a primary-interface lookup, and 3.35 seconds for a local LLM fallback. After simulating a fresh install by deleting the sidecar, the first LLM fallback also performed the one-time full model SHA-256 check and completed in 4.32 seconds. These representative runs met the target on the tested host, but do not create a universal hard latency guarantee. Unsupported requests can still hit the 48-token cap and fail closed; no hard wall-clock timeout is currently enforced.
 
 The portable frozen configuration stores the model SHA-256, not machine-specific file metadata. After a successful full hash, a local sidecar next to the GGUF records that hash together with the local size, mtime, ctime, and inode. Ordinary CLI startup checks this sidecar rather than rereading the full 1.1 GB file. A missing or stale sidecar causes one full SHA-256 verification before the stamp is refreshed. This allows the same frozen configuration to work on another machine without trusting the original host's inode or timestamps. Source-code, classifier, manifest, threshold, dependency, and runtime checks remain part of normal configuration verification.
 
-Current report: `artifacts/evaluation/generation_dev_v17_report.json`. Current frozen settings: `artifacts/evaluation/frozen_generation_config.json`. The historical v7 40-request report and old runtime settings remain unchanged and must not be presented as measurements of this hybrid runtime.
+Historical optimization report: `artifacts/evaluation/generation_dev_v17_report.json`. Active frozen settings: `artifacts/evaluation/frozen_generation_config.json`. The historical v7 40-request report and old runtime settings remain unchanged and must not be presented as measurements of the final-source comparison in section 15.
 
 ## 10. Completed evaluations and safeguards
 
@@ -268,7 +268,7 @@ Current report: `artifacts/evaluation/generation_dev_v17_report.json`. Current f
 | Entity exact-span held-out test, 66 targeted requests | `artifacts/evaluation/entity_test_report.json` | `entity_test_evaluation.lock`; complete, do not rerun |
 | Generation v7 development comparison, 40 requests | `artifacts/evaluation/generation_dev_v7_report.json` | Historical baseline; unchanged |
 | Optimized offline prompt/runtime smoke check | `artifacts/evaluation/generation_dev_v8_smoke_report.json` | Historical implementation checkpoint |
-| Hybrid latency and generation check, v17, 20 requests | `artifacts/evaluation/generation_dev_v17_report.json` | Current development-only sample; not held-out quality evidence |
+| Historical hybrid latency and generation check, v17, 20 requests | `artifacts/evaluation/generation_dev_v17_report.json` | Earlier development-only sample; not held-out quality evidence |
 | Current frozen hybrid configuration | `artifacts/evaluation/frozen_generation_config.json` | Binds the portable model SHA-256, source hashes, prompt, and runtime settings |
 
 **Do not run the one-time classifier test evaluation or entity test benchmark again on the canonical checkout.** Do not delete, reset, or bypass their guards. For these test evaluations, reproducibility means inspecting committed reports, source manifests, checksums, and CI integrity assertions, not generating a second test result.
@@ -320,9 +320,9 @@ These are automated, development-only engineering diagnostics, not semantic-accu
 
 The project owner confirmed that all 80 candidates received human semantic review. The completion attestation did not include row-level ratings or reviewer notes, so no human semantic score or A/B win rate is claimed.
 
-### 13.1 Current hybrid latency check (v17)
+### 13.1 Historical hybrid latency check (v17)
 
-The separate 20-request v17 development sample uses deterministic templates for common patterns and the local Qwen model for requests outside that template set.
+The earlier 20-request v17 development sample used deterministic templates for common patterns and the local Qwen model for requests outside that template set. The latest final-source comparison is recorded in section 15.
 
 | NLP-context metric | v17 result |
 |---|---:|
