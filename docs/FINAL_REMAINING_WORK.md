@@ -88,3 +88,8 @@ The project owner confirmed that the v1 semantic review is complete; it is no lo
 - [ ] Verify the package-smoke and development-only model evaluation workflows; update the engineering handoff with their observed outcomes.
 
 The consumed v1 generation test set and one-time classifier/entity test evaluations remain untouched.
+
+
+### CI iteration note — 2026-11-24
+
+The first package-smoke run for the retry implementation exposed a missing exception import in the new regression test (runtime code was not the cause). The test import and source escape warnings have been corrected; CI is being rerun. Do not mark verification complete until the rerun passes.

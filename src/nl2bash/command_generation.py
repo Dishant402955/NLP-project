@@ -169,7 +169,7 @@ def _fast_candidate_covers_request(
             continue
         candidates = {value, value.strip("'\"")}
         if value.startswith("~/"):
-            candidates.update({"$HOME/" + value[2:], "\${HOME}/" + value[2:]})
+            candidates.update({"$HOME/" + value[2:], "${HOME}/" + value[2:]})
         if not any(candidate.casefold() in output for candidate in candidates if candidate):
             return False
 
@@ -420,7 +420,7 @@ def _try_fast_command(request: str, extraction: EntityExtractionResult) -> tuple
             and any(word in lower for word in ("files", "names")) \
             and not any(word in lower for word in ("contain", "contents", "text", "move", "delete", "remove")):
         predicates = " -o ".join(f"-name {pattern}" for pattern in extension_patterns)
-        return f"find {quoted_paths} -type f \( {predicates} \) -print", "find_multiple_file_types"
+        return f"find {quoted_paths} -type f \\( {predicates} \\) -print", "find_multiple_file_types"
 
     # Filter files by an explicit wildcard path and numeric-sort the requested filename field.
     numeric_field_match = re.search(r"\*+/([A-Za-z0-9_.-]+)/\*+", text)

@@ -27,7 +27,7 @@
     "source_revision": "91cad51170dc346986eccefdc2dd33a9da36ead9"
   },
   "prompt": {
-    "sha256": "ac3119bc93049477b6da6000edef8d1ad1a62e88f9860fab6b87fef124ba38c4",
+    "sha256": "100a7744aa34199352fe85e9cbd7604efcfb79fea046f545f13a29a23dcfe745",
     "source_file": "src/nl2bash/command_generation.py",
     "version": "qwen-bash-command-v8"
   },
@@ -50,7 +50,7 @@
     "pyproject.toml": "11c8435e30a2892bfd1b264081cc7dfda1901f49fd054c0ae2db8210e5a77e72",
     "src/nl2bash/bash_validation.py": "940f22a4e8948aa88dbc52381c36e3ed147dcedc87626d24af2ac150906be563",
     "src/nl2bash/cli.py": "f3df64daf65668385239058ced8f285f397d84f76ba2a5937f0053419c6eea44",
-    "src/nl2bash/command_generation.py": "ac3119bc93049477b6da6000edef8d1ad1a62e88f9860fab6b87fef124ba38c4",
+    "src/nl2bash/command_generation.py": "100a7744aa34199352fe85e9cbd7604efcfb79fea046f545f13a29a23dcfe745",
     "src/nl2bash/entity_extraction.py": "f803d527abd41eee5cc6d324f3db018e7830e69d0555599544bc3253561ec4a5",
     "src/nl2bash/entity_validation.py": "d95dddefb548555252be503b470019f81a895cfd202e43e87aee8db43a12cb86",
     "src/nl2bash/generation_configuration.py": "b5ed0f95f4e638e35cc9b099a17493d96b3532cfe3f53de610288eae9c061a65",

@@ -13,6 +13,7 @@ from unittest.mock import Mock, patch
 
 from nl2bash.cli import LoadedRuntime, _generate_one, _load_runtime, _run_generate, build_parser
 from nl2bash.command_generation import (
+    CommandGenerationError,
     DEFAULT_BATCH_SIZE,
     DEFAULT_CONTEXT_SIZE,
     DEFAULT_GPU_LAYERS,

@@ -61,3 +61,8 @@ No new held-out accuracy/latency claim is made for the hardened implementation u
 - Confirm package-smoke for the retry implementation commit.
 - Run the 20-request development-only model evaluation to observe actual retry frequency, correctness proxies and latency. It does not use the v1 test partition.
 - Update this handoff with final commit SHA and workflow outcomes.
+
+
+## CI correction iteration — 2026-11-24
+
+The first Stage 2 package-smoke run (45366209377) caught a missing `CommandGenerationError` test import. The runtime retry-success test, template coverage tests, and other unit tests passed; one failure was isolated to the test module import. The import has been added. An invalid Python escape in the new home-path guard and legacy parenthesis escape warnings were also corrected. The active and v15 frozen config command-source hashes were refreshed for the final source bytes. Rerun package-smoke before marking this stage verified.
