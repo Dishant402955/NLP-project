@@ -1,6 +1,6 @@
 # Command-Generation Development Evaluation
 
-**Latest optimization check:** generation v17, 2026-11-24
+**Latest verification:** final-source template hardening and bounded recovery, 24 November 2026. The v17 optimization sample is retained as historical context.
 **Model:** Qwen2.5-1.5B-Instruct Q4_K_M GGUF  
 **Historical v7 runtime:** llama-cpp-python 0.3.37, CPU, four threads, 4,096-token context, temperature 0.0, 512-token output limit. This describes the preserved v7 comparison only.
 
@@ -29,7 +29,7 @@ Cold one-shot CLI wall-clock checks, including Python process startup and with t
 
 The Qwen3-0.6B Q4_0 experiment was not adopted: although it decoded faster, command correctness and formatting were not acceptable on the sampled tasks. The 1.5B model remains the offline fallback while templates handle common patterns.
 
-The latest report is `artifacts/evaluation/generation_dev_v17_report.json`. The runtime is frozen in `artifacts/evaluation/frozen_generation_config.json` (versioned snapshot: `artifacts/evaluation/frozen_generation_config_v13.json`). The optional GitHub workflow verifies this configuration and writes a separate artifact; it does not overwrite v7 records.
+The earlier optimization report is `artifacts/evaluation/generation_dev_v17_report.json` and is retained as a historical development checkpoint. The active frozen runtime is `artifacts/evaluation/frozen_generation_config.json` (versioned snapshot: `artifacts/evaluation/frozen_generation_config_v15.json`). The final-source workflow verifies this configuration and writes a separate artifact; it does not overwrite historical v7 records.
 
 ## Method
 
