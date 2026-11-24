@@ -101,3 +101,10 @@ The earlier ten-request v6 pilot is retained as a historical artifact and supers
 The v7 blinded worksheet is `data/annotations/generation_dev_v7_semantic_review.csv`; it contains 80 candidates, two for each of the 40 requests. The owner-completion attestation is `data/annotations/generation_dev_v7_human_review_attestation.json`. The original worksheet remains in its blinded A/B format. Its semantic-rating and reviewer-note fields remain blank because individual score values and comments were not included in the completion confirmation.
 
 The supplementary assistant-only review in `data/annotations/generation_dev_v7_assistant_semantic_review.csv` is not human ground truth and is not substituted for the owner review.
+
+
+## Post-v1 template-routing hardening (2026-11-24)
+
+A conservative request-coverage gate now sits between deterministic template matching and returning a command. The gate checks extracted paths, all explicitly named file extensions, home-directory scope, supported time/size filters, file-versus-directory scope, and selected action verbs such as convert, append, move, copy, delete, archive, extract, permission change, count, and sort. It also checks explicit content-search, case-insensitive, and recursive requirements. If a check shows that a candidate omits a request requirement, the candidate is discarded and the request falls through to the local LLM.
+
+This is a fail-closed guard for known, mechanically checkable omissions, not a semantic-equivalence proof. It deliberately trades some template speed for a lower chance of returning a command that obviously omits the requested operation. The consumed v1 held-out partition was not used for implementation or tuning.

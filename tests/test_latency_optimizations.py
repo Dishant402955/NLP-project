@@ -20,6 +20,7 @@ from nl2bash.command_generation import (
     DEFAULT_THREADS,
     PROMPT_VERSION,
     _prompt,
+    _fast_candidate_covers_request,
     generate_bash_command,
     GeneratedCommand,
     LocalGeneratorRequired,
@@ -192,6 +193,51 @@ class LatencyOptimizationTests(unittest.TestCase):
         extraction = extract_entities(request)
         generated = generate_bash_command(request, intent, extraction, generator=FakeGenerator())
         self.assertEqual(generated.inference_metrics.get("generation_path"), "local_llm")
+
+
+    def test_template_coverage_gate_rejects_known_partial_commands(self) -> None:
+        cases = (
+            (
+                "Append files modified within the last 24 hours to existing logs.tar.",
+                "find . -type f -mmin -1440 -print0 | tar -cf logs.tar --null -T -",
+            ),
+            (
+                "Find all Python files in my home directory.",
+                "find . -type f -name '*.py' -print",
+            ),
+            (
+                "Find regular files ending in .c or .h.",
+                "find . -type f -name '*.h' -print",
+            ),
+            (
+                "Find and convert all .md files under /tmp to HTML.",
+                "find /tmp -type f -name '*.md' -print",
+            ),
+            (
+                "Find all .log files under /var/log modified in the last 24 hours.",
+                "find . -type f -name '*.log' -print",
+            ),
+        )
+        for request, command in cases:
+            with self.subTest(request=request):
+                self.assertFalse(
+                    _fast_candidate_covers_request(request, extract_entities(request), command, "test_route"),
+                )
+
+    def test_incomplete_template_candidate_falls_back_to_local_llm(self) -> None:
+        request = normalize_request("Find all Python files in my home directory.")
+        intent = IntentPrediction(
+            request=request, intent_label="file_discovery", raw_top_label="file_discovery",
+            confidence=0.8, low_confidence=False, confidence_threshold=0.13,
+        )
+        fake = FakeGenerator()
+        with patch(
+            "nl2bash.command_generation._try_fast_command",
+            return_value=("find . -type f -name '*.py' -print", "incorrect_home_path"),
+        ):
+            result = generate_bash_command(request, intent, extract_entities(request), generator=fake)
+        self.assertEqual(result.inference_metrics["generation_path"], "local_llm")
+        self.assertIsNotNone(fake.kwargs)
 
     def test_invalid_token_budget_is_rejected_even_on_deterministic_path(self) -> None:
         with self.assertRaises(ValueError):

@@ -62,3 +62,16 @@ There are no remaining core implementation, annotation-review, evaluation, engin
 Before institutional submission, add college, department, student, supervisor, date, and declaration details only where required by the college's official report/presentation format. Those are institution-specific metadata fields, not open technical project work. Check the final report against the department's rubric and include the existing caveats and reproducibility instructions.
 
 The canonical clean-clone instructions are in [Reproducibility Guide](REPRODUCIBILITY.md). This page supersedes the earlier pending-work checklist.
+
+
+## Update — 2026-11-24
+
+The project owner has confirmed that the full v1 semantic review is complete. It is no longer an open action item. Do not request the same review again. Do not invent or publish a numerical human semantic-accuracy score unless the actual review decisions are present in a validated artifact.
+
+The engineering follow-up is generation hardening:
+- [x] Add a conservative template request-coverage gate so partial templates fall through to the local model.
+- [ ] Add bounded recovery when local-model generation reaches its initial token ceiling.
+- [ ] Add and run regression coverage for template routing, truncation recovery, and safety boundaries.
+- [ ] Verify CI results and update the final engineering handoff.
+
+The 879-request generation v1 test, classifier test, and entity test remain protected and must not be rerun or used for tuning.

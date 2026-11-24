@@ -151,6 +151,91 @@ def load_local_generator(
         raise CommandGenerationError(f"could not load local GGUF model {selected_path}: {exc}") from exc
 
 
+
+def _fast_candidate_covers_request(
+    request: str, extraction: EntityExtractionResult, command: str, route: str,
+) -> bool:
+    """Reject a template when it omits explicit, mechanically checkable requirements."""
+    lower = request.casefold()
+    output = command.casefold()
+
+    # Every extracted non-trivial path must be represented in the command.
+    for entity in extraction.entities:
+        if entity.entity_type != "path":
+            continue
+        value = str(entity.value).strip()
+        if not value or value in {".", "./"}:
+            continue
+        candidates = {value, value.strip("'\"")}
+        if value.startswith("~/"):
+            candidates.update({"$HOME/" + value[2:], "\${HOME}/" + value[2:]})
+        if not any(candidate.casefold() in output for candidate in candidates if candidate):
+            return False
+
+    # "Home directory" is a scope requirement, not an alias for the current directory.
+    if re.search(r"\b(?:my|user'?s)\s+home(?:\s+(?:directory|folder))?\b|\bhome\s+(?:directory|folder)\b", lower):
+        if not re.search(r"(?:\$HOME|\$\{HOME\}|~/|/home/)", output):
+            return False
+
+    # Preserve every explicitly mentioned suffix (including compound suffixes).
+    explicit_extensions = set(re.findall(
+        r"(?<![A-Za-z0-9_])\.[A-Za-z0-9]+(?:\.[A-Za-z0-9]+)*", lower,
+    ))
+    if any(extension not in output for extension in explicit_extensions):
+        return False
+
+    # Time and size filters must survive the fast route.
+    if re.search(r"\b(?:last|past)\s+(?:24\s+hours?|day)\b|\bwithin\s+(?:the\s+)?last\s+24\s+hours?\b", lower):
+        if not re.search(r"(?:-mmin\b|-mtime\b|-cmin\b|-ctime\b|-newermt\b|-newer\b)", output):
+            return False
+    if re.search(r"\b(?:last|past)\s+(?:seven|7)\s+days?\b", lower):
+        if not re.search(r"(?:-mmin\b|-mtime\b|-newermt\b|-newer\b)", output):
+            return False
+    if any(entity.entity_type == "size" for entity in extraction.entities):
+        if not re.search(r"(?:-size\b|--threshold\b|\bdu\b)", output):
+            return False
+
+    asks_for_directories = bool(re.search(
+        r"\b(?:find|list|show|display)\s+(?:all\s+)?(?:the\s+)?(?:directories|folders)\b", lower,
+    ))
+    if asks_for_directories and "find " in output and "-type d" not in output and not re.search(r"\bdu\b", output):
+        return False
+    if re.search(r"\bregular files\b", lower) and "find " in output and "-type f" not in output:
+        return False
+
+    # Explicit operation verbs must be reflected by the generated command.
+    action_requirements = (
+        (r"\b(?:convert|converting|converted|transform|transcode|render)\b",
+         r"\b(?:pandoc|soffice|libreoffice|ffmpeg|magick|convert|gs|enscript|wkhtmlto[a-z]*)\b"),
+        (r"\bappend\b|\badd\b.{0,40}\b(?:existing\s+)?archive\b",
+         r"\btar\b.*(?:--append|--concatenate|(?:^|\s)-[a-z]*r[a-z]*(?:\s|$))"),
+        (r"\b(?:move|moving)\b", r"(?:^|[\s;&|])mv(?:\s|$)"),
+        (r"\b(?:copy|copied|copying)\b", r"\b(?:cp|scp|rsync)\b"),
+        (r"\b(?:delete|deleting|remove|removing)\b", r"\brm\b|\b-unlink\b|\s-delete\b"),
+        (r"\b(?:archive|archiving|compress|compressing|zip)\b", r"\b(?:tar|zip|gzip|bzip2|xz)\b"),
+        (r"\b(?:extract|unpack|uncompress)\b", r"\bunzip\b|\b7z\b.*\bx\b|\btar\b.*(?:-x|--extract)"),
+        (r"\b(?:change|modify|set)\b.{0,30}\bpermissions?\b|\bchmod\b",
+         r"\b(?:chmod|chown|setfacl)\b"),
+        (r"\bcount\b.{0,40}\b(?:lines|files|matches|occurrences)\b", r"\b(?:wc|awk|grep)\b"),
+        (r"\b(?:sort|sorted|sorting)\b", r"\bsort\b"),
+    )
+    for request_pattern, command_pattern in action_requirements:
+        if re.search(request_pattern, lower) and not re.search(command_pattern, output):
+            return False
+
+    # Searching names and searching file contents are different operations.
+    if re.search(r"\b(?:search|find|look)\b.{0,80}\b(?:contents?|text|lines?|contain(?:ing)?)\b", lower):
+        if not re.search(r"\b(?:grep|rg|awk|sed)\b", output):
+            return False
+    if re.search(r"\bcase[- ]insensitive\b|\bignore case\b", lower):
+        if not re.search(r"(?:-iname\b|grep\b.*\s-i\b|rg\b.*\s-i\b)", output):
+            return False
+    if re.search(r"\brecursively\b", lower) and "find " not in output and not re.search(r"\b(?:grep|rg)\b.*\s-R\b", output):
+        return False
+
+    return True
+
+
 def _try_fast_command(request: str, extraction: EntityExtractionResult) -> tuple[str, str] | None:
     """Handle common, well-specified Linux tasks without invoking the LLM."""
     text = request.strip()
@@ -437,11 +522,13 @@ def generate_bash_command(
     fast_path_seconds = time.perf_counter() - fast_started
     if fast_match is not None:
         command, route = fast_match
-        return GeneratedCommand(
-            command, "Generated using a deterministic command template.", (),
-            f"deterministic:{route}", PROMPT_VERSION,
-            {"fast_path_seconds": round(fast_path_seconds, 6), "generation_path": "deterministic_template"},
-        )
+        if _fast_candidate_covers_request(request, extraction, command, route):
+            return GeneratedCommand(
+                command, "Generated using a deterministic command template.", (),
+                f"deterministic:{route}", PROMPT_VERSION,
+                {"fast_path_seconds": round(fast_path_seconds, 6), "generation_path": "deterministic_template"},
+            )
+        # Prefer a slower local fallback over returning a template that drops intent.
     if generator is None:
         raise LocalGeneratorRequired("no deterministic template matched; local LLM fallback is required")
 
