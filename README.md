@@ -103,17 +103,17 @@ For full reproduction instructions, including safe data preparation and evaluati
 
 ## Latency optimization results (2026-11-24)
 
-The current hybrid path was measured on the tested Intel Core i3-1005G1 (2 physical cores / 4 logical CPUs) using a 20-request development sample. With NLP context, mean generation-plus-validation latency was **0.73s**, median **0.80s**, and maximum **1.92s**. All 20 requests generated a command and passed Bash syntax checks; 19/20 passed the selected explicit-constraint checks. Seven requests used deterministic templates and thirteen used the local LLM fallback. This is a development-only sample, not a universal latency guarantee or semantic-accuracy estimate.
+The final-source hybrid path was verified on a paired 20-request development sample. Both request-only and hybrid conditions generated all requests and passed Bash syntax checks. Both passed selected explicit-constraint checks on 18/20 requests and exactly matched the reference command on 1/20. Hybrid mean latency was **0.595s**, median **0.618s**, p90 **1.178s**, p95 **1.302s**, and maximum **1.544s**. Request-only mean latency was **1.250s**, median **1.188s**, p90 **1.625s**, p95 **1.904s**, and maximum **3.566s**. Seven requests used deterministic templates and thirteen used the local Qwen fallback. These are development-only automated diagnostics, not semantic accuracy or a universal latency guarantee. See the final-source run [45366673492](https://github.com/Dishant402955/NLP-project/actions/runs/45366673492) and [uploaded report](https://github.com/Dishant402955/NLP-project/actions/runs/45366673492/artifacts/14908375296).
 
 Cold one-shot CLI runs, including Python process startup and with the local integrity sidecar present, were measured at **0.98s** for a deterministic request, **1.02s** for a filename-sort template, **0.98s** for a primary-interface lookup template, and **3.35s** for a local LLM fallback. After simulating a fresh model install by deleting the sidecar, the first LLM fallback also performed the one-time full SHA-256 check and completed in **4.32s**. These representative runs met the 5-second target. Arbitrary unsupported requests and other hardware are not guaranteed to meet a hard 5-second deadline; the LLM has a 48-token cap and fails closed when it reaches that cap.
 
 The previous 0.6B model experiment was not adopted because its speed did not come with acceptable command quality on the sampled requests. The stronger 1.5B local model remains the fallback while deterministic templates handle common patterns.
 
-The detailed current report is [generation_dev_v17_report.json](artifacts/evaluation/generation_dev_v17_report.json). The frozen runtime configuration is `artifacts/evaluation/frozen_generation_config.json`.
+The current frozen runtime configuration is `artifacts/evaluation/frozen_generation_config.json`. The final-source workflow artifact records the latest paired model-backed development result; historical v17 reports are retained as historical records.
 
-## Recorded end-to-end results
+## Historical end-to-end results (v7)
 
-The project-level quantitative results are from the paired v7 development comparison: 40 requests evaluated in both conditions, producing 80 candidates. The raw LLM baseline receives only the natural-language request; the final system also receives the frozen intent prediction and deterministic entity context.
+The following v7 comparison is retained as a historical record. It has been superseded for current reporting by the final-source paired development result above. The raw LLM baseline receives only the natural-language request; the v7 NLP-context system also receives the frozen intent prediction and deterministic entity context.
 
 | Automated metric | Raw LLM (request-only) | Final system (NLP context) |
 |---|---:|---:|
@@ -125,7 +125,7 @@ The project-level quantitative results are from the paired v7 development compar
 | Mean latency | 5.52 s | 6.21 s |
 | Median latency | 4.57 s | 5.82 s |
 
-These are automated, development-only engineering diagnostics, not semantic-accuracy estimates. Syntax validity and selected-constraint preservation do not prove that a command is semantically correct or safe. Exact string matching can also penalise semantically equivalent commands.
+These historical metrics are automated development diagnostics, not semantic-accuracy estimates. Syntax validity and selected-constraint preservation do not prove that a command is semantically correct or safe. Exact string matching can also penalise semantically equivalent commands.
 
 The project owner confirmed that all 80 candidates received human semantic review. The completion attestation did not include row-level ratings or reviewer notes, so no human semantic score or A/B win rate is claimed.
 
