@@ -2,106 +2,103 @@
 
 **Repository:** https://github.com/Dishant402955/NLP-project  
 **Branch:** `main`  
-**Base benchmark commit:** `99d53353d31998ca24dc48022d77a099ee902768`  
-**Current stage-1 commit:** `81c1667efbdf5ebcb77e6a563fbd37b4ebe7f191`
+**Final source commit:** `4067d01ba18f7f174754763fa11bd0f940794946`  
+**Latest documentation commit before this handoff update:** `cadf2c0b5e6cd4c4588d18a9adae4a1da8c931c4`
 
-## User-confirmed review status
+## Status
 
-The project owner has stated that the v1 semantic review is complete. Treat it as completed and do not ask for it again. The repository does not yet contain a validated numeric semantic-review result in this change, so no semantic-accuracy percentage is claimed here.
+The requested engineering hardening, final-source CI, final-source model-backed development evaluation, report update, presentation update, and documentation handoff are complete.
 
-## Protected evaluation boundaries
+The project owner confirmed that the earlier human semantic-review milestone is complete. Its repository attestation records completion but not candidate-level scores or notes. Do not request the review again and do not infer a human semantic score or A/B win rate.
 
-- Do not rerun or tune against generation-test-benchmark-v1 (879 unique requests).
-- Do not rerun/tune the one-time intent classifier or entity extractor tests.
-- Do not change their reports, locks, checksums, review worksheet, or input partitions.
-- Generated Bash remains local and is never executed by generation or tests.
+## Engineering changes delivered
 
-## Stage 1 — Template-routing hardening (pushed)
+### Guarded deterministic-template routing
 
 Implemented in `src/nl2bash/command_generation.py`:
-- Added a conservative request-coverage gate between deterministic matching and returning a template result.
-- It checks extracted paths, explicit file extensions, home-directory scope, supported time/size filters, file-versus-directory scope, action verbs, content-search requirements, case sensitivity and recursion.
-- If a deterministic candidate omits a mechanically checkable requirement, it is discarded and the request falls through to the local LLM.
-- Added regression tests for append-vs-create, home-directory scope, multiple extensions, file conversion, missing time filter, and fallback integration.
-- Updated `docs/GENERATION_EVALUATION.md` and `docs/FINAL_REMAINING_WORK.md`.
+- A conservative request-coverage gate runs before a deterministic template can be returned.
+- The gate checks mechanically identifiable requirements including explicit paths, file extensions, home-directory scope, time/size filters, file-versus-directory scope, requested actions, content-search requirements, case sensitivity, and recursion.
+- A candidate that omits a detected requirement is discarded and the request falls through to the local Qwen model.
+- The gate is deliberately conservative. It is not a semantic-equivalence proof and may increase fallback frequency.
 
-This gate is conservative, not a semantic-equivalence proof. It may increase local LLM fallback frequency. It must not be used to claim a new held-out accuracy score.
+### Bounded incomplete-output recovery
 
-## Stage 1 verification
+- The initial generation attempt is retained.
+- An explicitly truncated/incomplete model response triggers one bounded retry with a larger generation allowance.
+- A second incomplete response raises a generation error; a partial command is never returned.
+- Retry counts and per-attempt timing are recorded in generation metrics.
+- The active frozen generation configuration was updated and integrity hashes were refreshed. The v14 snapshot remains unchanged; the newer frozen snapshot is preserved separately.
 
-- GitHub Actions package-smoke run for commit `81c1667...`: queued at handoff creation; outcome must be checked before treating this stage as CI-verified.
-- The local remote-coding-agent shell was unavailable, so no local checkout test result is claimed.
+### Regression tests and CI
 
-## Remaining implementation stages
+The tests cover:
+- Template-coverage rejection and fall-through.
+- Successful recovery after an explicitly incomplete generation.
+- A repeated incomplete response failing closed.
+- No retry when the first model response completes normally.
+- Frozen configuration and safety/validation boundaries.
 
-1. **Token-budget recovery:** retain the 48-token first attempt and add one bounded retry only on an explicit `finish_reason == "length"`. Record retry metrics and preserve clear failure behavior if the retry also truncates.
-2. **Regression coverage:** exercise template routing, retry success/failure, token limits, CLI behavior, syntax/risk boundaries, and config integrity. Use only development/challenge fixtures.
-3. **Frozen configuration:** version the changed generation source and runtime retry setting without weakening integrity checks. Preserve `frozen_generation_config_v14.json` unchanged; use a new version for updated settings.
-4. **CI and handoff:** run package-smoke, fix any regressions, and update this handoff with final commit IDs and observed workflow outcomes.
+Final-source package-smoke workflow [45366673886](https://github.com/Dishant402955/NLP-project/actions/runs/45366673886) completed successfully:
+- Python compilation passed.
+- Declared package entry points passed.
+- All 26 unit tests passed.
+- Parse-only Bash safety and syntax checks passed.
+- Protected annotation/evaluation provenance and review-attestation integrity checks passed.
 
-## Historical v1 baseline — not a tuning target
+## Final-source model-backed verification
 
-The v1 held-out benchmark measured 879 unique requests: warm mean 1.429445 s, median 1.348127 s, maximum 4.885406 s, with 879/879 under five seconds on the recorded Intel i3-1005G1 host. There were 24 generation failures at the 48-token ceiling. Strict reference match was 7.74%; shell-token match was 8.87%. These are lexical reference proxies, not human semantic accuracy.
+The duplicate development run on final source commit `4067d01` completed successfully in workflow [45366673492](https://github.com/Dishant402955/NLP-project/actions/runs/45366673492). Its model-backed evaluation artifact is [14908375296](https://github.com/Dishant402955/NLP-project/actions/runs/45366673492/artifacts/14908375296).
 
-No new held-out accuracy/latency claim is made for the hardened implementation until an untouched evaluation is run.
+The run verified the frozen hybrid configuration, evaluated a seeded paired sample of 20 development requests, confirmed that no test partition was used, and uploaded the JSON report. Reference commands were excluded from generation prompts.
 
+| Automated diagnostic | Request-only local LLM | Final hybrid pipeline |
+|---|---:|---:|
+| Generation success | 20/20 (100%) | 20/20 (100%) |
+| Bash syntax valid | 20/20 (100%) | 20/20 (100%) |
+| Selected explicit constraints passed | 18/20 (90%) | 18/20 (90%) |
+| Strict exact reference-command match | 1/20 (5%) | 1/20 (5%) |
+| High-risk warnings | 0 | 1 |
+| Retry attempts | 1 | 0 |
+| Routes | 20 local-model | 7 templates, 13 local-model |
+| Mean latency | 1.249595 s | 0.595200 s |
+| Median latency | 1.188471 s | 0.618001 s |
+| Minimum latency | 0.479235 s | 0.002487 s |
+| p90 latency | 1.624674 s | 1.178148 s |
+| p95 latency | 1.903935 s | 1.302335 s |
+| Maximum latency | 3.566361 s | 1.543935 s |
 
-## Stage 2 — Bounded local-LLM retry (current implementation)
+Interpretation:
+- Both conditions succeeded and passed syntax checks for every sampled request.
+- Both passed selected explicit-constraint checks on the same 18 requests.
+- Both exactly matched the reference command on the same request. Exact matching is a lexical reference proxy, not semantic accuracy.
+- The hybrid mean latency was lower in this sample. Seven requests used deterministic templates and bypassed the local model; the remaining requests used local Qwen. This is a small development sample, not a universal latency guarantee.
+- Syntax validity, selected-constraint checks, and exact reference matching do not prove semantic correctness or safety.
 
-- Initial token budget remains 48; one retry at 96 tokens occurs only for an explicit `finish_reason == "length"`.
-- A second length cutoff raises a clear generation error; partial output is never returned.
-- Metrics record retry count, initial/retry call durations, effective token ceilings, and aggregate API usage from both attempts.
-- The development report summarizes retry count and records the retry ceiling.
-- Active frozen config now includes the retry ceiling and refreshed hashes. `frozen_generation_config_v14.json` is preserved; a new `frozen_generation_config_v15.json` snapshot is added.
-- Retry tests cover success after truncation, repeat truncation failure, and no retry for a normal first-pass completion.
-- Stage-1 package-smoke run 45365481368 completed successfully.
+## Academic deliverables updated
 
-## Stage 2/3 verification still to perform
+The supplied source report and presentation were updated in place as new final files:
+- `submission/NLP_Project_Report_Final.docx`
+- `submission/NLP_Project_Presentation_Final.pptx`
 
-- Confirm package-smoke for the retry implementation commit.
-- Run the 20-request development-only model evaluation to observe actual retry frequency, correctness proxies and latency. It does not use the v1 test partition.
-- Update this handoff with final commit SHA and workflow outcomes.
+Editorial constraints applied to both:
+- Report end-to-end pipeline diagnostics and latency only.
+- Do not present TF-IDF/Logistic Regression component accuracy or component sample counts.
+- Do not include generation token-budget values.
+- Describe the final hybrid flow: intent/entity context, guarded deterministic templates, local-model fallback, validation, and bounded fail-closed recovery.
+- State that the experiment is development-only and that automated diagnostics are not semantic accuracy.
+- Preserve the human-review caveat: completion is attested, but no structured human score was supplied.
 
+The report has been rendered and visually inspected after editing. The PowerPoint has been rendered and visually checked slide-by-slide, including the architecture, intent-stage, hybrid-generation, results, and limitations slides.
 
-## CI correction iteration — 2026-11-24
+## Frozen and protected artifacts
 
-The first Stage 2 package-smoke run (45366209377) caught a missing `CommandGenerationError` test import. The runtime retry-success test, template coverage tests, and other unit tests passed; one failure was isolated to the test module import. The import has been added. An invalid Python escape in the new home-path guard and legacy parenthesis escape warnings were also corrected. The active and v15 frozen config command-source hashes were refreshed for the final source bytes. Rerun package-smoke before marking this stage verified.
+- The active frozen generation configuration verifies successfully in the final-source workflow.
+- The older v14 configuration snapshot remains unchanged.
+- The 879-request generation v1 held-out benchmark, the one-time intent test, the one-time entity test, their guards/checksums/review worksheets, and the historical v7 human-review worksheet were not used for tuning and were not modified.
+- Generated Bash was never executed.
 
+## Remaining work
 
-## Corrected package-smoke verification — 2026-11-24
+There is no remaining core engineering or documentation task from the requested scope. Before institutional submission, check college-specific formatting and metadata requirements that were not supplied (college/department, supervisor, declaration/certificate, signatures, and official rubric).
 
-The corrected implementation commit `4067d01ba18f7f174754763fa11bd0f940794946` passed GitHub Actions package-smoke run **45366673886**:
-- Python compilation and all package entry-point checks passed.
-- **26 unit tests passed** (including template-coverage and bounded-retry tests).
-- Bash syntax/risk safety checks passed.
-- Existing annotation, classifier/entity evaluation provenance and v7 review-artifact integrity checks passed.
-
-The earlier failed run `45366209377` was caused by a missing test import and is superseded by the successful corrected run. The development-only model evaluation is still running/building; no measured retry frequency or post-change model latency is claimed until that run completes.
-
-
-## Final task status — 2026-11-24
-
-**User-requested tasks 2, 3 and 4: implemented.** The semantic review is user-confirmed complete and is no longer an open task.
-
-### Commits on main
-
-- `81c1667efbdf5ebcb77e6a563fbd37b4ebe7f191`: conservative deterministic-template coverage gate and initial regression tests.
-- `2c6eeb89e630b2f9b35d8008c5dff02adecc1257`: stage-1 handoff.
-- `d1659f2c9e3a10bee6470c73a1268802b02373f5`: 48-token first pass, one 96-token retry on explicit length cutoff, retry metrics, dev summary metrics, config v15, and extended tests.
-- `4067d01ba18f7f174754763fa11bd0f940794946`: fix missing test import and Python source escapes; refresh source hashes.
-- `9f452bec09b11933f8c9e549d1849b52632a1351`: record successful package-smoke verification.
-
-### Verification
-
-- Final-source package-smoke run **45366673886** succeeded. All 26 unit tests passed; package entry points, compilation, Bash validation/safety checks and protected artifact-integrity checks passed.
-- Development-only model run **45366209580** succeeded on commit `d1659f2`. The frozen v15 configuration verified, the 20-request dev comparison and isolation checks passed, and report artifact 14906354383 uploaded.
-- Development-only results are documented in `docs/GENERATION_EVALUATION.md`. The hybrid condition had 20/20 successful generations, 20/20 syntax-valid commands, 18/20 selected constraint checks, one exact reference match, one high-risk warning, and zero retries; mean latency 0.690222 s, median 0.682358 s, maximum 1.844542 s. This is a 20-request development sample, not semantic accuracy or held-out test performance.
-- A matching model run on the final cleanup commit `4067d01` (45366673492) was still in progress at this handoff update. It is a duplicate confirmation run; the final-source package suite is already green.
-
-### Protected artifacts
-
-- `frozen_generation_config_v14.json` remains unchanged.
-- Active `frozen_generation_config.json` and `frozen_generation_config_v15.json` include `retry_max_tokens=96` and refreshed source hashes.
-- The 879-request generation v1 benchmark, classifier test, entity test, reports and one-time guards were not changed or rerun.
-- Generated Bash was not executed.
-- No new semantic-accuracy percentage is claimed. A future final accuracy estimate requires a fresh untouched held-out set.
+A fresh untouched generation holdout with structured human semantic scoring is needed only before making a new final semantic-accuracy claim. The current 20-request development comparison is reported as development evidence only.
