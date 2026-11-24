@@ -1,116 +1,72 @@
 # Project Completion and Handoff Status
 
-**Status date:** 2026-11-17  
+**Status date:** 2026-11-24  
 **Repository:** Dishant402955/NLP-project  
-**Status:** Core project and requested review milestones complete
+**Status:** Core implementation, final-source verification, report update, presentation update, and documentation sync complete
 
 ## Completion summary
 
-The implementation, data preparation, annotation exports, classifier, entity extractor, local command-generation adapter, Bash validator, end-to-end CLI, recorded evaluations, and selected engineering audit are complete.
+The hybrid natural-language-to-Bash pipeline and the requested engineering hardening are complete. Deterministic templates are screened by a conservative request-coverage gate; unsupported or insufficiently covered requests fall back to the local Qwen model. Explicitly incomplete model output receives one bounded retry, and repeated truncation fails closed rather than returning a partial command.
 
-The project owner confirmed that the human semantic review of all 80 v7 development candidates is complete. The attestation is committed at `data/annotations/generation_dev_v7_human_review_attestation.json`. The completion confirmation did not include individual rating values or reviewer notes, so the project does not claim a human semantic accuracy score, ordinal aggregate, or condition win rate. The original candidate worksheet is preserved without fabricated row-level scores.
-
-The presentation has been reviewed and approved by the project owner. It is marked complete and does not require further project edits.
+The final-source package-smoke workflow passed. The final-source model-backed development workflow also passed and uploaded its report artifact. The academic report and presentation were updated against that final-source run. Both exclude component-level classifier accuracy and figures, and omit model token-budget settings. They report only end-to-end automated pipeline diagnostics and latency, with explicit caveats that these are development-only proxies rather than semantic accuracy.
 
 ## Completed deliverables
 
-- [x] Python package and end-to-end NLP-to-Bash CLI.
-- [x] Duplicate-aware NL2Bash data preparation with source/license/checksum provenance.
-- [x] Confirmed training, development, and test intent annotation exports.
-- [x] TF-IDF and Logistic Regression intent classifier with committed model/manifest.
-- [x] Development-selected frozen confidence threshold.
-- [x] Deterministic entity extraction with exact source spans and structured extraction issues.
-- [x] Local Qwen2.5-1.5B-Instruct GGUF generation adapter and pinned inference setup.
-- [x] Parse-only Bash syntax validation, safety heuristics, and selected entity-grounding checks.
-- [x] One-time classifier test evaluation and report/guard.
-- [x] Owner-reviewed targeted entity sample and one-time exact-span test evaluation/report/guard.
-- [x] 40-request paired v7 generation development comparison and 80-candidate worksheet.
-- [x] Human semantic review milestone for all 80 v7 candidates, attested by the project owner.
-- [x] Selected clean-install, entry-point, malformed-output, frozen-checksum, grounding, and Bash safety audit checks.
-- [x] Project report/presentation/demo guidance prepared; presentation approved.
-- [x] Repository documentation and clean-clone reproduction guide.
+- [x] Python package and end-to-end natural-language-to-Bash CLI.
+- [x] Dataset provenance, duplicate-aware partitions, annotation provenance, and reproducibility artifacts.
+- [x] Intent prediction and deterministic entity extraction stages.
+- [x] Guarded deterministic-template routing with fall-through to the local Qwen model when request requirements are not covered.
+- [x] Bounded recovery for explicitly incomplete local-model output; repeated incomplete output fails closed.
+- [x] Regression tests for template coverage, fallback integration, retry success/failure, and normal no-retry behaviour.
+- [x] Corrected package-smoke CI on final source: run [45366673886](https://github.com/Dishant402955/NLP-project/actions/runs/45366673886), all 26 unit tests passed.
+- [x] Final-source model-backed development comparison: run [45366673492](https://github.com/Dishant402955/NLP-project/actions/runs/45366673492), completed successfully; artifact [14908375296](https://github.com/Dishant402955/NLP-project/actions/runs/45366673492/artifacts/14908375296).
+- [x] Frozen generation configuration verified by the final-source model workflow.
+- [x] Human semantic-review milestone previously confirmed complete by the project owner. No row-level ratings or reviewer notes were supplied; no numeric human score or A/B win-rate is claimed.
+- [x] Final NLP project report updated from the supplied DOCX source.
+- [x] Final presentation updated from the supplied PPTX source.
+- [x] Generation evaluation, reproducibility, README, engineering handoff, and remaining-work documentation updated.
+- [x] Generated commands remained non-executing throughout tests and evaluations.
 
-## Canonical artifacts
+## Final-source end-to-end results
 
-| Component | Artifact |
-|---|---|
-| Dataset partitions and checksums | `data/processed/nl2bash/manifest.json` |
-| Classifier model/provenance | `models/intent_classifier.joblib`, `models/intent_classifier_manifest.json` |
-| Frozen threshold/configuration | `artifacts/evaluation/frozen_dev_threshold.json`, `artifacts/evaluation/frozen_generation_config.json` |
-| Classifier test report/guard | `artifacts/evaluation/test_report.json`, `artifacts/evaluation/test_evaluation.lock` |
-| Entity test report/guard | `artifacts/evaluation/entity_test_report.json`, `artifacts/evaluation/entity_test_evaluation.lock` |
-| v7 development report | `artifacts/evaluation/generation_dev_v7_report.json` |
-| Human-review completion attestation | `data/annotations/generation_dev_v7_human_review_attestation.json` |
-| Original candidate worksheet | `data/annotations/generation_dev_v7_semantic_review.csv` |
-| Separate assistant-only assessment | `data/annotations/generation_dev_v7_assistant_semantic_review.csv` |
+The paired comparison used 20 development requests, the same inputs in both conditions, and no held-out test data.
 
-## Interpretation safeguards
+| Automated diagnostic | Request-only local LLM | Final hybrid pipeline |
+|---|---:|---:|
+| Generation success | 20/20 (100%) | 20/20 (100%) |
+| Bash syntax valid | 20/20 (100%) | 20/20 (100%) |
+| Selected explicit constraints passed | 18/20 (90%) | 18/20 (90%) |
+| Strict exact reference-command match | 1/20 (5%) | 1/20 (5%) |
+| High-risk warnings | 0 | 1 |
+| Mean latency | 1.250 s | 0.595 s |
+| Median latency | 1.188 s | 0.618 s |
+| Minimum / maximum latency | 0.479 / 3.566 s | 0.002 / 1.544 s |
+| p90 / p95 latency | 1.625 / 1.904 s | 1.178 / 1.302 s |
 
-- Intent and entity labels used for test evaluation are AI-assisted and owner-approved, not independently adjudicated gold data.
-- The entity sample has 66 targeted requests; it is not prevalence-representative and has sparse/zero support for some types.
-- The generation comparison is a 40-request development experiment, not a held-out generation test estimate.
-- Human semantic-review completion is attested, but row-level human ratings/comments were not supplied with the completion confirmation. Do not derive or invent human metrics from the assistant-only review.
-- Syntax validation does not prove that a command is safe or correct.
-- The Bash validator is heuristic and its known limitations are documented in `docs/ENGINEERING_AUDIT.md`.
-- Never rerun the one-time classifier or entity test evaluations, delete their guards, or tune the frozen system against those test results.
-- Never execute generated commands as part of generation or evaluation.
+The hybrid route used 7 deterministic templates and 13 local-model fallbacks. One request-only generation retried; no hybrid request required a retry in this sample.
+
+These are automated development-only diagnostics. Exact reference matching is lexical, selected-constraint checks cover only chosen explicit requirements, and Bash syntax validity does not establish task semantics. They must not be reported as semantic accuracy or held-out test performance. The earlier human-review completion attestation does not contain individual scores, so there is no numeric human semantic result.
+
+## Protected evaluation boundaries
+
+- Do not rerun or tune against the consumed 879-request generation v1 held-out benchmark.
+- Do not rerun the one-time intent-classifier or entity-extraction test evaluations.
+- Do not change their reports, locks, checksums, review worksheets, or input partitions.
+- Do not use held-out test labels or outputs to select templates, prompts, validators, or model settings.
+- Never execute generated Bash during evaluation or audit.
+
+A new, independently curated and untouched held-out generation set is required before making a new final semantic-accuracy claim. This is not a blocker for accurately presenting the current development diagnostics.
 
 ## Remaining administrative checks
 
-There are no remaining core implementation, annotation-review, evaluation, engineering-audit, or presentation tasks recorded for this project.
+No core engineering, regression-test, final-source CI, development evaluation, report-editing, presentation-editing, or repository-documentation task remains.
 
-Before institutional submission, add college, department, student, supervisor, date, and declaration details only where required by the college's official report/presentation format. Those are institution-specific metadata fields, not open technical project work. Check the final report against the department's rubric and include the existing caveats and reproducibility instructions.
+Before institutional submission, check only the college-specific requirements that were not supplied with the project files: college and department naming, supervisor details, declaration/certificate pages, required signatures, and the department's final report/presentation rubric. Do not invent these fields. The current report is an NLP project report for Natural Language Processing (CS 702), with the two student names and roll numbers retained from the supplied source.
 
-The canonical clean-clone instructions are in [Reproducibility Guide](REPRODUCIBILITY.md). This page supersedes the earlier pending-work checklist.
+## Canonical references
 
-
-## Update — 2026-11-24
-
-The project owner has confirmed that the full v1 semantic review is complete. It is no longer an open action item. Do not request the same review again. Do not invent or publish a numerical human semantic-accuracy score unless the actual review decisions are present in a validated artifact.
-
-The engineering follow-up is generation hardening:
-- [x] Add a conservative template request-coverage gate so partial templates fall through to the local model.
-- [ ] Add bounded recovery when local-model generation reaches its initial token ceiling.
-- [ ] Add and run regression coverage for template routing, truncation recovery, and safety boundaries.
-- [ ] Verify CI results and update the final engineering handoff.
-
-The 879-request generation v1 test, classifier test, and entity test remain protected and must not be rerun or used for tuning.
-
-
-## Update — 2026-11-24 (generation hardening)
-
-The project owner confirmed that the v1 semantic review is complete; it is no longer pending. No new numerical semantic-accuracy result is claimed here.
-
-- [x] Stage 1: reject deterministic templates that omit mechanically checkable request requirements and fall back to local LLM.
-- [x] Stage 2: retain the 48-token first pass and retry once at 96 tokens only after an explicit length cutoff; fail clearly if the retry also truncates.
-- [x] Stage 2: version the active frozen configuration as v15 while preserving v14 unchanged and keeping integrity checks enabled.
-- [x] Stage 3: add offline regression tests for template coverage, fallback integration, retry success/failure, and no-retry normal behavior.
-- [ ] Verify the package-smoke and development-only model evaluation workflows; update the engineering handoff with their observed outcomes.
-
-The consumed v1 generation test set and one-time classifier/entity test evaluations remain untouched.
-
-
-### CI iteration note — 2026-11-24
-
-The first package-smoke run for the retry implementation exposed a missing exception import in the new regression test (runtime code was not the cause). The test import and source escape warnings have been corrected; CI is being rerun. Do not mark verification complete until the rerun passes.
-
-
-### Verification update — 2026-11-24
-
-- [x] Corrected package-smoke workflow: success (run 45366673886); all 26 unit tests passed.
-- [ ] Complete the real-model development-only comparison to measure retry incidence and the latency/correctness trade-off. This remains development-only, not a new held-out test.
-
-
-## Final engineering status — 2026-11-24
-
-The three requested engineering tasks are implemented:
-- [x] Template route guard rejects candidates that omit mechanically checkable request requirements and falls back to local Qwen.
-- [x] Bounded recovery retries once at 96 tokens only after a 48-token `finish_reason=length`; a second truncation returns an error rather than a partial command.
-- [x] Regression coverage covers template omissions/fallback, retry success, repeated truncation, and normal no-retry completion.
-
-Verification:
-- [x] Final-source package-smoke run 45366673886 succeeded; all 26 unit tests passed.
-- [x] Development-only 20-request model comparison completed successfully on implementation commit d1659f2; results are recorded in `docs/GENERATION_EVALUATION.md`.
-- [ ] A duplicate development run on the final cleanup commit 4067d01 (run 45366673492) was still in progress at this documentation update.
-
-The v1 879-request held-out test and one-time classifier/entity evaluations were not rerun or tuned. A fresh untouched holdout is still required before making any new final accuracy claim.
+- Final engineering handoff: [ENGINEERING_HANDOFF_2026-11-24.md](ENGINEERING_HANDOFF_2026-11-24.md)
+- Generation evaluation: [GENERATION_EVALUATION.md](GENERATION_EVALUATION.md)
+- Reproduction guide: [REPRODUCIBILITY.md](REPRODUCIBILITY.md)
+- Final-source model workflow: [run 45366673492](https://github.com/Dishant402955/NLP-project/actions/runs/45366673492)
+- Final-source package-smoke workflow: [run 45366673886](https://github.com/Dishant402955/NLP-project/actions/runs/45366673886)
