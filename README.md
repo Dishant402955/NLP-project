@@ -21,7 +21,7 @@ The project owner has also approved the presentation. Any college-specific cover
 2. Preprocessing validates the request and trims surrounding whitespace only.
 3. A Scikit-learn TF-IDF + Logistic Regression model predicts an intent category and confidence.
 4. A deterministic rule-based extractor finds supported parameters such as extensions, paths, file names, sizes, ports, process names, dates, comparison conditions, programming languages, and case-sensitivity requirements. It preserves exact values and source spans, and reports incomplete or conflicting cues.
-5. The generation adapter sends the original request and structured NLP context to a local Qwen2.5-1.5B-Instruct model. The model must return structured JSON containing a Bash command, explanation, and assumptions.
+5. The generation adapter sends a compact request and structured NLP context to a local Qwen2.5-1.5B-Instruct model. The model returns structured JSON containing a Bash command, explanation, and assumptions. Inference is offline and local.
 6. The validator runs Bash syntax parsing in parse-only mode, applies heuristic risk checks, and checks selected explicit constraints against the generated text.
 7. The CLI displays the command and all findings. It never invokes a shell to execute generated text.
 
@@ -40,11 +40,11 @@ The pipeline pattern can be adapted to other CLI ecosystems such as Docker or AW
 | Intent classification | Scikit-learn TF-IDF word unigrams/bigrams + Logistic Regression |
 | Entity extraction | Deterministic Python rules and regular expressions |
 | Generation | Qwen2.5-1.5B-Instruct Q4_K_M GGUF |
-| Inference | llama-cpp-python 0.3.37, local CPU inference |
+| Inference | llama-cpp-python 0.3.37, local CPU inference (2 threads, batch 512 by default on the tested 2-core CPU) |
 | Bash parsing | `bash -n` parse-only mode and bashlex AST analysis |
 | Interfaces | `nl2bash`, `nl2bash-classifier`, `nl2bash-annotations`, `nl2bash-prepare-dataset` CLIs |
 
-The base package works without the optional LLM runtime. The model binary is downloaded separately, not committed to Git, and verified using a pinned SHA-256. Setup instructions are in [Local Model Setup](docs/LOCAL_MODEL_SETUP.md).
+The base package works without the optional LLM runtime. The model binary is installed separately, not committed to Git, and verified using a pinned SHA-256. After the model and dependencies are present locally, normal generation makes no network requests and uses no hosted inference service. Setup instructions are in [Local Model Setup](docs/LOCAL_MODEL_SETUP.md).
 
 ## Quick start
 
@@ -90,6 +90,14 @@ Run an example:
 ```bash
 uv run nl2bash generate --request 'Find all Python files larger than 10 MB in the current directory.'
 ```
+
+For repeated requests, keep one local model instance in memory with the interactive mode. It accepts requests until `exit` or `quit` and does not reload the 1.1 GB model between them:
+
+```bash
+uv run nl2bash generate --interactive --timings
+```
+
+The timing output separates startup, classifier, entity extraction, prompt evaluation, token generation, and validation. The runtime can be tuned with `--threads`, `--batch-size`, `--context-size`, `--gpu-layers`, and `--max-tokens`; the frozen configuration accepts only its recorded settings unless it is deliberately re-evaluated and re-frozen.
 
 For full reproduction instructions, including safe data preparation and evaluation commands, see [Reproducibility Guide](docs/REPRODUCIBILITY.md).
 
@@ -143,9 +151,10 @@ The project owner confirmed that all 80 candidates received human semantic revie
 - `models/`: committed classifier and manifest.
 - `artifacts/evaluation/`: frozen configuration/threshold, reports, and one-time guards.
 - `docs/`: project, methodology, implementation, evaluation, audit, and reproducibility documentation.
+- `tests/`: offline regression tests for prompt, runtime configuration, caching, and interactive mode.
 - `.github/workflows/`: package smoke and experiment workflows.
 
-Temporary test fixtures, caches, virtual environments, model binaries, and secrets are not committed. Project policy keeps standalone test source outside the repository; CI uses inline smoke and integrity checks.
+Temporary test fixtures, caches, virtual environments, model binaries, and secrets are not committed. Regression tests use Python's standard `unittest` framework and require no network access.
 
 ## Limitations and safety
 

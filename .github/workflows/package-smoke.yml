@@ -9,6 +9,8 @@ on:
       - "notebooks/**"
       - "uv.lock"
       - "src/nl2bash/**"
+      - "tests/**"
+      - "artifacts/evaluation/generation_dev_v8_smoke_report.json"
       - "data/annotations/entity_test_ai_suggestions.jsonl"
       - "data/annotations/entity_test_human_review.csv"
       - "data/annotations/entity_test_review_manifest.json"
@@ -52,8 +54,9 @@ jobs:
           uv run nl2bash-annotations --help >/dev/null
           uv run nl2bash-classifier --help >/dev/null
           uv run python -m nl2bash.entity_benchmark_cli --help >/dev/null
-          python -m compileall -q src/nl2bash
-          echo "All declared package entry points and the entity evaluator module CLI expose help successfully."
+          python -m compileall -q src/nl2bash tests
+          uv run python -m unittest discover -s tests -v
+          echo "All declared package entry points and offline latency regression tests passed."
 
       - name: Verify parse-only Bash validation and safety findings
         run: |

@@ -1,0 +1,189 @@
+{
+  "classifier": {
+    "confidence_threshold": 0.1361115729921777,
+    "file": "models/intent_classifier.joblib",
+    "sha256": "b2c4c64fc4723b5279bb198dff04dd58921f969406b91739ff6524fa97e12d2e",
+    "threshold_sha256": "a0ac257309d234e0266d8fd1ca3ad6a0cbf2160d4c4786e87c126a356975a647"
+  },
+  "conditions": {
+    "nlp_context": "Original request plus frozen intent prediction and deterministic extracted entities/issues.",
+    "request_only": "Original request only; no classifier prediction or extracted entities passed to the generator."
+  },
+  "development_source": {
+    "annotation_manifest_sha256": "b7d2f67305b56d1bb2931871d17544e70521ae9c77863fa593d083b511a3d338",
+    "annotations_sha256": "72bca2300f8c983ffb01d469523d18db2518dfff383c165be111d2f9a69d2cf5",
+    "dataset_revision": "d6b9f5bdff45621d190134e31ab63b7bf7002190",
+    "partition": "dev",
+    "partition_sha256": "22f30b63140a34c9d12dfd98a0dc0110111f19d46cc8771088c9ddd65e6002f5"
+  },
+  "evaluation_type": "development_generation_comparison",
+  "examples": [
+    {
+      "example_id": "nl2bash-005170",
+      "intent_label": "file_discovery",
+      "nlp_context_command": "find /var/log /tmp -type f -size +10000000c -mtime +1440",
+      "nlp_context_constraint_findings": [
+        "The generated command adds a date/time filter that the request did not specify."
+      ],
+      "nlp_context_constraints_passed": false,
+      "nlp_context_exact_match": false,
+      "nlp_context_generation_error": null,
+      "nlp_context_high_risk": false,
+      "nlp_context_inference_metrics": {
+        "completion_tokens": 77,
+        "compute_graph_reuse_count": 76,
+        "generation_tokens_per_second": 14.25,
+        "model_call_seconds": 11.654811,
+        "prompt_build_seconds": 4.7e-05,
+        "prompt_eval_seconds": 3.554312,
+        "prompt_eval_tokens": 269,
+        "prompt_eval_tokens_per_second": 75.68,
+        "prompt_tokens": 596,
+        "token_generation_seconds": 5.402715,
+        "total_tokens": 673
+      },
+      "nlp_context_latency_seconds": 11.657587,
+      "nlp_context_risk_level": "none",
+      "nlp_context_success": true,
+      "nlp_context_syntax_valid": true,
+      "reference_command": "find /tmp /var/tmp -size +30M -mtime 31 -ls",
+      "request": "List files larger than 10MB under /var/log /tmp that haven't changed in a month",
+      "request_only_command": "find /var/log /tmp -type f -size +10M -mtime +30",
+      "request_only_constraint_findings": [
+        "The generated command adds a date/time filter that the request did not specify.",
+        "The requested size constraint (10MB) is missing or its comparison direction is inconsistent with the request."
+      ],
+      "request_only_constraints_passed": false,
+      "request_only_exact_match": false,
+      "request_only_generation_error": null,
+      "request_only_high_risk": false,
+      "request_only_inference_metrics": {
+        "completion_tokens": 69,
+        "compute_graph_reuse_count": 68,
+        "generation_tokens_per_second": 14.62,
+        "model_call_seconds": 11.477118,
+        "prompt_build_seconds": 3e-05,
+        "prompt_eval_seconds": 4.335349,
+        "prompt_eval_tokens": 363,
+        "prompt_eval_tokens_per_second": 83.73,
+        "prompt_tokens": 363,
+        "token_generation_seconds": 4.720377,
+        "total_tokens": 432
+      },
+      "request_only_latency_seconds": 11.480382,
+      "request_only_risk_level": "none",
+      "request_only_success": true,
+      "request_only_syntax_valid": true
+    },
+    {
+      "example_id": "nl2bash-000184",
+      "intent_label": "archive_compression",
+      "nlp_context_command": "tar -cvf 2009.tar data/filepattern-*2009*",
+      "nlp_context_constraint_findings": [],
+      "nlp_context_constraints_passed": true,
+      "nlp_context_exact_match": false,
+      "nlp_context_generation_error": null,
+      "nlp_context_high_risk": false,
+      "nlp_context_inference_metrics": {
+        "completion_tokens": 89,
+        "compute_graph_reuse_count": 88,
+        "generation_tokens_per_second": 14.5,
+        "model_call_seconds": 10.706374,
+        "prompt_build_seconds": 3e-05,
+        "prompt_eval_seconds": 1.043174,
+        "prompt_eval_tokens": 81,
+        "prompt_eval_tokens_per_second": 77.65,
+        "prompt_tokens": 411,
+        "token_generation_seconds": 6.137381,
+        "total_tokens": 500
+      },
+      "nlp_context_latency_seconds": 10.708565,
+      "nlp_context_risk_level": "none",
+      "nlp_context_success": true,
+      "nlp_context_syntax_valid": true,
+      "reference_command": "find -x data -name \"filepattern-*2009*\" -print0 | tar --null --no-recursion -uf 2009.tar --files-from -",
+      "request": "Archive all filepattern-*2009* files/directories under data/ into 2009.tar",
+      "request_only_command": "tar -cvf 2009.tar *pattern-*2009*",
+      "request_only_constraint_findings": [],
+      "request_only_constraints_passed": true,
+      "request_only_exact_match": false,
+      "request_only_generation_error": null,
+      "request_only_high_risk": false,
+      "request_only_inference_metrics": {
+        "completion_tokens": 166,
+        "compute_graph_reuse_count": 164,
+        "generation_tokens_per_second": 14.51,
+        "model_call_seconds": 18.454335,
+        "prompt_build_seconds": 3e-05,
+        "prompt_eval_seconds": 0.842781,
+        "prompt_eval_tokens": 62,
+        "prompt_eval_tokens_per_second": 73.57,
+        "prompt_tokens": 366,
+        "token_generation_seconds": 11.438942,
+        "total_tokens": 532
+      },
+      "request_only_latency_seconds": 18.456698,
+      "request_only_risk_level": "none",
+      "request_only_success": true,
+      "request_only_syntax_valid": true
+    }
+  ],
+  "generator": {
+    "batch_size": 512,
+    "context_size": 4096,
+    "gpu_layers": 0,
+    "max_tokens": 256,
+    "model": "Qwen2.5-1.5B-Instruct-Q4_K_M",
+    "model_file": "/home/user/.cache/nl2bash/models/qwen2.5-1.5b-instruct-q4_k_m.gguf",
+    "model_sha256": "6a1a2eb6d15622bf3c96857206351ba97e1af16c30d7a74ee38970e434e9407e",
+    "prompt_version": "qwen-bash-json-v7",
+    "runtime": "llama-cpp-python local inference",
+    "temperature": 0.0,
+    "threads": 2
+  },
+  "limitations": [
+    "Exact match is a strict textual metric and can penalize semantically equivalent Bash commands.",
+    "Syntax validity does not establish semantic correctness or safety.",
+    "Explicit-constraint checks cover selected extracted values only and are not a complete semantic verifier.",
+    "The sample is a small development-set engineering experiment, not a final test estimate.",
+    "No human semantic-accuracy score is claimed."
+  ],
+  "metrics": {
+    "nlp_context": {
+      "exact_match_count": 0,
+      "exact_match_rate": 0.0,
+      "example_count": 2,
+      "explicit_constraint_pass_count": 1,
+      "explicit_constraint_pass_rate": 0.5,
+      "generation_failure_count": 0,
+      "generation_success_count": 2,
+      "generation_success_rate": 1.0,
+      "high_risk_warning_count": 0,
+      "mean_latency_seconds": 11.183076,
+      "median_latency_seconds": 11.183076,
+      "syntax_valid_count": 2,
+      "syntax_valid_rate": 1.0
+    },
+    "request_only": {
+      "exact_match_count": 0,
+      "exact_match_rate": 0.0,
+      "example_count": 2,
+      "explicit_constraint_pass_count": 1,
+      "explicit_constraint_pass_rate": 0.5,
+      "generation_failure_count": 0,
+      "generation_success_count": 2,
+      "generation_success_rate": 1.0,
+      "high_risk_warning_count": 0,
+      "mean_latency_seconds": 14.96854,
+      "median_latency_seconds": 14.96854,
+      "syntax_valid_count": 2,
+      "syntax_valid_rate": 1.0
+    }
+  },
+  "reference_commands_in_generation_prompts": false,
+  "sample_size": 2,
+  "sampling": "one seeded example from each of 2 sampled intent labels",
+  "schema_version": 1,
+  "seed": 20261124,
+  "test_data_used": false
+}

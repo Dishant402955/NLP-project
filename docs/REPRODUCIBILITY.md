@@ -110,7 +110,7 @@ echo "6a1a2eb6d15622bf3c96857206351ba97e1af16c30d7a74ee38970e434e9407e  $HOME/.c
 
 Do not continue if the checksum fails or the download is incomplete. Normal generation uses local inference and does not send prompts to a hosted inference API. Downloading packages and the model requires network access.
 
-The CLI accepts an explicit model path through `--llm-model`. The default model path is under the user cache. The frozen generation configuration also verifies the model, classifier, manifest, threshold, prompt, source files, and selected runtime settings before inference.
+The CLI accepts an explicit model path through `--llm-model`. The default model path is under the user cache. The frozen generation configuration also verifies the model, classifier, manifest, threshold, prompt, source files, and selected runtime settings before inference. The optimized default for the tested 2-core CPU is 2 threads, batch size 512, context size 4096, GPU layers 0, and a 256-token output ceiling. These are local runtime settings, not remote services. The SHA-256 verifier caches each successful file hash by resolved path, inode, size, and change/modification timestamps during the process; a new process verifies the files again.
 
 ## 5. Run the end-to-end application
 
@@ -130,6 +130,14 @@ uv run nl2bash generate \
 ```
 
 The output contains the original request, predicted intent and confidence, extracted entities and extraction issues, generated command, explanation, assumptions, selected-constraint findings, syntax status, heuristic risk findings, and an explicit `executed: false` field. A non-zero status indicates that generation or validation needs attention. Review the structured output; do not treat a generated command as ready to execute.
+
+For multiple requests in one session, keep the local model and classifier loaded instead of starting a new process for every request:
+
+```bash
+uv run nl2bash generate --interactive --timings
+```
+
+Enter one task per line and type `exit` or `quit` to stop. The startup costs (including model loading and frozen-file verification) are paid once for that session. Per-request timing output separates intent prediction, entity extraction, prompt construction, llama.cpp prompt evaluation, token generation, and validation. `--json` emits one JSON result per request; errors go to standard error.
 
 ## 6. Reproduce the dataset preparation
 
@@ -224,7 +232,7 @@ The committed v7 experiment uses a seeded sample of 40 development requests and 
 - **Request-only:** the generator receives the original natural-language request.
 - **NLP context:** the generator receives the original request, the frozen intent prediction, and the deterministic extracted entities/issues.
 
-Paired reference commands are used only after generation for scoring. They are not placed in either generation prompt. The test partition is not used. The workflow `.github/workflows/generation-development-evaluation.yml` records the pinned model, checksum, locked environment, native build flags, four CPU threads, 4,096-token context, 512-token output limit, sample size, and seed.
+Paired reference commands are used only after generation for scoring. They are not placed in either generation prompt. The test partition is not used. The workflow `.github/workflows/generation-development-evaluation.yml` records the pinned model, checksum, locked environment, native build flags, four CPU threads, 4,096-token context, and 512-token output limit, sample size, and seed. Those settings describe the historical v7 comparison, not the optimized local defaults now recorded in the frozen runtime configuration.
 
 To run a separate local development reproduction, use a new output file:
 
@@ -238,13 +246,24 @@ uv run nl2bash evaluate-generation-dev \
 
 The CLI refuses to overwrite an existing report. Results may vary with hardware and native build settings. The committed report remains the canonical result of the recorded run. This is a development engineering experiment, not a held-out generation test estimate.
 
+### 9.1 Optimized offline runtime
+
+The current local runtime defaults are 2 CPU threads, `n_batch=512`, `n_ctx=4096`, `n_gpu_layers=0`, and `max_tokens=256` on the tested 2-core / 4-logical-CPU Intel machine. GPU offload remains disabled because no supported CUDA accelerator was available in that environment. Thread and batch values remain configurable for other machines.
+
+The optimized generation prompt removes unused character spans and intent confidence, drops one of the two examples, and shortens repeated output instructions. On the representative filename-search prompt, the measured prompt size fell from 698 tokens to 437 tokens (about 37% fewer). The system prompt explicitly retains case-sensitive filename matching by default and the rolling 24-hour `-mmin -1440` rule.
+
+A small same-machine comparison on two representative requests measured 54.51 seconds total with the previous 4-thread / 256-batch settings and 41.98 seconds with 2 threads / 512 batch, about 23% lower combined model-call time. This is an exploratory two-request tuning run, not a statistically meaningful benchmark or a guarantee for other hardware. The historical v7 40-request report remains unchanged and must not be presented as a measurement of the optimized prompt/runtime.
+
+The one-shot `generate` command remains available. Use `nl2bash generate --interactive --timings` to reuse one loaded local model across multiple requests. The application performs no hosted inference calls and no network calls during generation.
+
 ## 10. Completed evaluations and safeguards
 
 | Evaluation | Canonical report | Guard/status |
 |---|---|---|
 | Intent classifier held-out test, 375 examples | `artifacts/evaluation/test_report.json` | `test_evaluation.lock`; complete, do not rerun |
 | Entity exact-span held-out test, 66 targeted requests | `artifacts/evaluation/entity_test_report.json` | `entity_test_evaluation.lock`; complete, do not rerun |
-| Generation v7 development comparison, 40 requests | `artifacts/evaluation/generation_dev_v7_report.json` | Complete; dev-only, with frozen configuration verification |
+| Generation v7 development comparison, 40 requests | `artifacts/evaluation/generation_dev_v7_report.json` | Historical baseline; unchanged |
+| Optimized offline prompt/runtime smoke check | `artifacts/evaluation/generation_dev_v8_smoke_report.json` | New small development-only check; not a quality estimate |
 
 **Do not run the one-time classifier test evaluation or entity test benchmark again on the canonical checkout.** Do not delete, reset, or bypass their guards. For these test evaluations, reproducibility means inspecting committed reports, source manifests, checksums, and CI integrity assertions, not generating a second test result.
 

@@ -22,13 +22,6 @@ htmlcov/
 .env.*
 !.env.example
 
-# Temporary verification code and test fixtures (project policy)
-tests/
-test/
-**/tests/
-**/test/
-test_*.py
-*_test.py
-*.test.py
-test_*.sh
-*_test.sh
+# Temporary test fixtures, never the versioned regression test suite
+tests/fixtures/
+**/tests/fixtures/

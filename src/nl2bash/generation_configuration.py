@@ -2,11 +2,14 @@
 from __future__ import annotations
 
 import hashlib
+from functools import lru_cache
 import json
 from pathlib import Path
 from typing import Any
 
-from nl2bash.command_generation import PROMPT_VERSION
+from nl2bash.command_generation import (
+    DEFAULT_BATCH_SIZE, DEFAULT_GPU_LAYERS, DEFAULT_MAX_TOKENS, DEFAULT_THREADS, PROMPT_VERSION,
+)
 
 COMPONENT_FILES = (
     "src/nl2bash/bash_validation.py",
@@ -33,6 +36,21 @@ def sha256_file(path: str | Path) -> str:
     return digest.hexdigest()
 
 
+@lru_cache(maxsize=128)
+def _sha256_file_cached(path: str, size: int, mtime_ns: int, ctime_ns: int, inode: int) -> str:
+    # A stable file is hashed once per process. The stat tuple invalidates the
+    # cache when its identity, size, or timestamps change.
+    return sha256_file(path)
+
+
+def sha256_file_cached(path: str | Path) -> str:
+    selected = Path(path).expanduser().resolve()
+    stat = selected.stat()
+    return _sha256_file_cached(
+        str(selected), stat.st_size, stat.st_mtime_ns, stat.st_ctime_ns, stat.st_ino,
+    )
+
+
 def freeze_generation_configuration(
     *, model_path: str | Path,
     development_report_path: str | Path,
@@ -40,6 +58,8 @@ def freeze_generation_configuration(
     classifier_manifest_path: str | Path = "models/intent_classifier_manifest.json",
     frozen_threshold_path: str | Path = "artifacts/evaluation/frozen_dev_threshold.json",
     output_path: str | Path = "artifacts/evaluation/frozen_generation_config.json",
+    context_size: int = 4096, threads: int = DEFAULT_THREADS, batch_size: int = DEFAULT_BATCH_SIZE,
+    gpu_layers: int = DEFAULT_GPU_LAYERS, max_tokens: int = DEFAULT_MAX_TOKENS,
 ) -> dict[str, Any]:
     """Create a configuration manifest after the development experiment is reviewed."""
     model_path = Path(model_path)
@@ -86,13 +106,15 @@ def freeze_generation_configuration(
         "runtime": {
             "name": "llama-cpp-python",
             "version": runtime_version,
-            "device": "CPU",
-            "context_size": 4096,
-            "threads": 4,
+            "device": "GPU-offload" if gpu_layers else "CPU",
+            "context_size": context_size,
+            "threads": threads,
+            "batch_size": batch_size,
+            "gpu_layers": gpu_layers,
             "temperature": 0.0,
             "top_p": 0.9,
             "seed": 42,
-            "max_tokens": 512,
+            "max_tokens": max_tokens,
         },
         "prompt": {
             "version": PROMPT_VERSION,
@@ -134,7 +156,9 @@ def verify_frozen_generation_configuration(
     frozen_threshold_path: str | Path,
     context_size: int = 4096,
     threads: int | None = None,
-    max_tokens: int = 512,
+    batch_size: int = DEFAULT_BATCH_SIZE,
+    gpu_layers: int = DEFAULT_GPU_LAYERS,
+    max_tokens: int = DEFAULT_MAX_TOKENS,
 ) -> str:
     """Fail closed if the model, prompt, dependencies, threshold, or validators drift."""
     config_path = Path(config_path)
@@ -150,15 +174,15 @@ def verify_frozen_generation_configuration(
         raise GenerationConfigurationError("unexpected generation configuration artifact type")
 
     model = config.get("model", {})
-    if model.get("sha256") != sha256_file(model_path):
+    if model.get("sha256") != sha256_file_cached(model_path):
         raise GenerationConfigurationError("local language-model file does not match the frozen configuration")
     classifier = config.get("classifier", {})
-    if classifier.get("sha256") != sha256_file(classifier_model_path):
+    if classifier.get("sha256") != sha256_file_cached(classifier_model_path):
         raise GenerationConfigurationError("intent classifier does not match the frozen generation configuration")
-    if classifier.get("manifest_sha256") != sha256_file(classifier_manifest_path):
+    if classifier.get("manifest_sha256") != sha256_file_cached(classifier_manifest_path):
         raise GenerationConfigurationError("intent classifier manifest does not match the frozen generation configuration")
     threshold = config.get("frozen_intent_threshold", {})
-    if threshold.get("sha256") != sha256_file(frozen_threshold_path):
+    if threshold.get("sha256") != sha256_file_cached(frozen_threshold_path):
         raise GenerationConfigurationError("frozen intent threshold does not match the generation configuration")
 
     prompt = config.get("prompt", {})
@@ -167,7 +191,7 @@ def verify_frozen_generation_configuration(
         raise GenerationConfigurationError("generation prompt version differs from the frozen configuration")
     for relative in COMPONENT_FILES:
         expected = components.get(relative)
-        if not isinstance(expected, str) or expected != sha256_file(relative):
+        if not isinstance(expected, str) or expected != sha256_file_cached(relative):
             raise GenerationConfigurationError(f"frozen component changed since configuration freeze: {relative}")
     try:
         import llama_cpp
@@ -177,11 +201,15 @@ def verify_frozen_generation_configuration(
     if runtime.get("version") != llama_cpp.__version__:
         raise GenerationConfigurationError("llama-cpp-python version differs from the frozen configuration")
     import os
-    effective_threads = threads if threads is not None else min(4, os.cpu_count() or 1)
+    effective_threads = threads if threads is not None else min(DEFAULT_THREADS, os.cpu_count() or 1)
     if runtime.get("context_size") != context_size:
         raise GenerationConfigurationError("context size differs from the frozen generation configuration")
     if runtime.get("threads") != effective_threads:
         raise GenerationConfigurationError("CPU thread count differs from the frozen generation configuration")
+    if runtime.get("batch_size") != batch_size:
+        raise GenerationConfigurationError("batch size differs from the frozen generation configuration")
+    if runtime.get("gpu_layers") != gpu_layers:
+        raise GenerationConfigurationError("GPU layer setting differs from the frozen generation configuration")
     if runtime.get("max_tokens") != max_tokens:
         raise GenerationConfigurationError("maximum generation tokens differ from the frozen configuration")
-    return sha256_file(config_path)
+    return sha256_file_cached(config_path)

@@ -4,7 +4,7 @@
 
 The generation adapter uses `llama-cpp-python` with the Qwen2.5-1.5B-Instruct GGUF model. This is a local CPU inference path and makes no outbound inference API calls. The model is not committed to Git because it is a large third-party binary.
 
-The target agent host was inspected on 2026-11-17: Ubuntu-based x86-64 Linux, 4 logical CPU cores, about 7.5 GiB RAM, and no detected NVIDIA GPU. The selected Q4_K_M quantization is approximately 1.12 GB. The default inference context is 4,096 tokens and the default thread count is capped at four.
+The tested agent host is Ubuntu-based x86-64 Linux with an Intel Core i3-1005G1 (2 physical cores / 4 logical CPUs), about 7.5 GiB RAM, and no detected NVIDIA/CUDA accelerator. The selected Q4_K_M quantization is approximately 1.12 GB. The current tuned defaults are a 4,096-token context, 2 CPU threads, `n_batch=512`, `n_gpu_layers=0`, and a 256-token output ceiling. These settings are configurable and may not be optimal on other CPUs.
 
 ## Install the Python runtime
 
@@ -50,7 +50,15 @@ For machine-readable output:
 uv run nl2bash generate --request 'List listening TCP ports.' --json
 ```
 
-The default command loads the checksum-verified intent classifier and the development-frozen confidence threshold before it loads the local language model. It then extracts entities, generates one command, checks Bash syntax, and applies safety heuristics. No generated command is executed.
+For several requests in one session, reuse the loaded model:
+
+```bash
+uv run nl2bash generate --interactive --timings
+```
+
+Enter one request per line; type `exit` or `quit` to stop. The model, classifier, and frozen configuration are loaded/verified once per interactive session. Per-request timing data separates prompt evaluation and token generation using llama.cpp runtime counters when available.
+
+The one-shot command loads the checksum-verified intent classifier and the development-frozen confidence threshold before it loads the local language model. It then extracts entities, generates one command, checks Bash syntax, and applies safety heuristics. No generated command is executed.
 
 ## Resource and safety notes
 

@@ -10,7 +10,7 @@
 | Intent classifier | Scikit-learn Logistic Regression | Predict the requested operation category |
 | Parameter extraction | Python rules and regular expressions | Extract paths, extensions, file names, sizes, ports, process names, dates, and comparison conditions |
 | Language model | Qwen2.5-1.5B-Instruct Q4_K_M GGUF | Local command generation |
-| Model runtime | llama-cpp-python | CPU inference from the local GGUF file |
+| Model runtime | llama-cpp-python | Offline CPU inference from the local GGUF file; 2 threads / batch 512 by default on the tested 2-core CPU |
 | Bash syntax | `bash -n` plus bashlex | Parse-only syntax check and supplementary AST analysis |
 | Constraint check | Deterministic entity grounding | Flag selected explicit request constraints missing from generated command text |
 
@@ -33,9 +33,9 @@ The implementation is organized around the following responsibilities:
 
 ## 3. Model interaction
 
-The generation component sends the original request and, in the context-aware condition, the predicted intent and structured entity metadata to a local Qwen GGUF model through llama-cpp-python. A second request-only condition is retained for development experiments. The model must return a JSON object containing a Bash command, explanation, and assumptions. The adapter validates the schema and never invokes a shell.
+The generation component sends the original request and, in the context-aware condition, a compact predicted intent and structured entity context to a local Qwen GGUF model through llama-cpp-python. A second request-only condition is retained for development experiments. The prompt avoids unused character offsets and redundant metadata; output is capped at 256 tokens by default. The model must return a JSON object containing a Bash command, explanation, and assumptions. The adapter validates the schema and never invokes a shell. No hosted inference endpoint is used.
 
-The application handles unavailable local models, malformed structured responses, empty output, and invalid generation settings. Local inference runs synchronously; a hard per-request wall-clock timeout is not currently enforced.
+The application handles unavailable local models, malformed structured responses, empty output, and invalid generation settings. Local inference runs synchronously; a hard per-request wall-clock timeout is not currently enforced. The one-shot CLI loads the model for one request; `nl2bash generate --interactive` reuses one local model and classifier for multiple requests. Optional timing output separates startup, NLP stages, prompt evaluation, token generation, and validation. Frozen-file hashes are cached by path and file stat during a process.
 
 The rule-based entity extractor preserves exact values and source spans and reports incomplete or contradictory parameters; see [Entity Extraction](ENTITY_EXTRACTION.md).
 
@@ -59,13 +59,13 @@ The target is a local Linux environment with Python. The base package does not r
 - Prefer small, testable modules.
 - Keep dependencies limited to those required by the project.
 - Version the licensed raw dataset, processed partitions, annotation worklists/exports, model artifacts, and evaluation configuration with their provenance manifests.
-- Keep test source code, temporary fixtures, generated caches, virtual environments, and secrets out of Git.
+- Version small offline regression tests; keep temporary fixtures, generated caches, virtual environments, and secrets out of Git.
 - Record model version and experiment configuration for reproducibility.
 - Do not store secrets or machine-specific configuration in source control.
 
 ## 7. Verification policy
 
-Executable checks are required for each implementation step. By project requirement, test source and fixtures will be created only in temporary locations outside the repository and will not be committed. See the [Implementation Roadmap](IMPLEMENTATION_ROADMAP.md) for the mandatory ten-pass review and adversarial-review procedure.
+Executable checks are required for each implementation step. The repository includes a small standard-library `unittest` suite for prompt, settings, checksum-cache, and interactive-mode regressions; temporary fixtures remain outside Git. See the [Implementation Roadmap](IMPLEMENTATION_ROADMAP.md) for the implementation review and adversarial-review procedure.
 
 ## 8. Dataset boundary
 

@@ -3,7 +3,11 @@
 **Evaluation date:** 2026-11-17  
 **Current comparison:** generation v7  
 **Model:** Qwen2.5-1.5B-Instruct Q4_K_M GGUF  
-**Runtime:** llama-cpp-python 0.3.37, CPU, four threads, 4,096-token context, temperature 0.0, 512-token output limit
+**Historical v7 runtime:** llama-cpp-python 0.3.37, CPU, four threads, 4,096-token context, temperature 0.0, 512-token output limit. This describes the preserved v7 comparison, not the newer optimized CLI defaults.
+
+## Current offline runtime defaults
+
+The optimized local CLI uses a compact v7 prompt, a 256-token output ceiling, 2 CPU threads, `n_batch=512`, a 4,096-token context, and zero GPU layers on the tested 2-core CPU. The `--interactive` mode keeps one model instance loaded for repeated requests. Its stage timings include llama.cpp prompt-evaluation and token-generation counters. A separate small smoke report is recorded as `artifacts/evaluation/generation_dev_v8_smoke_report.json`; it is not a replacement for the 40-request v7 quality comparison and is not a quality estimate.
 
 ## Method
 

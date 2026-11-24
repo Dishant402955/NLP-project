@@ -77,6 +77,8 @@ def evaluate_generation_on_development(
     sample_size: int = 10,
     seed: int = 20261117,
     output_path: str | Path = "artifacts/evaluation/generation_dev_report.json",
+    context_size: int = 4096, threads: int | None = None, batch_size: int = 256,
+    gpu_layers: int = 0, max_tokens: int = 256,
 ) -> dict[str, Any]:
     """Evaluate the two prompt conditions on a seeded, label-stratified dev sample.
 
@@ -119,17 +121,29 @@ def evaluate_generation_on_development(
     for example_id, label in label_by_id.items():
         grouped.setdefault(label, []).append(example_id)
     selected: list[str] = []
-    for label in sorted(grouped):
-        selected.append(rng.choice(sorted(grouped[label])))
-    remainder = [example_id for example_id in held_out.example_ids if example_id not in selected]
-    rng.shuffle(remainder)
-    selected.extend(remainder[:max(0, sample_size - len(selected))])
-    selected = selected[:sample_size]
+    available_labels = sorted(grouped)
+    if sample_size < len(available_labels):
+        chosen_labels = sorted(rng.sample(available_labels, sample_size))
+        selected.extend(rng.choice(sorted(grouped[label])) for label in chosen_labels)
+        sampling_description = f"one seeded example from each of {sample_size} sampled intent labels"
+    else:
+        for label in available_labels:
+            selected.append(rng.choice(sorted(grouped[label])))
+        remainder = [example_id for example_id in held_out.example_ids if example_id not in selected]
+        rng.shuffle(remainder)
+        selected.extend(remainder[:max(0, sample_size - len(selected))])
+        selected = selected[:sample_size]
+        sampling_description = "one seeded example per available intent label, then seeded fill without replacement"
     # Seeded shuffle prevents label order from becoming a presentation artifact.
     rng.shuffle(selected)
 
-    from nl2bash.command_generation import load_local_generator
-    generator = load_local_generator(model_path)
+    from nl2bash.command_generation import DEFAULT_THREADS, load_local_generator
+    import os
+    generator = load_local_generator(
+        model_path, context_size=context_size, threads=threads,
+        batch_size=batch_size, gpu_layers=gpu_layers,
+    )
+    effective_threads = threads if threads is not None else min(DEFAULT_THREADS, os.cpu_count() or 1)
     rows: list[dict[str, Any]] = []
     for example_id in selected:
         record = by_id[example_id]
@@ -148,7 +162,7 @@ def evaluate_generation_on_development(
             try:
                 generated = generate_bash_command(
                     request, intent, extraction, generator=generator,
-                    max_tokens=512, include_nlp_context=use_context,
+                    max_tokens=max_tokens, include_nlp_context=use_context,
                 )
                 validation = validate_bash_command(generated.command)
                 grounding = validate_entity_grounding(generated.command, extraction)
@@ -161,6 +175,7 @@ def evaluate_generation_on_development(
                 row[f"{prefix}_risk_level"] = validation.risk_level
                 row[f"{prefix}_constraint_findings"] = [item.message for item in grounding]
                 row[f"{prefix}_generation_error"] = None
+                row[f"{prefix}_inference_metrics"] = generated.inference_metrics
             except CommandGenerationError as exc:
                 row[f"{prefix}_success"] = False
                 row[f"{prefix}_command"] = None
@@ -171,6 +186,7 @@ def evaluate_generation_on_development(
                 row[f"{prefix}_risk_level"] = "unavailable"
                 row[f"{prefix}_constraint_findings"] = []
                 row[f"{prefix}_generation_error"] = str(exc)
+                row[f"{prefix}_inference_metrics"] = {}
             elapsed = time.perf_counter() - started
             row[f"{prefix}_latency_seconds"] = round(elapsed, 6)
         rows.append(row)
@@ -182,7 +198,7 @@ def evaluate_generation_on_development(
         "reference_commands_in_generation_prompts": False,
         "seed": seed,
         "sample_size": len(rows),
-        "sampling": "one seeded example per available intent label, then seeded fill without replacement",
+        "sampling": sampling_description,
         "development_source": {
             "partition": "dev",
             "partition_sha256": _sha256(partition_path),
@@ -202,9 +218,12 @@ def evaluate_generation_on_development(
             "model_sha256": _sha256(model_path),
             "prompt_version": PROMPT_VERSION,
             "temperature": 0.0,
-            "max_tokens": 512,
-            "context_size": 4096,
-            "runtime": "llama-cpp-python CPU",
+            "max_tokens": max_tokens,
+            "context_size": context_size,
+            "threads": effective_threads,
+            "batch_size": batch_size,
+            "gpu_layers": gpu_layers,
+            "runtime": "llama-cpp-python local inference",
         },
         "conditions": {
             "request_only": "Original request only; no classifier prediction or extracted entities passed to the generator.",
